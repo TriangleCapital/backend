@@ -6,6 +6,7 @@ import { formatPhoneNumber } from '../../utils/parser';
 import { email } from '../../utils/constants';
 import { sendEmail } from '../services/nodemailer';
 import { generateLeadEmail } from '../../utils/funcs';
+import { TBoolean } from '../../database/interfaces/enums';
 
 export async function processExcelLeads(req: Request, res: Response, next: NextFunction) {
   try {
@@ -72,6 +73,8 @@ export async function sendChatbotCompletedEmail(req: Request, res: Response, nex
 
     const allLeads = await getAllLeads();
     const lead = allLeads.find((l) => formatPhoneNumber(l.telefono) === formatPhoneNumber(leadPhoneNumber));
+
+    await updateLead(lead._id, { chatbot_completado: TBoolean.Si });
 
     const subject = `✅ Chatbot completado por ${lead.nombre}`;
     const message = generateLeadEmail(lead);
