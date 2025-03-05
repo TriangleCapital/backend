@@ -1,8 +1,12 @@
 import express from 'express';
-import { controllerFunc } from '../controllers/totalumController';
+import { processExcelLeads } from '../controllers/totalumController';
+import multer from 'multer';
 
 const totalumRouter = express.Router();
 
-totalumRouter.post('/', controllerFunc);
+const upload = multer({ limits: { fileSize: 25000000 }, dest: 'uploads/' });
+
+totalumRouter.get('/', (req, res) => res.send('Working Totalum endpoint!'));
+totalumRouter.post('/excel-leads', upload.any(), processExcelLeads);
 
 export default totalumRouter;

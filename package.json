@@ -1,5 +1,5 @@
 {
-    "name": "autotrafic-backend",
+    "name": "novafinance-backend",
     "version": "2.0.0",
     "description": "",
     "main": "dist/index.js",
@@ -9,11 +9,10 @@
         "start": "cross-env NODE_ENV=production node .",
         "dev": "cross-env NODE_ENV=development node .",
         "dev:watch": "nodemon -q",
-        "build": "npm run tsc",
-        "vercel-build": "echo hello"
+        "build": "npm run tsc"
     },
     "keywords": [],
-    "author": "AutoTrafic Gestoria",
+    "author": "Aron Ilie",
     "license": "ISC",
     "dependencies": {
         "axios": "^1.7.2",
