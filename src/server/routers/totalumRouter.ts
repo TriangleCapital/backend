@@ -1,5 +1,5 @@
 import express from 'express';
-import { processExcelLeads, sendEmailController, updateLeadByPhoneNumber } from '../controllers/totalumController';
+import { processExcelLeads, sendChatbotCompletedEmail, sendEmailController, updateLeadByPhoneNumber } from '../controllers/totalumController';
 import multer from 'multer';
 
 const totalumRouter = express.Router();
@@ -12,5 +12,6 @@ totalumRouter.post('/excel-leads', upload.any(), processExcelLeads);
 totalumRouter.post('/update-lead-by-phone', updateLeadByPhoneNumber);
 
 totalumRouter.post('/send-email', sendEmailController);
+totalumRouter.post('/chatbot-completed-email', sendChatbotCompletedEmail);
 
 export default totalumRouter;

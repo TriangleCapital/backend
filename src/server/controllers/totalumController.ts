@@ -5,6 +5,7 @@ import { getAllLeads, updateLead } from '../services/totalum';
 import { formatPhoneNumber } from '../../utils/parser';
 import { email } from '../../utils/constants';
 import { sendEmail } from '../services/nodemailer';
+import { generateLeadEmail } from '../../utils/funcs';
 
 export async function processExcelLeads(req: Request, res: Response, next: NextFunction) {
   try {
@@ -53,6 +54,29 @@ export async function sendEmailController(req: Request, res: Response, next: Nex
     }
 
     await sendEmail(to, subject, message);
+
+    res.status(200).json({ success: true });
+  } catch (error) {
+    catchControllerError(error, 'Error enviando el email', req.body, next);
+  }
+}
+
+export async function sendChatbotCompletedEmail(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { leadPhoneNumber, receiverEmail } = req.body;
+
+    if (!leadPhoneNumber) {
+      res.status(400).send(`Falta el teléfono`);
+      return;
+    }
+
+    const allLeads = await getAllLeads();
+    const lead = allLeads.find((l) => formatPhoneNumber(l.telefono) === formatPhoneNumber(leadPhoneNumber));
+
+    const subject = `✅ Chatbot completado por ${lead.nombre}`;
+    const message = generateLeadEmail(lead);
+
+    await sendEmail(receiverEmail, subject, message);
 
     res.status(200).json({ success: true });
   } catch (error) {
