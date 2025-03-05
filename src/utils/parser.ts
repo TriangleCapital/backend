@@ -39,7 +39,7 @@ export function parseLeadFromExcelToTotalum(excelLead: ExcelLead): Partial<TLead
     telefono: `${excelLead.TELÉFONO}`,
     email: excelLead.EMAIL,
     timestamp,
-    conversacion_iniciada: TLeadConversationStarted.Si,
+    conversacion_iniciada: TLeadConversationStarted.No,
     propiedad_interes: excelLead.DESCRIPCIÓN,
   };
 }

@@ -1,7 +1,7 @@
 import { MANYCHAT_BOT_FIELD_ID } from '../../utils/constants';
 import { parseExcelToTLeads } from '../../utils/parser';
 import { filterNonSendedLeads } from '../helpers/leads';
-import { createSubscriber, updateBotField } from '../services/manychat';
+import { createSubscriber, sendFlowToSubscriber, updateBotField } from '../services/manychat';
 import { createLead, getLastProperty, updateLastProperty } from '../services/totalum';
 
 export async function handleExcelLeads(excel: Express.Multer.File) {
@@ -17,9 +17,13 @@ export async function handleExcelLeads(excel: Express.Multer.File) {
         await updateLastProperty(lead.propiedad_interes);
       }
 
-      await createSubscriber(lead);
+      const subscriberId = await createSubscriber(lead);
 
       await createLead(lead);
+
+      await sendFlowToSubscriber(subscriberId);
+
+      // Update totalum sended
     }
 
     return leadsToCreate.length;

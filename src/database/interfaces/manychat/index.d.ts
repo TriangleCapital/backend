@@ -14,3 +14,8 @@ interface MBotField {
   field_id: number;
   field_value: string;
 }
+
+interface MSendFlow {
+  subscriber_id: number;
+  flow_ns: string;
+}
