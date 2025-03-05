@@ -1,6 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import { catchControllerError } from '../../errors/generalError';
 import { handleExcelLeads } from '../handlers/leads';
+import { getAllLeads, updateLead } from '../services/totalum';
+import { formatPhoneNumber } from '../../utils/parser';
+import { email } from '../../utils/constants';
+import { sendEmail } from '../services/nodemailer';
 
 export async function processExcelLeads(req: Request, res: Response, next: NextFunction) {
   try {
@@ -15,6 +19,43 @@ export async function processExcelLeads(req: Request, res: Response, next: NextF
 
     res.status(200).json({ success: true, leadsProcessed });
   } catch (error) {
-    catchControllerError(error, 'Error toggling totalum header content', req.body, next);
+    catchControllerError(error, 'Error procesando el excel de leads en el controlador', req.body, next);
+  }
+}
+
+export async function updateLeadByPhoneNumber(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { phoneNumber, update } = req.body;
+
+    if (!phoneNumber) {
+      res.status(400).send(`No se ha recibido ningún teléfono`);
+      return;
+    }
+
+    const allLeads = await getAllLeads();
+    const lead = allLeads.find((l) => formatPhoneNumber(l.telefono) === formatPhoneNumber(phoneNumber));
+
+    await updateLead(lead._id, update);
+
+    res.status(200).json({ success: true });
+  } catch (error) {
+    catchControllerError(error, 'Error actualizando el lead en el controlador', req.body, next);
+  }
+}
+
+export async function sendEmailController(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { to, subject, message } = req.body;
+
+    if (!to || !message) {
+      res.status(400).send(`Falta el destinatario o el mensaje`);
+      return;
+    }
+
+    await sendEmail(to, subject, message);
+
+    res.status(200).json({ success: true });
+  } catch (error) {
+    catchControllerError(error, 'Error enviando el email', req.body, next);
   }
 }

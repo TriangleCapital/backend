@@ -1,4 +1,4 @@
-export enum TLeadConversationStarted {
+export enum TBoolean {
   Si = 'Si',
   No = 'No',
 }
@@ -22,3 +22,19 @@ export enum ExcelLeadState {
   Contestada = 'Contestada',
   NoContestada = 'No contestada',
 }
+
+export enum TLeadFinanciacion {
+  Hipoteca = 'Hipoteca',
+  AlContado = 'Al contado'
+};
+
+export enum TLeadUsoVivienda {
+  ViviendaPrincipal = 'Vivienda principal',
+  Inversion = 'Inversión'
+};
+
+export enum TLeadFinInversion {
+  ReformarYVender = 'Reformar y vender',
+  RentabilidadPorAlquiler = 'Rentabilidad por alquiler'
+};
+

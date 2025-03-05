@@ -1,4 +1,5 @@
 import '../loadEnvironment';
+import nodemailer from 'nodemailer';
 
 const isTest = process.env.NODE_ENV !== 'production';
 
@@ -22,3 +23,11 @@ export const manychatOptions = {
     'Content-Type': 'application/json',
   },
 };
+
+export const email = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.NOTIFICATION_EMAIL,
+    pass: process.env.NOTIFICATION_EMAIL_PW,
+  },
+});

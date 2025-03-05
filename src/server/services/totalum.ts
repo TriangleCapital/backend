@@ -18,15 +18,27 @@ export async function getAllLeads(): Promise<TLead[]> {
   }
 }
 
-export async function createLead(lead: Partial<TLead>) {
+export async function createLead(lead: Partial<TLead>): Promise<string> {
   try {
     const response = await totalumSdk.crud.createItem('lead', lead);
-    return response.data.data;
+    return response.data.data.insertedId;
   } catch (error) {
     if (error.response.data.errors) {
       throw new Error(`Error creando el lead de Totalum: ${error.response.data.errors}`);
     } else {
       throw new Error(`Error creando el lead de Totalum: ${error.message}`);
+    }
+  }
+}
+
+export async function updateLead(leadId: string, update: Partial<TLead>) {
+  try {
+    await totalumSdk.crud.editItemById('lead', leadId, update);
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error actualizando el lead de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error actualizando el lead de Totalum: ${error.message}`);
     }
   }
 }

@@ -1,4 +1,11 @@
-import { TLeadConversationStarted, TLeadOrigin, TLeadPrimitiveState } from '../enums';
+import {
+  TBoolean,
+  TLeadFinanciacion,
+  TLeadFinInversion,
+  TLeadOrigin,
+  TLeadPrimitiveState,
+  TLeadUsoVivienda,
+} from '../enums';
 
 interface TMensajeIniciador {
   _id: string;
@@ -11,7 +18,7 @@ interface TLead {
   _id: string;
   createdAt: Date;
   updatedAt: Date;
-  conversacion_iniciada: TLeadConversationStarted;
+  conversacion_iniciada: TBoolean;
   nombre: string;
   apellidos: string;
   telefono: string;
@@ -21,6 +28,11 @@ interface TLead {
   mensaje_primitivo: string;
   timestamp: Date;
   propiedad_interes: string;
+  financiacion: TLeadFinanciacion;
+  uso_vivienda: TLeadUsoVivienda;
+  fin_inversion: TLeadFinInversion;
+  ahorros_disponibles: number;
+  chatbot_completado: TBoolean;
 }
 
 interface TLastPropertyWorked {

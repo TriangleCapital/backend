@@ -1,8 +1,9 @@
+import { TBoolean } from '../../database/interfaces/enums';
 import { MANYCHAT_BOT_FIELD_ID } from '../../utils/constants';
 import { parseExcelToTLeads } from '../../utils/parser';
 import { filterNonSendedLeads } from '../helpers/leads';
 import { createSubscriber, sendFlowToSubscriber, updateBotField } from '../services/manychat';
-import { createLead, getLastProperty, updateLastProperty } from '../services/totalum';
+import { createLead, getLastProperty, updateLastProperty, updateLead } from '../services/totalum';
 
 export async function handleExcelLeads(excel: Express.Multer.File) {
   try {
@@ -19,11 +20,11 @@ export async function handleExcelLeads(excel: Express.Multer.File) {
 
       const subscriberId = await createSubscriber(lead);
 
-      await createLead(lead);
+      const newLeadId = await createLead(lead);
 
       await sendFlowToSubscriber(subscriberId);
 
-      // Update totalum sended
+      await updateLead(newLeadId, { conversacion_iniciada: TBoolean.Si });
     }
 
     return leadsToCreate.length;

@@ -1,13 +1,7 @@
 import fs from 'fs';
 import * as XLSX from 'xlsx';
 import { ExcelLead } from '../database/interfaces';
-import {
-  ExcelLeadOrigin,
-  ExcelLeadState,
-  TLeadConversationStarted,
-  TLeadOrigin,
-  TLeadPrimitiveState,
-} from '../database/interfaces/enums';
+import { ExcelLeadOrigin, ExcelLeadState, TBoolean, TLeadOrigin, TLeadPrimitiveState } from '../database/interfaces/enums';
 import { TLead } from '../database/interfaces/totalum';
 
 export function formatPhoneNumber(phone: string): string {
@@ -39,8 +33,9 @@ export function parseLeadFromExcelToTotalum(excelLead: ExcelLead): Partial<TLead
     telefono: `${excelLead.TELÉFONO}`,
     email: excelLead.EMAIL,
     timestamp,
-    conversacion_iniciada: TLeadConversationStarted.No,
+    conversacion_iniciada: TBoolean.No,
     propiedad_interes: excelLead.DESCRIPCIÓN,
+    chatbot_completado: TBoolean.No,
   };
 }
 
