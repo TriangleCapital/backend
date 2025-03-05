@@ -22,7 +22,7 @@ const limiter = rateLimit({
 
 app.use(limiter);
 app.use(hpp());
-app.use(cors());
+app.use(cors({ origin: '*' }));
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(
   helmet.contentSecurityPolicy({
