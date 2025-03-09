@@ -17,9 +17,9 @@ export async function processExcelLeads(req: Request, res: Response, next: NextF
       return;
     }
 
-    const leadsProcessed = await handleExcelLeads(files[0]);
+    const { leadsProcessed, leadsOmitted } = await handleExcelLeads(files[0]);
 
-    res.status(200).json({ success: true, leadsProcessed });
+    res.status(200).json({ success: true, leadsProcessed, leadsOmitted });
   } catch (error) {
     catchControllerError(error, 'Error procesando el excel de leads en el controlador', req.body, next);
   }

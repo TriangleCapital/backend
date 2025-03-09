@@ -27,7 +27,7 @@ export async function handleExcelLeads(excel: Express.Multer.File) {
       await updateLead(newLeadId, { conversacion_iniciada: TBoolean.Si });
     }
 
-    return leadsToCreate.length;
+    return { leadsProcessed: leadsToCreate.length, leadsOmitted: parsedExcelLeads.length - leadsToCreate.length };
   } catch (error) {
     throw new Error(`Error manejando los leads del excel: ${error.message}`);
   }
