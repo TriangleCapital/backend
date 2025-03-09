@@ -1,5 +1,9 @@
 import { TLead } from '../database/interfaces/totalum';
 
+export function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export function generateLeadEmail(lead: TLead): string {
   return `
       Un nuevo lead ha completado el chatbot. Aquí están los detalles:
@@ -8,7 +12,7 @@ export function generateLeadEmail(lead: TLead): string {
       - Teléfono: ${lead.telefono}
       - Correo electrónico: ${lead.email || ''}
       - Propiedad de interés: ${lead.propiedad_interes}
-      - Tipo de financiación: ${lead.financiacion}
+      ${lead.financiacion ? `- Tipo de financiación: ${lead.financiacion}` : ''}
       ${lead.uso_vivienda ? `- Uso de la vivienda: ${lead.uso_vivienda}` : ''}
       ${lead.fin_inversion ? `- Finalidad de la inversión: ${lead.fin_inversion}` : ''}
       ${lead.ahorros_disponibles > 0 ? `- Ahorros disponibles: ${lead.ahorros_disponibles.toLocaleString()} €` : ''}
