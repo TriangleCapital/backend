@@ -6,8 +6,10 @@ export async function filterNonSendedLeads(parsedExcelLeads: Partial<TLead>[]): 
     const totalumLeads = await getAllLeads();
     const totalumPhones = totalumLeads.map((lead: TLead) => String(lead.telefono));
 
+    const seenPhones = new Set<string>();
+
     const filteredLeads = parsedExcelLeads.filter((lead, index, self) => {
-      if (!lead.telefono || lead.telefono === 'undefined') return false;
+      if (!lead.telefono) return false;
 
       const phoneStr = String(lead.telefono).replace(/\s+/g, '');
 
@@ -15,14 +17,17 @@ export async function filterNonSendedLeads(parsedExcelLeads: Partial<TLead>[]): 
         return false;
       }
 
-      return (
-        phoneStr.length >= 9 &&
-        !totalumPhones.includes(phoneStr) &&
-        self.findIndex((l) => String(l.telefono) === phoneStr) === index
-      );
-    });
+      if (/[a-zA-Z]/.test(phoneStr) || phoneStr.length < 9 || totalumPhones.includes(phoneStr)) {
+        return false;
+      }
 
-    console.log(filteredLeads);
+      if (seenPhones.has(phoneStr)) {
+        return false;
+      }
+
+      seenPhones.add(phoneStr);
+      return true;
+    });
 
     return filteredLeads;
   } catch (error) {
