@@ -8,7 +8,7 @@ export async function filterNonSendedLeads(parsedExcelLeads: Partial<TLead>[]): 
 
     const seenPhones = new Set<string>();
 
-    const filteredLeads = parsedExcelLeads.filter((lead, index, self) => {
+    const filteredLeads = parsedExcelLeads.filter((lead) => {
       if (!lead.telefono) return false;
 
       const phoneStr = String(lead.telefono).replace(/\s+/g, '');

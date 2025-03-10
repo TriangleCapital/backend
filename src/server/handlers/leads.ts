@@ -14,27 +14,27 @@ export async function handleExcelLeads(excel: Express.Multer.File) {
     const leadsToCreate = await filterNonSendedLeads(parsedExcelLeads);
 
     let leadsWithError = 0;
-    // for (const lead of leadsToCreate) {
-    //   try {
-    //     if (lead.propiedad_interes !== lastPropertyWorked) {
-    //       await updateBotField(MANYCHAT_BOT_FIELD_ID, lead.propiedad_interes);
-    //       await updateLastProperty(lead.propiedad_interes);
-    //     }
+    for (const lead of leadsToCreate) {
+      try {
+        if (lead.propiedad_interes !== lastPropertyWorked) {
+          await updateBotField(MANYCHAT_BOT_FIELD_ID, lead.propiedad_interes);
+          await updateLastProperty(lead.propiedad_interes);
+        }
 
-    //     const subscriberId = await createSubscriber(lead);
+        const subscriberId = await createSubscriber(lead);
 
-    //     const newLeadId = await createLead(lead);
+        const newLeadId = await createLead(lead);
 
-    //     await sendFlowToSubscriber(subscriberId);
+        await sendFlowToSubscriber(subscriberId);
 
-    //     await updateLead(newLeadId, { conversacion_iniciada: TBoolean.Si });
+        await updateLead(newLeadId, { conversacion_iniciada: TBoolean.Si });
 
-    //     await sleep(500);
-    //   } catch (error) {
-    //     console.error(`Error creando el lead: ${error.message}`);
-    //     leadsWithError++;
-    //   }
-    // }
+        await sleep(500);
+      } catch (error) {
+        console.error(`Error creando el lead: ${error.message}`);
+        leadsWithError++;
+      }
+    }
 
     return {
       leadsProcessed: leadsToCreate.length - leadsWithError,
