@@ -7,8 +7,15 @@ export async function filterNonSendedLeads(parsedExcelLeads: Partial<TLead>[]): 
     const totalumPhones = totalumLeads.map((lead: TLead) => String(lead.telefono));
 
     const filteredLeads = parsedExcelLeads.filter((lead, index, self) => {
-      if (!lead.telefono || lead.telefono === 'undefined') return false;
+      if (!lead.telefono || typeof lead.telefono !== 'string' || lead.telefono.trim() === '') {
+        return false;
+      }
+
       const phoneStr = String(lead.telefono).replace(/\s+/g, '');
+
+      if (/[a-zA-Z]/.test(phoneStr)) {
+        return false;
+      }
 
       return (
         phoneStr.length >= 9 &&
