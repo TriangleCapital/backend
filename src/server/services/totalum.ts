@@ -1,5 +1,5 @@
 import { TotalumApiSdk } from 'totalum-api-sdk';
-import { TOTALUM_LAST_PROPERTY_WORKED_ID, totalumOptions } from '../../utils/constants';
+import { TOTALUM_LAST_LINK_WORKED_ID, TOTALUM_LAST_PROPERTY_WORKED_ID, totalumOptions } from '../../utils/constants';
 import { TLastPropertyWorked, TLead } from '../../database/interfaces/totalum';
 
 const totalumSdk = new TotalumApiSdk(totalumOptions);
@@ -74,6 +74,34 @@ export async function updateLastProperty(newPropertyDescription: string) {
       throw new Error(`Error actualizando la última propiedad trabajada de Totalum: ${error.response.data.errors}`);
     } else {
       throw new Error(`Error actualizando la última propiedad trabajada de Totalum: ${error.message}`);
+    }
+  }
+}
+
+// ------ ultimo_enlace_trabajado ------
+export async function getLastLink(): Promise<string> {
+  try {
+    const response = await totalumSdk.crud.getItems('ultimo_enlace_trabajado');
+    return response.data.data[0].enlace;
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error obteniendo la última propiedad trabajada de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error obteniendo la última propiedad trabajada de Totalum: ${error.message}`);
+    }
+  }
+}
+
+export async function updateLastLink(newLink: string) {
+  try {
+    const options = { enlace: newLink };
+
+    await totalumSdk.crud.editItemById('ultimo_enlace_trabajado', TOTALUM_LAST_LINK_WORKED_ID, options);
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error actualizando el último enlace trabajado de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error actualizando el último enlace trabajado de Totalum: ${error.message}`);
     }
   }
 }

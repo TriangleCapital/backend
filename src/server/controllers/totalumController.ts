@@ -11,13 +11,14 @@ import { TBoolean } from '../../database/interfaces/enums';
 export async function processExcelLeads(req: Request, res: Response, next: NextFunction) {
   try {
     const files = req.files as Express.Multer.File[];
+    const { realtyLink } = req.body;
 
-    if (!files || files.length === 0) {
-      res.status(400).send(`No se ha recibido ningún archivo. Archivos: ${files}`);
+    if (!files || files.length === 0 || !realtyLink) {
+      res.status(400).send(`No se ha recibido ningún archivo o enlace de propiedad.`);
       return;
     }
 
-    const { leadsProcessed, leadsOmitted } = await handleExcelLeads(files[0]);
+    const { leadsProcessed, leadsOmitted } = await handleExcelLeads(files[0], realtyLink);
 
     res.status(200).json({ success: true, leadsProcessed, leadsOmitted });
   } catch (error) {
