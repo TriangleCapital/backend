@@ -29,8 +29,6 @@ export async function updateLeadByPhoneNumber(req: Request, res: Response, next:
   try {
     const { phoneNumber, update } = req.body;
 
-    console.log('body----------->', phoneNumber, update);
-
     if (!phoneNumber) {
       res.status(400).send(`No se ha recibido ningún teléfono`);
       return;

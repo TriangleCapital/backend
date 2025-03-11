@@ -7,7 +7,12 @@ const totalumSdk = new TotalumApiSdk(totalumOptions);
 // ------ lead ------
 export async function getAllLeads(): Promise<TLead[]> {
   try {
-    const response = await totalumSdk.crud.getItems('lead');
+    const response = await totalumSdk.crud.getItems('lead', {
+      pagination: {
+        limit: 999,
+        page: 0,
+      },
+    });
     return response.data.data;
   } catch (error) {
     if (error.response.data.errors) {
@@ -33,6 +38,8 @@ export async function createLead(lead: Partial<TLead>): Promise<string> {
 
 export async function updateLead(leadId: string, update: Partial<TLead>) {
   try {
+    if (!leadId) return;
+
     await totalumSdk.crud.editItemById('lead', leadId, update);
   } catch (error) {
     if (error.response.data.errors) {
