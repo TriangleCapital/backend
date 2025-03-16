@@ -18,7 +18,7 @@ const createTransporter = async () => {
     const accessToken = await new Promise((resolve, reject) => {
       oauth2Client.getAccessToken((err, token) => {
         if (err) {
-          console.log('*ERR: ', err);
+          console.error('Error getting access token for transporter: ', err);
           reject();
         }
         resolve(token);
@@ -46,7 +46,6 @@ const createTransporter = async () => {
 
 export async function sendEmail(receiverEmail: string, subject: string, htmlMessage: string) {
   try {
-    console.log('sending email...')
     const mailOptions = {
       from: process.env.USER_EMAIL,
       to: receiverEmail,
@@ -56,8 +55,6 @@ export async function sendEmail(receiverEmail: string, subject: string, htmlMess
 
     let emailTransporter = await createTransporter();
     await emailTransporter.sendMail(mailOptions);
-
-    console.log('mailOptions: ', mailOptions);
   } catch (err) {
     throw new Error(`Error sending gmail email: ${err.message}`);
   }

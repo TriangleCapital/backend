@@ -95,23 +95,23 @@ export async function handleHipotecaInteraction(
   phoneNumber: string,
   contactData: MContactData,
   sharedLead: TLeadShared | null
-): Promise<Partial<TLeadHipoteca>> {
+): Promise<{ lead: Partial<TLeadHipoteca>; alreadyHandled: boolean }> {
   try {
     const hipotecaLead = await findHipotecaLeadByPhone(phoneNumber);
 
     if (hipotecaLead) {
-      if (hipotecaLead.chatbot_completado === 'Si') return hipotecaLead;
+      if (hipotecaLead.chatbot_completado === 'Si') return { lead: hipotecaLead, alreadyHandled: true };
 
       const update = parseHipotecaLeadFromManychatToTotalum(contactData);
       await updateHipotecaLead(hipotecaLead._id, update);
 
-      return { ...hipotecaLead, ...update };
+      return { lead: { ...hipotecaLead, ...update }, alreadyHandled: false };
     } else {
       if (sharedLead) {
         const newLead = parseHipotecaLeadFromMultipleSourcesToTotalum(contactData, sharedLead);
         await createHipotecaLead(newLead);
 
-        return newLead;
+        return { lead: newLead, alreadyHandled: false };
       }
     }
   } catch (error) {
@@ -123,23 +123,23 @@ export async function handleContadoInteraction(
   phoneNumber: string,
   contactData: MContactData,
   sharedLead: TLeadShared | null
-): Promise<Partial<TLeadAlContado>> {
+): Promise<{ lead: Partial<TLeadAlContado>; alreadyHandled: boolean }> {
   try {
     const contadoLead = await findContadoLeadByPhone(phoneNumber);
 
     if (contadoLead) {
-      if (contadoLead.chatbot_completado === 'Si') return contadoLead;
+      if (contadoLead.chatbot_completado === 'Si') return { lead: contadoLead, alreadyHandled: true };
 
       const update = parseContadoLeadFromManychatToTotalum(contactData);
       await updateContadoLead(contadoLead._id, update);
 
-      return { ...contadoLead, ...update };
+      return { lead: { ...contadoLead, ...update }, alreadyHandled: false };
     } else {
       if (sharedLead) {
         const newLead = parseContadoLeadFromMultipleSourcesToTotalum(contactData, sharedLead);
         await createContadoLead(newLead);
 
-        return newLead;
+        return { lead: newLead, alreadyHandled: false };
       }
     }
   } catch (error) {

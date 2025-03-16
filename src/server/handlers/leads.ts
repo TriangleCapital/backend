@@ -91,16 +91,22 @@ export async function handleCompletedChatbot(phoneNumber: string, contactData: M
   const sharedLead = await findSharedLeadByPhone(phoneNumber);
 
   let lead: Partial<TLeadHipoteca> | Partial<TLeadAlContado>;
+  let alreadyHandled: boolean = false;
 
   if (leadType && leadType === TLeadFinanciacion.Hipoteca) {
-    lead = await handleHipotecaInteraction(phoneNumber, contactData, sharedLead);
+    const leadData = await handleHipotecaInteraction(phoneNumber, contactData, sharedLead);
+
+    lead = leadData.lead;
+    alreadyHandled = leadData.alreadyHandled;
   }
 
   if (leadType && leadType === TLeadFinanciacion.AlContado) {
-    lead = await handleContadoInteraction(phoneNumber, contactData, sharedLead);
+    const leadData = await handleContadoInteraction(phoneNumber, contactData, sharedLead);
+  
+    lead = leadData.lead;
+    alreadyHandled = leadData.alreadyHandled;
   }
 
-  console.log('entering to send email: ', lead.chatbot_completado);
   if (!lead.chatbot_completado) {
     await sendCompletedChatbotEmail(receiverEmail, leadType, lead);
   }

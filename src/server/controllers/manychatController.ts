@@ -29,8 +29,6 @@ export async function completedChatbotController(req: CompletedChatbotPayload, r
       return;
     }
 
-    console.log('completed chatbot logggggggggggggg')
-
     await handleCompletedChatbot(leadPhoneNumber, contactData, receiverEmail);
 
     res.status(200).json({ success: true });
