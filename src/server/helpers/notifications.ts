@@ -21,8 +21,6 @@ export async function sendCompletedChatbotEmail(
       htmlMessage = generateContadoLeadEmailHtmlMessage(lead as Partial<TLeadAlContado>);
     }
 
-    console.log('sending email ', )
-
     await sendEmail(receiverEmail, subject, htmlMessage);
   } catch (error) {
     throw new Error(`Error enviando el email del chatbot completado: ${error.message}`);
