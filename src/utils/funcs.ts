@@ -56,7 +56,7 @@ export function generateHipotecaLeadEmailHtmlMessage(hipotecaLead: Partial<TLead
     </head>
     <body>
       <div class="container">
-        <h2>Nuevo Lead de Hipoteca</h2>
+        <h2>Nuevo Lead de Hipoteca para ${hipotecaLead.propiedad_interes}</h2>
         <p>Se ha recibido un nuevo lead con los siguientes datos:</p>
 
         ${formatBox('Nombre', hipotecaLead.nombre)}
@@ -65,7 +65,7 @@ export function generateHipotecaLeadEmailHtmlMessage(hipotecaLead: Partial<TLead
         ${formatBox('Estado de Hipoteca', hipotecaLead.estado_hipoteca)}
         ${formatBox('Cuándo quiere mudarse', hipotecaLead.cuando_quiere_mudarse)}
         ${formatBox(
-          'Venta actual de propiedad',
+          'Quiere vender su propiedad actual',
           hipotecaLead.venta_actual_propiedad === TBoolean.Si
             ? 'Sí'
             : hipotecaLead.venta_actual_propiedad === TBoolean.No
@@ -76,12 +76,7 @@ export function generateHipotecaLeadEmailHtmlMessage(hipotecaLead: Partial<TLead
           'Ahorros Disponibles',
           hipotecaLead.ahorros_disponibles ? `€${hipotecaLead.ahorros_disponibles.toLocaleString()}` : ''
         )}
-        ${formatBox('Propiedad de interés', hipotecaLead.propiedad_interes)}
-        ${formatBox('Mensaje Idealista', hipotecaLead.mensaje_idealista)}
-        ${formatBox(
-          'Fecha de Contacto',
-          hipotecaLead.fecha_contacto ? hipotecaLead.fecha_contacto.toLocaleDateString() : ''
-        )}
+        ${formatBox('Mensaje que envió por Idealista', hipotecaLead.mensaje_idealista)}
 
         Para acceder al Panel de leads: https://web.totalum.app/table/leads
   
@@ -94,7 +89,7 @@ export function generateHipotecaLeadEmailHtmlMessage(hipotecaLead: Partial<TLead
 
 export function generateContadoLeadEmailHtmlMessage(contadoLead: Partial<TLeadAlContado>): string {
   const formatBox = (label: string, value?: string | number) => {
-    return value ? `<div class="info-box"><strong>${label}:</strong> ${value}</div>` : "";
+    return value ? `<div class="info-box"><strong>${label}:</strong> ${value}</div>` : '';
   };
 
   return `
@@ -143,19 +138,20 @@ export function generateContadoLeadEmailHtmlMessage(contadoLead: Partial<TLeadAl
     </head>
     <body>
       <div class="container">
-        <h2>Nuevo Lead al Contado</h2>
+        <h2>Nuevo Lead al Contado para ${contadoLead.propiedad_interes}</h2>
         <p>Se ha recibido un nuevo lead con los siguientes datos:</p>
 
-        ${formatBox("Nombre", contadoLead.nombre)}
-        ${formatBox("Teléfono", contadoLead.telefono)}
-        ${formatBox("Email", contadoLead.email ? `<a href="mailto:${contadoLead.email}">${contadoLead.email}</a>` : "")}
-        ${formatBox("Uso de Vivienda", contadoLead.uso_vivienda)}
-        ${formatBox("Finalidad de la Inversión", contadoLead.fin_inversion)}
-        ${formatBox("Zona de Interés", contadoLead.zona_interes)}
-        ${formatBox("Ahorros Disponibles", contadoLead.ahorros_disponibles ? `€${contadoLead.ahorros_disponibles.toLocaleString()}` : "")}
-        ${formatBox("Propiedad de Interés", contadoLead.propiedad_interes)}
-        ${formatBox("Mensaje Idealista", contadoLead.mensaje_idealista)}
-        ${formatBox("Fecha de Contacto", contadoLead.fecha_contacto ? contadoLead.fecha_contacto.toLocaleDateString() : "")}
+        ${formatBox('Nombre', contadoLead.nombre)}
+        ${formatBox('Teléfono', contadoLead.telefono)}
+        ${formatBox('Email', contadoLead.email ? `<a href="mailto:${contadoLead.email}">${contadoLead.email}</a>` : '')}
+        ${formatBox('Uso de Vivienda', contadoLead.uso_vivienda)}
+        ${formatBox('Finalidad de la Inversión', contadoLead.fin_inversion)}
+        ${formatBox('Zona de Interés', contadoLead.zona_interes)}
+        ${formatBox(
+          'Ahorros Disponibles',
+          contadoLead.ahorros_disponibles ? `€${contadoLead.ahorros_disponibles.toLocaleString()}` : ''
+        )}
+        ${formatBox('Mensaje que envió por Idealista', contadoLead.mensaje_idealista)}
 
         Para acceder al Panel de leads: https://web.totalum.app/table/leads
   
