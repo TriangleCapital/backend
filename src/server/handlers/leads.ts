@@ -107,7 +107,7 @@ export async function handleCompletedChatbot(phoneNumber: string, contactData: M
     alreadyHandled = leadData.alreadyHandled;
   }
 
-  if (!lead.chatbot_completado) {
+  if (!alreadyHandled) {
     await sendCompletedChatbotEmail(receiverEmail, leadType, lead);
   }
 
