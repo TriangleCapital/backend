@@ -1,7 +1,7 @@
 import fs from 'fs';
 import * as XLSX from 'xlsx';
 import { ExcelLead } from '../database/interfaces';
-import { ExcelLeadOrigin, TBoolean, TLeadOrigin } from '../database/interfaces/enums';
+import { ExcelLeadOrigin, TBoolean, TLeadCuandoQuiereMudarse, TLeadOrigin } from '../database/interfaces/enums';
 import { TLeadAlContado, TLeadHipoteca, TLeadShared } from '../database/interfaces/totalum';
 import { MContactData, MSubscriber } from '../database/interfaces/manychat';
 import { parse } from 'path';
@@ -83,13 +83,19 @@ export function parseHipotecaLeadFromManychatToTotalum(contactData: MContactData
     contactData.custom_fields;
 
   const phone = formatPhoneNumber(contactData.whatsapp_phone);
+  
+  const moveTime =
+    cuando_quiere_mudarse === TLeadCuandoQuiereMudarse.En3Meses ||
+    cuando_quiere_mudarse === TLeadCuandoQuiereMudarse.Enseguida
+      ? cuando_quiere_mudarse
+      : `${cuando_quiere_mudarse} meses`;
 
   return {
     nombre: contactData.name,
     telefono: phone,
     ahorros_disponibles,
     estado_hipoteca,
-    cuando_quiere_mudarse: `${cuando_quiere_mudarse} meses`,
+    cuando_quiere_mudarse: moveTime,
     venta_actual_propiedad,
     chatbot_completado: chatbot_completado || TBoolean.No,
   };

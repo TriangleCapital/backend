@@ -55,6 +55,8 @@ export async function sendEmail(receiverEmail: string, subject: string, htmlMess
 
     let emailTransporter = await createTransporter();
     await emailTransporter.sendMail(mailOptions);
+
+    console.log(`Email sent with email options: ${mailOptions}`);
   } catch (err) {
     throw new Error(`Error sending gmail email: ${err.message}`);
   }
