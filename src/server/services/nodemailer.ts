@@ -46,6 +46,7 @@ const createTransporter = async () => {
 
 export async function sendEmail(receiverEmail: string, subject: string, htmlMessage: string) {
   try {
+    console.log('sending email...')
     const mailOptions = {
       from: process.env.USER_EMAIL,
       to: receiverEmail,

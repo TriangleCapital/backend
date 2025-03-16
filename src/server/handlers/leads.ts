@@ -100,6 +100,7 @@ export async function handleCompletedChatbot(phoneNumber: string, contactData: M
     lead = await handleContadoInteraction(phoneNumber, contactData, sharedLead);
   }
 
+  console.log('entering to send email: ', lead.chatbot_completado);
   if (!lead.chatbot_completado) {
     await sendCompletedChatbotEmail(receiverEmail, leadType, lead);
   }
