@@ -25,16 +25,25 @@ export enum ExcelLeadState {
 
 export enum TLeadFinanciacion {
   Hipoteca = 'Hipoteca',
-  AlContado = 'Al contado'
-};
+  AlContado = 'Al contado',
+}
 
 export enum TLeadUsoVivienda {
   ViviendaPrincipal = 'Vivienda principal',
-  Inversion = 'Inversión'
-};
+  Inversion = 'Inversión',
+}
 
 export enum TLeadFinInversion {
   ReformarYVender = 'Reformar y vender',
-  RentabilidadPorAlquiler = 'Rentabilidad por alquiler'
-};
+  RentabilidadPorAlquiler = 'Rentabilidad por alquiler',
+}
 
+export enum TLeadEstadoHipoteca {
+  VistaConElBanco = 'Vista con el banco',
+  QuiereAsesoramiento = 'Quiere asesoramiento + visita',
+}
+
+export enum TLeadCuandoQuiereMudarse {
+  Enseguida = 'Enseguida',
+  En3Meses = 'En 3 meses',
+}

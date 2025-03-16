@@ -1,11 +1,11 @@
 import { TotalumApiSdk } from 'totalum-api-sdk';
 import { TOTALUM_LAST_LINK_WORKED_ID, TOTALUM_LAST_PROPERTY_WORKED_ID, totalumOptions } from '../../utils/constants';
-import { TLastPropertyWorked, TLead } from '../../database/interfaces/totalum';
+import { TLastPropertyWorked, TLeadAlContado, TLeadHipoteca, TLeadShared } from '../../database/interfaces/totalum';
 
 const totalumSdk = new TotalumApiSdk(totalumOptions);
 
-// ------ lead ------
-export async function getAllLeads(): Promise<TLead[]> {
+// ------ lead sin respuesta ------
+export async function getAllSharedLeads(): Promise<TLeadShared[]> {
   try {
     const response = await totalumSdk.crud.getItems('lead', {
       pagination: {
@@ -23,7 +23,7 @@ export async function getAllLeads(): Promise<TLead[]> {
   }
 }
 
-export async function createLead(lead: Partial<TLead>): Promise<string> {
+export async function createSharedLead(lead: Partial<TLeadShared>): Promise<string> {
   try {
     const response = await totalumSdk.crud.createItem('lead', lead);
     return response.data.data.insertedId;
@@ -36,7 +36,7 @@ export async function createLead(lead: Partial<TLead>): Promise<string> {
   }
 }
 
-export async function updateLead(leadId: string, update: Partial<TLead>) {
+export async function updateSharedLead(leadId: string, update: Partial<TLeadShared>) {
   try {
     if (!leadId) return;
 
@@ -46,6 +46,112 @@ export async function updateLead(leadId: string, update: Partial<TLead>) {
       throw new Error(`Error actualizando el lead de Totalum: ${error.response.data.errors}`);
     } else {
       throw new Error(`Error actualizando el lead de Totalum: ${error.message}`);
+    }
+  }
+}
+
+export async function removeSharedLead(leadId: string) {
+  try {
+    if (!leadId) return;
+
+    await totalumSdk.crud.deleteItemById('lead', leadId);
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error borrando el lead de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error borrando el lead de Totalum: ${error.message}`);
+    }
+  }
+}
+
+// ------ lead hipoteca ------
+export async function getAllHipotecaLeads(): Promise<TLeadHipoteca[]> {
+  try {
+    const response = await totalumSdk.crud.getItems('lead_hipoteca', {
+      pagination: {
+        limit: 999,
+        page: 0,
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error obteniendo todos los leads hipoteca de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error obteniendo todos los leads hipoteca de Totalum: ${error.message}`);
+    }
+  }
+}
+
+export async function createHipotecaLead(lead: Partial<TLeadHipoteca>): Promise<string> {
+  try {
+    const response = await totalumSdk.crud.createItem('lead_hipoteca', lead);
+    return response.data.data.insertedId;
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error creando el lead hipoteca de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error creando el lead hipoteca de Totalum: ${error.message}`);
+    }
+  }
+}
+
+export async function updateHipotecaLead(leadId: string, update: Partial<TLeadHipoteca>) {
+  try {
+    if (!leadId) return;
+
+    await totalumSdk.crud.editItemById('lead_hipoteca', leadId, update);
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error actualizando el lead hipoteca de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error actualizando el lead hipoteca de Totalum: ${error.message}`);
+    }
+  }
+}
+
+// ------ lead contado ------
+export async function getAllContadoLeads(): Promise<TLeadAlContado[]> {
+  try {
+    const response = await totalumSdk.crud.getItems('lead_al_contado', {
+      pagination: {
+        limit: 999,
+        page: 0,
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error obteniendo todos los leads contado de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error obteniendo todos los leads contado de Totalum: ${error.message}`);
+    }
+  }
+}
+
+export async function createContadoLead(lead: Partial<TLeadAlContado>): Promise<string> {
+  try {
+    const response = await totalumSdk.crud.createItem('lead_al_contado', lead);
+    return response.data.data.insertedId;
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error creando el lead contado de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error creando el lead contado de Totalum: ${error.message}`);
+    }
+  }
+}
+
+export async function updateContadoLead(leadId: string, update: Partial<TLeadAlContado>) {
+  try {
+    if (!leadId) return;
+
+    await totalumSdk.crud.editItemById('lead_al_contado', leadId, update);
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error actualizando el lead contado de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error actualizando el lead contado de Totalum: ${error.message}`);
     }
   }
 }

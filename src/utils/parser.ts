@@ -1,10 +1,14 @@
 import fs from 'fs';
 import * as XLSX from 'xlsx';
 import { ExcelLead } from '../database/interfaces';
-import { ExcelLeadOrigin, ExcelLeadState, TBoolean, TLeadOrigin, TLeadPrimitiveState } from '../database/interfaces/enums';
-import { TLead } from '../database/interfaces/totalum';
+import { ExcelLeadOrigin, TBoolean, TLeadOrigin } from '../database/interfaces/enums';
+import { TLeadAlContado, TLeadHipoteca, TLeadShared } from '../database/interfaces/totalum';
+import { MContactData, MSubscriber } from '../database/interfaces/manychat';
+import { parse } from 'path';
 
 export function formatPhoneNumber(phone: string): string {
+  if (!phone) return '';
+
   let cleaned = phone.replace(/[^0-9+]/g, '');
 
   if (!cleaned.startsWith('+34')) {
@@ -20,26 +24,22 @@ export function formatPhoneNumber(phone: string): string {
   return cleaned;
 }
 
-export function parseLeadFromExcelToTotalum(excelLead: ExcelLead): Partial<TLead> {
+export function parseLeadFromExcelToTotalum(excelLead: ExcelLead): Partial<TLeadShared> {
   const [day, month, year, time] = excelLead.FECHA.split(/[/ ]/);
   const timestamp = new Date(`${year}-${month}-${day}T${time}`);
 
   return {
-    origen: excelLead.ORIGEN === ExcelLeadOrigin.Email ? TLeadOrigin.Email : TLeadOrigin.Llamada,
-    estado_primitivo:
-      excelLead.ESTADO === ExcelLeadState.Contestada ? TLeadPrimitiveState.Contestado : TLeadPrimitiveState.NoContestado,
-    mensaje_primitivo: excelLead.MENSAJE,
+    mensaje_idealista: excelLead.MENSAJE,
     nombre: excelLead.USUARIO,
-    telefono: `${excelLead.TELÉFONO}`,
+    telefono: excelLead.TELÉFONO,
     email: excelLead.EMAIL,
-    timestamp,
-    conversacion_iniciada: TBoolean.No,
+    fecha_contacto: timestamp,
     propiedad_interes: excelLead.DESCRIPCIÓN,
     chatbot_completado: TBoolean.No,
   };
 }
 
-export function parseExcelToTLeads(excel: Express.Multer.File): Partial<TLead>[] {
+export function parseExcelToTLeads(excel: Express.Multer.File): Partial<TLeadShared>[] {
   try {
     if (!excel.path) {
       throw new Error('File path is missing.');
@@ -63,12 +63,11 @@ export function parseExcelToTLeads(excel: Express.Multer.File): Partial<TLead>[]
   }
 }
 
-export function parseLeadFromTotalumToManychat(lead: Partial<TLead>): MSubscriber {
+export function parseLeadFromTotalumToManychat(lead: Partial<TLeadShared>): MSubscriber {
   const phone = lead.telefono ? formatPhoneNumber(lead.telefono) : '';
 
   return {
     first_name: lead.nombre || '',
-    last_name: lead.apellidos || '',
     phone,
     whatsapp_phone: phone,
     email: lead.email || '',
@@ -76,5 +75,80 @@ export function parseLeadFromTotalumToManychat(lead: Partial<TLead>): MSubscribe
     has_opt_in_sms: false,
     has_opt_in_email: false,
     consent_phrase: '',
+  };
+}
+
+export function parseHipotecaLeadFromManychatToTotalum(contactData: MContactData): Partial<TLeadHipoteca> {
+  const { ahorros_disponibles, estado_hipoteca, cuando_quiere_mudarse, venta_actual_propiedad, chatbot_completado } =
+    contactData.custom_fields;
+
+  const phone = formatPhoneNumber(contactData.whatsapp_phone);
+
+  return {
+    nombre: contactData.name,
+    telefono: phone,
+    ahorros_disponibles,
+    estado_hipoteca,
+    cuando_quiere_mudarse,
+    venta_actual_propiedad,
+    chatbot_completado: chatbot_completado || TBoolean.No,
+  };
+}
+
+export function parseContadoLeadFromManychatToTotalum(contactData: MContactData): Partial<TLeadAlContado> {
+  const { ahorros_disponibles, uso_vivienda, fin_inversion, zona_interes, chatbot_completado } = contactData.custom_fields;
+
+  const phone = formatPhoneNumber(contactData.whatsapp_phone);
+
+  return {
+    nombre: contactData.name,
+    telefono: phone,
+    ahorros_disponibles,
+    uso_vivienda,
+    fin_inversion,
+    zona_interes,
+    chatbot_completado: chatbot_completado || TBoolean.No,
+  };
+}
+
+export function parseHipotecaLeadFromMultipleSourcesToTotalum(
+  manychatContactData: MContactData,
+  totalumSharedLead: TLeadShared
+): Partial<TLeadHipoteca> {
+  const { email, mensaje_idealista, fecha_contacto, propiedad_interes } = totalumSharedLead;
+
+  const parsedContactData = parseHipotecaLeadFromManychatToTotalum(manychatContactData);
+
+  const phone = formatPhoneNumber(manychatContactData.whatsapp_phone);
+
+  return {
+    ...parsedContactData,
+    nombre: manychatContactData.name,
+    telefono: phone,
+    email,
+    mensaje_idealista,
+    fecha_contacto,
+    propiedad_interes,
+  };
+}
+
+export function parseContadoLeadFromMultipleSourcesToTotalum(
+  manychatContactData: MContactData,
+  totalumSharedLead: TLeadShared
+): Partial<TLeadAlContado> {
+  const { email, mensaje_idealista, fecha_contacto, propiedad_interes } = totalumSharedLead;
+
+  const parsedContactData = parseContadoLeadFromManychatToTotalum(manychatContactData);
+
+  const phone = formatPhoneNumber(manychatContactData.whatsapp_phone);
+
+  return {
+    ...parsedContactData,
+    nombre: manychatContactData.name,
+    telefono: phone,
+    email,
+    mensaje_idealista,
+    fecha_contacto,
+    propiedad_interes,
   };
 }

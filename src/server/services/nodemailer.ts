@@ -44,13 +44,13 @@ const createTransporter = async () => {
   }
 };
 
-export async function sendEmail(receiverEmail: string, subject: string, message: string) {
+export async function sendEmail(receiverEmail: string, subject: string, htmlMessage: string) {
   try {
     const mailOptions = {
       from: process.env.USER_EMAIL,
       to: receiverEmail,
       subject,
-      text: message,
+      html: htmlMessage,
     };
 
     let emailTransporter = await createTransporter();

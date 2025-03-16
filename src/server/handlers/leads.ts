@@ -1,10 +1,25 @@
-import { TBoolean } from '../../database/interfaces/enums';
-import { MANYCHAT_BOT_FIELD_ID, MANYCHAT_LINK_BOT_FIELD_ID } from '../../utils/constants';
+import { TLeadFinanciacion } from '../../database/interfaces/enums';
+import { MContactData } from '../../database/interfaces/manychat';
+import { TLeadAlContado, TLeadHipoteca } from '../../database/interfaces/totalum';
+import { MANYCHAT_REALTY_NAME_FIELD_ID, MANYCHAT_REALTY_LINK_FIELD_ID } from '../../utils/constants';
 import { sleep } from '../../utils/funcs';
 import { parseExcelToTLeads } from '../../utils/parser';
-import { filterNonSendedLeads } from '../helpers/leads';
+import {
+  filterNonSendedLeads,
+  findSharedLeadByPhone,
+  handleContadoInteraction,
+  handleHipotecaInteraction,
+} from '../helpers/leads';
+import { sendCompletedChatbotEmail } from '../helpers/notifications';
 import { createSubscriber, sendFlowToSubscriber, updateBotField } from '../services/manychat';
-import { createLead, getLastLink, getLastProperty, updateLastLink, updateLastProperty, updateLead } from '../services/totalum';
+import {
+  getLastLink,
+  getLastProperty,
+  updateLastLink,
+  updateLastProperty,
+  createSharedLead,
+  removeSharedLead,
+} from '../services/totalum';
 
 export async function handleExcelLeads(excel: Express.Multer.File, realtyLink: string) {
   try {
@@ -19,22 +34,20 @@ export async function handleExcelLeads(excel: Express.Multer.File, realtyLink: s
     for (const lead of leadsToCreate) {
       try {
         if (lead.propiedad_interes !== lastPropertyWorked) {
-          await updateBotField(MANYCHAT_BOT_FIELD_ID, lead.propiedad_interes);
+          await updateBotField(MANYCHAT_REALTY_NAME_FIELD_ID, lead.propiedad_interes);
           await updateLastProperty(lead.propiedad_interes);
         }
 
         if (realtyLink !== lastLinkWorked) {
-          await updateBotField(MANYCHAT_LINK_BOT_FIELD_ID, realtyLink);
+          await updateBotField(MANYCHAT_REALTY_LINK_FIELD_ID, realtyLink);
           await updateLastLink(realtyLink);
         }
 
         const subscriberId = await createSubscriber(lead);
 
-        const newLeadId = await createLead(lead);
-
         await sendFlowToSubscriber(subscriberId);
 
-        await updateLead(newLeadId, { conversacion_iniciada: TBoolean.Si });
+        await createSharedLead(lead);
 
         await sleep(500);
       } catch (error) {
@@ -49,5 +62,52 @@ export async function handleExcelLeads(excel: Express.Multer.File, realtyLink: s
     };
   } catch (error) {
     throw new Error(`Error manejando los leads del excel: ${error.message}`);
+  }
+}
+
+export async function handleManychatInteraction(phoneNumber: string, contactData: MContactData) {
+  try {
+    const leadType: TLeadFinanciacion = contactData.custom_fields.tipo_financiacion;
+
+    const sharedLead = await findSharedLeadByPhone(phoneNumber);
+
+    if (leadType && leadType === TLeadFinanciacion.Hipoteca) {
+      await handleHipotecaInteraction(phoneNumber, contactData, sharedLead);
+    }
+
+    if (leadType && leadType === TLeadFinanciacion.AlContado) {
+      await handleContadoInteraction(phoneNumber, contactData, sharedLead);
+    }
+
+    if (sharedLead) await removeSharedLead(sharedLead._id);
+  } catch (error) {
+    throw new Error(`Error manejando la interacción de Manychat: ${error.message}`);
+  }
+}
+
+export async function handleCompletedChatbot(phoneNumber: string, contactData: MContactData, receiverEmail: string) {
+  const leadType: TLeadFinanciacion = contactData.custom_fields.tipo_financiacion;
+
+  const sharedLead = await findSharedLeadByPhone(phoneNumber);
+
+  let lead: Partial<TLeadHipoteca> | Partial<TLeadAlContado>;
+
+  if (leadType && leadType === TLeadFinanciacion.Hipoteca) {
+    lead = await handleHipotecaInteraction(phoneNumber, contactData, sharedLead);
+  }
+
+  if (leadType && leadType === TLeadFinanciacion.AlContado) {
+    lead = await handleContadoInteraction(phoneNumber, contactData, sharedLead);
+  }
+
+  if (!lead.chatbot_completado) {
+    await sendCompletedChatbotEmail(receiverEmail, leadType, lead);
+  }
+
+  if (sharedLead) await removeSharedLead(sharedLead._id);
+
+  try {
+  } catch (error) {
+    throw new Error(`Error manejando el chatbot completado: ${error.message}`);
   }
 }

@@ -7,6 +7,8 @@ import hpp from 'hpp';
 import { generalError, notFoundError } from '../errors/generalError';
 import scriptRouter from './routers/scriptRouter';
 import totalumRouter from './routers/totalumRouter';
+import notificationsRouter from './routers/notificationsRouter';
+import manychatRouter from './routers/manychatRouter';
 
 const app = express();
 
@@ -41,6 +43,8 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.get('/', (req, res) => res.send('Working!'));
 
 app.use('/totalum', totalumRouter);
+app.use('/manychat', manychatRouter);
+app.use('/notifications', notificationsRouter);
 app.use('/script', scriptRouter);
 
 app.use(notFoundError);

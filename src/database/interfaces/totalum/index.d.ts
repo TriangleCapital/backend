@@ -1,5 +1,7 @@
 import {
   TBoolean,
+  TLeadCuandoQuiereMudarse,
+  TLeadEstadoHipoteca,
   TLeadFinanciacion,
   TLeadFinInversion,
   TLeadOrigin,
@@ -14,26 +16,30 @@ interface TMensajeIniciador {
   mensaje: string;
 }
 
-interface TLead {
+interface TLeadShared {
   _id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  conversacion_iniciada: TBoolean;
   nombre: string;
-  apellidos: string;
   telefono: string;
   email: string;
-  origen: TLeadOrigin;
-  estado_primitivo: TLeadPrimitiveState;
-  mensaje_primitivo: string;
-  timestamp: Date;
+  mensaje_idealista: string;
+  fecha_contacto: Date;
   propiedad_interes: string;
-  financiacion: TLeadFinanciacion;
+  chatbot_completado: TBoolean;
+  ahorros_disponibles: number;
+}
+
+interface TLeadAlContado extends TLeadShared {
   uso_vivienda: TLeadUsoVivienda;
   fin_inversion: TLeadFinInversion;
-  ahorros_disponibles: number;
-  chatbot_completado: TBoolean;
+  zona_interes: string;
 }
+
+interface TLeadHipoteca extends TLeadShared {
+  estado_hipoteca: TLeadEstadoHipoteca;
+  cuando_quiere_mudarse: TLeadCuandoQuiereMudarse;
+  venta_actual_propiedad: TBoolean;
+}
+
 
 interface TLastPropertyWorked {
   _id: string;

@@ -1,9 +1,10 @@
 import axios from 'axios';
-import { TLead } from '../../database/interfaces/totalum';
 import { MANYCHAT_API, MANYCHAT_FLOW_NS, manychatOptions } from '../../utils/constants';
 import { parseLeadFromTotalumToManychat } from '../../utils/parser';
+import { TLeadShared } from '../../database/interfaces/totalum';
+import { MBotField, MSendFlow } from '../../database/interfaces/manychat';
 
-export async function createSubscriber(lead: Partial<TLead>): Promise<number> {
+export async function createSubscriber(lead: Partial<TLeadShared>): Promise<number> {
   try {
     const subscriber = parseLeadFromTotalumToManychat(lead);
 
