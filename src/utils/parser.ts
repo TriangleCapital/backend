@@ -89,7 +89,7 @@ export function parseHipotecaLeadFromManychatToTotalum(contactData: MContactData
     telefono: phone,
     ahorros_disponibles,
     estado_hipoteca,
-    cuando_quiere_mudarse,
+    cuando_quiere_mudarse: `${cuando_quiere_mudarse} meses`,
     venta_actual_propiedad,
     chatbot_completado: chatbot_completado || TBoolean.No,
   };

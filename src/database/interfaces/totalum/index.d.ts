@@ -36,7 +36,7 @@ interface TLeadAlContado extends TLeadShared {
 
 interface TLeadHipoteca extends TLeadShared {
   estado_hipoteca: TLeadEstadoHipoteca;
-  cuando_quiere_mudarse: TLeadCuandoQuiereMudarse;
+  cuando_quiere_mudarse: TLeadCuandoQuiereMudarse | string;
   venta_actual_propiedad: TBoolean;
 }
 
