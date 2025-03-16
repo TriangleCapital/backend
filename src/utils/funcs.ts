@@ -78,7 +78,7 @@ export function generateHipotecaLeadEmailHtmlMessage(hipotecaLead: Partial<TLead
         )}
         ${formatBox('Mensaje que envió por Idealista', hipotecaLead.mensaje_idealista)}
 
-        <p>Para acceder al Panel de leads: <a href="mailto:https://web.totalum.app/table/leads">https://web.totalum.app/table/leads</a></p>
+        <p>Para acceder al Panel de leads: <a target="_blank" href="https://web.totalum.app/table/leads_hipoteca">https://web.totalum.app/table/leads_hipoteca</a></p>
   
         <p>Vamos! 🚀</p>
       </div>
@@ -153,7 +153,7 @@ export function generateContadoLeadEmailHtmlMessage(contadoLead: Partial<TLeadAl
         )}
         ${formatBox('Mensaje que envió por Idealista', contadoLead.mensaje_idealista)}
 
-        <p>Para acceder al Panel de leads: <a href="mailto:https://web.totalum.app/table/leads">https://web.totalum.app/table/leads</a></p>
+        <p>Para acceder al Panel de leads: <a target="_blank" href="https://web.totalum.app/table/leads_hipoteca">https://web.totalum.app/table/leads_hipoteca</a></p>
   
         <p>Vamos! 🚀</p>
       </div>

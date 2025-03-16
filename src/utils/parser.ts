@@ -83,12 +83,13 @@ export function parseHipotecaLeadFromManychatToTotalum(contactData: MContactData
     contactData.custom_fields;
 
   const phone = formatPhoneNumber(contactData.whatsapp_phone);
-  
-  const moveTime =
-    cuando_quiere_mudarse === TLeadCuandoQuiereMudarse.En3Meses ||
-    cuando_quiere_mudarse === TLeadCuandoQuiereMudarse.Enseguida
+
+  const moveTime = cuando_quiere_mudarse
+    ? cuando_quiere_mudarse === TLeadCuandoQuiereMudarse.En3Meses ||
+      cuando_quiere_mudarse === TLeadCuandoQuiereMudarse.Enseguida
       ? cuando_quiere_mudarse
-      : `${cuando_quiere_mudarse} meses`;
+      : `${cuando_quiere_mudarse} meses`
+    : '';
 
   return {
     nombre: contactData.name,
