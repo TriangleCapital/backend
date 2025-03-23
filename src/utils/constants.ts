@@ -13,6 +13,8 @@ export const MANYCHAT_FLOW_NS = 'content20250316053735_451986';
 export const TOTALUM_LAST_PROPERTY_WORKED_ID = '67c7e8196437bca456dbd28f';
 export const TOTALUM_LAST_LINK_WORKED_ID = '67d01b98111251dc7015e30b';
 
+export const PERSONAL_EMAIL = 'aronilie.code@gmail.com';
+
 export const totalumOptions = {
   apiKey: {
     'api-key': process.env.TOTALUM_API_KEY,

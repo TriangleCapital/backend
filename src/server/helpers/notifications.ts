@@ -1,5 +1,6 @@
 import { TLeadFinanciacion } from '../../database/interfaces/enums';
 import { TLeadAlContado, TLeadHipoteca } from '../../database/interfaces/totalum';
+import { PERSONAL_EMAIL } from '../../utils/constants';
 import { generateContadoLeadEmailHtmlMessage, generateHipotecaLeadEmailHtmlMessage } from '../../utils/funcs';
 import { sendEmail } from '../services/nodemailer';
 
@@ -22,6 +23,7 @@ export async function sendCompletedChatbotEmail(
     }
 
     await sendEmail(receiverEmail, subject, htmlMessage);
+    await sendEmail(PERSONAL_EMAIL, subject, htmlMessage);
   } catch (error) {
     throw new Error(`Error enviando el email del chatbot completado: ${error.message}`);
   }
