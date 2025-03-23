@@ -1,8 +1,8 @@
 import fs from 'fs';
 import * as XLSX from 'xlsx';
-import { ExcelLead } from '../database/interfaces';
+import { ExcelLead, OkupaRoyalty } from '../database/interfaces';
 import { ExcelLeadOrigin, TBoolean, TLeadCuandoQuiereMudarse, TLeadOrigin } from '../database/interfaces/enums';
-import { TLeadAlContado, TLeadHipoteca, TLeadShared } from '../database/interfaces/totalum';
+import { TLeadAlContado, TLeadHipoteca, TLeadShared, TOkupaRealty } from '../database/interfaces/totalum';
 import { MContactData, MSubscriber } from '../database/interfaces/manychat';
 import { parse } from 'path';
 
@@ -157,5 +157,16 @@ export function parseContadoLeadFromMultipleSourcesToTotalum(
     mensaje_idealista,
     fecha_contacto,
     propiedad_interes,
+  };
+}
+
+export function parseExcelOkupaRealtyToTotalum(excelOkupaRealty: OkupaRoyalty): Partial<TOkupaRealty> {
+  return {
+    tipo_okupa: excelOkupaRealty.tipo_okupa,
+    direccion_completa: excelOkupaRealty.direccion_completa,
+    ref_catastral: excelOkupaRealty.ref_catastral,
+    precio_inicial: excelOkupaRealty.precio_inicial,
+    precio_venta: excelOkupaRealty.precio_inicial * 0.7 + 6,
+    fase_okupacion: excelOkupaRealty.fase_okupacion,
   };
 }

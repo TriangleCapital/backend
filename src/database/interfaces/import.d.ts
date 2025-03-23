@@ -1,4 +1,6 @@
 import { Request } from 'express';
+import { DebtRoyalty, OkupaRoyalty } from '.';
+import { TRoyaltieType } from './enums';
 
 interface HandleManychatInteractionPayload extends Request {
   body: {
@@ -12,5 +14,12 @@ interface CompletedChatbotPayload extends Request {
     leadPhoneNumber: string;
     contactData: MContactData;
     receiverEmail: string;
+  };
+}
+
+interface UploadRoyaltiesPayload extends Request {
+  body: {
+    royalties: Royalty[];
+    royaltyType: TRoyaltieType;
   };
 }

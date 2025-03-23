@@ -1,6 +1,7 @@
 import { TotalumApiSdk } from 'totalum-api-sdk';
 import { TOTALUM_LAST_LINK_WORKED_ID, TOTALUM_LAST_PROPERTY_WORKED_ID, totalumOptions } from '../../utils/constants';
-import { TLastPropertyWorked, TLeadAlContado, TLeadHipoteca, TLeadShared } from '../../database/interfaces/totalum';
+import { TLastPropertyWorked, TLeadAlContado, TLeadHipoteca, TLeadShared, TOkupaRealty } from '../../database/interfaces/totalum';
+import { DebtRoyalty, OkupaRoyalty } from '../../database/interfaces';
 
 const totalumSdk = new TotalumApiSdk(totalumOptions);
 
@@ -208,6 +209,110 @@ export async function updateLastLink(newLink: string) {
       throw new Error(`Error actualizando el último enlace trabajado de Totalum: ${error.response.data.errors}`);
     } else {
       throw new Error(`Error actualizando el último enlace trabajado de Totalum: ${error.message}`);
+    }
+  }
+}
+
+// ------ inmueble_okupado ------
+export async function getAllOkupaRoyalties(): Promise<OkupaRoyalty[]> {
+  let allRoyalties: OkupaRoyalty[] = [];
+  let page = 0;
+  const limit = 999;
+  let hasMore = true;
+
+  try {
+    while (hasMore) {
+      const response = await totalumSdk.crud.getItems('inmueble_okupado', {
+        pagination: { limit, page },
+      });
+
+      const royalties = response.data.data;
+      allRoyalties = allRoyalties.concat(royalties);
+
+      if (royalties.length < limit) {
+        hasMore = false;
+      } else {
+        page++;
+      }
+    }
+
+    return allRoyalties;
+  } catch (error) {
+    throw new Error(
+      `Error obteniendo todas las propiedades okupadas de Totalum: ${error.response?.data?.errors || error.message}`
+    );
+  }
+}
+
+export async function createOkupaRoyalty(royalty: Partial<TOkupaRealty>): Promise<string> {
+  try {
+    const response = await totalumSdk.crud.createItem('inmueble_okupado', royalty);
+
+    return response.data.data.insertedId;
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error creando el inmueble okupa de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error creando el inmueble okupa de Totalum: ${error.message}`);
+    }
+  }
+}
+
+export async function removeOkupaRoyalty(royaltyId: string) {
+  try {
+    if (!royaltyId) return;
+
+    await totalumSdk.crud.deleteItemById('inmueble_okupado', royaltyId);
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error borrando el inmueble okupa de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error borrando el inmueble okupa de Totalum: ${error.message}`);
+    }
+  }
+}
+
+// ------ inmueble_deuda ------
+export async function getAllDebtRoyalties(): Promise<DebtRoyalty[]> {
+  let allRoyalties: DebtRoyalty[] = [];
+  let page = 0;
+  const limit = 999;
+  let hasMore = true;
+
+  try {
+    while (hasMore) {
+      const response = await totalumSdk.crud.getItems('inmueble_deuda', {
+        pagination: { limit, page },
+      });
+
+      const royalties = response.data.data;
+      allRoyalties = allRoyalties.concat(royalties);
+
+      if (royalties.length < limit) {
+        hasMore = false;
+      } else {
+        page++;
+      }
+    }
+
+    return allRoyalties;
+  } catch (error) {
+    throw new Error(
+      `Error obteniendo todas las propiedades deuda de Totalum: ${error.response?.data?.errors || error.message}`
+    );
+  }
+}
+
+export async function createDebtRoyalty(royalty: DebtRoyalty): Promise<string> {
+  try {
+    const response = await totalumSdk.crud.createItem('inmueble_deuda', royalty);
+
+    return response.data.data.insertedId;
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error creando el inmueble deuda de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error creando el inmueble deuda de Totalum: ${error.message}`);
     }
   }
 }

@@ -1,5 +1,7 @@
 import {
+  EstadoNegociacion,
   TBoolean,
+  TipoOkupa,
   TLeadCuandoQuiereMudarse,
   TLeadEstadoHipoteca,
   TLeadFinanciacion,
@@ -40,8 +42,25 @@ interface TLeadHipoteca extends TLeadShared {
   venta_actual_propiedad: TBoolean;
 }
 
-
 interface TLastPropertyWorked {
   _id: string;
   descripcion: string;
+}
+
+interface TOkupaRealty {
+  _id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  tipo_okupa: TipoOkupa | '';
+  estado_negociacion: EstadoNegociacion | '';
+  notas: string;
+  enlace_inmueble: string;
+  enlace_idealista: string;
+  fotos: FileRecordI[];
+  ref_catastral: string;
+  precio_venta: number;
+  precio_valorado: number;
+  direccion_completa: string;
+  precio_inicial: number;
+  fase_okupacion: string;
 }

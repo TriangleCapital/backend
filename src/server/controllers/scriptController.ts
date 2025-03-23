@@ -2,12 +2,19 @@ import { NextFunction, Request, Response } from 'express';
 import { TotalumApiSdk } from 'totalum-api-sdk';
 import { totalumOptions } from '../../utils/constants';
 import CustomError from '../../errors/CustomError';
+import { getAllOkupaRoyalties, removeOkupaRoyalty } from '../services/totalum';
 
 const totalumSdk = new TotalumApiSdk(totalumOptions);
 
 export async function runScript(req: Request, res: Response, next: NextFunction) {
   try {
     const { orderId } = req.body;
+
+    const royalties: any = await getAllOkupaRoyalties();
+
+    for (const royalty of royalties.slice(30)) {
+      await removeOkupaRoyalty(royalty._id);
+    }
 
     res.status(200).json(true);
   } catch (error) {

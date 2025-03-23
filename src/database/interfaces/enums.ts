@@ -47,3 +47,26 @@ export enum TLeadCuandoQuiereMudarse {
   Enseguida = 'Enseguida',
   En3Meses = 'En 3 meses',
 }
+
+export enum TRoyaltieType {
+  Okupados = 'inmueble_okupado',
+  Deuda = 'inmueble_deuda',
+}
+
+export enum TipoOkupa {
+  Ajeno = 'Ajeno',
+  AntiguoPropietario = 'Antiguo Propietario',
+  AntiguoInquilino = 'Antiguo Inquilino',
+  Desconocido = 'Desconocido',
+  Vacio = 'Vacío'
+}
+
+export enum EstadoNegociacion {
+  PendienteSanear = 'Pendiente sanear',
+  PendienteSanearPrioritario = 'Pendiente sanear prioritario',
+  RequiereAccion = 'Requiere acción',
+  EnEspera = 'En espera',
+  PendienteVisita = 'Pendiente Visita',
+  PresentadoAInversores = 'Presentado a Inversores',
+  Cerrado = 'Cerrado'
+}
