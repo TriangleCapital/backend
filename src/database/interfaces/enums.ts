@@ -58,15 +58,36 @@ export enum TipoOkupa {
   AntiguoPropietario = 'Antiguo Propietario',
   AntiguoInquilino = 'Antiguo Inquilino',
   Desconocido = 'Desconocido',
-  Vacio = 'Vacío'
+  Vacio = 'Vacío',
 }
 
-export enum EstadoNegociacion {
+export enum EstadoNegociacionOkupa {
   PendienteSanear = 'Pendiente sanear',
   PendienteSanearPrioritario = 'Pendiente sanear prioritario',
   RequiereAccion = 'Requiere acción',
   EnEspera = 'En espera',
   PendienteVisita = 'Pendiente Visita',
   PresentadoAInversores = 'Presentado a Inversores',
-  Cerrado = 'Cerrado'
+  Cerrado = 'Cerrado',
+}
+
+export enum EstadoNegociacionDeuda {
+  PendienteVisitar = 'Pendiente Visitar',
+  PendienteVisitarPrioritario = 'Pendiente Visitar Prioritario',
+  RequiereAccion = 'Requiere Acción',
+  EnEspera = 'En Espera',
+  Descartado = 'Descartado',
+  Cerrado = 'Cerrado',
+}
+
+export enum Responsable {
+  Aron = 'Aron',
+  Aitor = 'Aitor',
+}
+
+export enum Provincia {
+  Valencia = 'Valencia',
+  Alicante = 'Alicante',
+  Castellon = 'Castellón',
+  Tarragona = 'Tarragona',
 }

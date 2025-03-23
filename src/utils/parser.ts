@@ -1,8 +1,8 @@
 import fs from 'fs';
 import * as XLSX from 'xlsx';
-import { ExcelLead, OkupaRoyalty } from '../database/interfaces';
+import { DebtRoyalty, ExcelLead, OkupaRoyalty } from '../database/interfaces';
 import { ExcelLeadOrigin, TBoolean, TLeadCuandoQuiereMudarse, TLeadOrigin } from '../database/interfaces/enums';
-import { TLeadAlContado, TLeadHipoteca, TLeadShared, TOkupaRealty } from '../database/interfaces/totalum';
+import { TDebtRealty, TLeadAlContado, TLeadHipoteca, TLeadShared, TOkupaRealty } from '../database/interfaces/totalum';
 import { MContactData, MSubscriber } from '../database/interfaces/manychat';
 import { parse } from 'path';
 
@@ -166,7 +166,18 @@ export function parseExcelOkupaRealtyToTotalum(excelOkupaRealty: OkupaRoyalty): 
     direccion_completa: excelOkupaRealty.direccion_completa,
     ref_catastral: excelOkupaRealty.ref_catastral,
     precio_inicial: excelOkupaRealty.precio_inicial,
-    precio_venta: excelOkupaRealty.precio_inicial * 0.7 + 6,
+    precio_venta: Math.floor(excelOkupaRealty.precio_inicial * 0.7 + 6),
     fase_okupacion: excelOkupaRealty.fase_okupacion,
+  };
+}
+
+export function parseExcelDebtRealtyToTotalum(excelDebtRealty: DebtRoyalty): Partial<TDebtRealty> {
+  return {
+    direccion_completa: excelDebtRealty.direccion_completa,
+    ref_catastral: excelDebtRealty.ref_catastral,
+    uf: excelDebtRealty.uf,
+    valor_deuda: Math.floor(excelDebtRealty.valor_deuda),
+    valor_tasacion: Math.floor(excelDebtRealty.valor_tasacion),
+    fase_deuda: excelDebtRealty.fase_deuda,
   };
 }

@@ -1,5 +1,8 @@
 import {
-  EstadoNegociacion,
+  EstadoNegociacionDeuda,
+  EstadoNegociacionOkupa,
+  Provincia,
+  Responsable,
   TBoolean,
   TipoOkupa,
   TLeadCuandoQuiereMudarse,
@@ -52,7 +55,7 @@ interface TOkupaRealty {
   createdAt: Date;
   updatedAt: Date;
   tipo_okupa: TipoOkupa | '';
-  estado_negociacion: EstadoNegociacion | '';
+  estado_negociacion: EstadoNegociacionOkupa | '';
   notas: string;
   enlace_inmueble: string;
   enlace_idealista: string;
@@ -63,4 +66,26 @@ interface TOkupaRealty {
   direccion_completa: string;
   precio_inicial: number;
   fase_okupacion: string;
+}
+
+interface TDebtRealty {
+  _id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  ref_catastral: string;
+  uf: string;
+  fase_deuda: string;
+  valor_deuda: number;
+  valor_venta: number;
+  valor_tasacion: number;
+  enlace_inmueble: string;
+  enlace_idealista: string;
+  notas: string;
+  estado_negociacion: EstadoNegociacionDeuda;
+  responsable: Responsable;
+  fotos: FileRecordI[];
+  enlace_maps: string;
+  provincia: Provincia;
+  direccion_catastro: string;
+  direccion_completa: string;
 }

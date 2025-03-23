@@ -1,6 +1,6 @@
 import { TotalumApiSdk } from 'totalum-api-sdk';
 import { TOTALUM_LAST_LINK_WORKED_ID, TOTALUM_LAST_PROPERTY_WORKED_ID, totalumOptions } from '../../utils/constants';
-import { TLastPropertyWorked, TLeadAlContado, TLeadHipoteca, TLeadShared, TOkupaRealty } from '../../database/interfaces/totalum';
+import { TDebtRealty, TLastPropertyWorked, TLeadAlContado, TLeadHipoteca, TLeadShared, TOkupaRealty } from '../../database/interfaces/totalum';
 import { DebtRoyalty, OkupaRoyalty } from '../../database/interfaces';
 
 const totalumSdk = new TotalumApiSdk(totalumOptions);
@@ -303,7 +303,7 @@ export async function getAllDebtRoyalties(): Promise<DebtRoyalty[]> {
   }
 }
 
-export async function createDebtRoyalty(royalty: DebtRoyalty): Promise<string> {
+export async function createDebtRoyalty(royalty: Partial<TDebtRealty>): Promise<string> {
   try {
     const response = await totalumSdk.crud.createItem('inmueble_deuda', royalty);
 
