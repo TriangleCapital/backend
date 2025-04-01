@@ -1,7 +1,13 @@
 import fs from 'fs';
 import * as XLSX from 'xlsx';
 import { DebtRoyalty, ExcelLead, OkupaRoyalty } from '../database/interfaces';
-import { ExcelLeadOrigin, TBoolean, TLeadCuandoQuiereMudarse, TLeadOrigin } from '../database/interfaces/enums';
+import {
+  EstadoNegociacionOkupa,
+  ExcelLeadOrigin,
+  TBoolean,
+  TLeadCuandoQuiereMudarse,
+  TLeadOrigin,
+} from '../database/interfaces/enums';
 import { TDebtRealty, TLeadAlContado, TLeadHipoteca, TLeadShared, TOkupaRealty } from '../database/interfaces/totalum';
 import { MContactData, MSubscriber } from '../database/interfaces/manychat';
 import { parse } from 'path';
@@ -168,6 +174,7 @@ export function parseExcelOkupaRealtyToTotalum(excelOkupaRealty: OkupaRoyalty): 
     precio_inicial: excelOkupaRealty.precio_inicial,
     precio_venta: Math.floor(excelOkupaRealty.precio_inicial * 0.7 + 6),
     fase_okupacion: excelOkupaRealty.fase_okupacion,
+    estado_negociacion: EstadoNegociacionOkupa.Nuevo,
   };
 }
 

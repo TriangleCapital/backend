@@ -69,6 +69,7 @@ export enum EstadoNegociacionOkupa {
   PendienteVisita = 'Pendiente Visita',
   PresentadoAInversores = 'Presentado a Inversores',
   Cerrado = 'Cerrado',
+  Nuevo = '🔷 Nuevo',
 }
 
 export enum EstadoNegociacionDeuda {
