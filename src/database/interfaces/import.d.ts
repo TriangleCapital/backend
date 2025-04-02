@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { DebtRoyalty, OkupaRoyalty } from '.';
+import { DebtRoyalty, OkupaRoyalty, Royalty } from '.';
 import { TRoyaltieType } from './enums';
 
 interface HandleManychatInteractionPayload extends Request {

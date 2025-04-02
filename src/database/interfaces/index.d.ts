@@ -28,5 +28,8 @@ interface DebtRoyalty {
   uf: string;
   valor_deuda: number;
   valor_tasacion: number;
+  valor_venta: number;
+  diferencia_precio: number;
   fase_deuda: string;
+  enlace_idealista: string;
 }

@@ -63,6 +63,7 @@ interface TOkupaRealty {
   ref_catastral: string;
   precio_venta: number;
   precio_valorado: number;
+  porcentaje_rentabilidad: number;
   direccion_completa: string;
   precio_inicial: number;
   fase_okupacion: string;

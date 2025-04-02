@@ -2,8 +2,10 @@ import fs from 'fs';
 import * as XLSX from 'xlsx';
 import { DebtRoyalty, ExcelLead, OkupaRoyalty } from '../database/interfaces';
 import {
+  EstadoNegociacionDeuda,
   EstadoNegociacionOkupa,
   ExcelLeadOrigin,
+  Responsable,
   TBoolean,
   TLeadCuandoQuiereMudarse,
   TLeadOrigin,
@@ -179,12 +181,24 @@ export function parseExcelOkupaRealtyToTotalum(excelOkupaRealty: OkupaRoyalty): 
 }
 
 export function parseExcelDebtRealtyToTotalum(excelDebtRealty: DebtRoyalty): Partial<TDebtRealty> {
-  return {
-    direccion_completa: excelDebtRealty.direccion_completa,
-    ref_catastral: excelDebtRealty.ref_catastral,
-    uf: excelDebtRealty.uf,
-    valor_deuda: Math.floor(excelDebtRealty.valor_deuda),
-    valor_tasacion: Math.floor(excelDebtRealty.valor_tasacion),
-    fase_deuda: excelDebtRealty.fase_deuda,
-  };
+  try {
+    const negotiationState = excelDebtRealty.fase_deuda.startsWith('06')
+      ? EstadoNegociacionDeuda.PendienteVisitarPrioritario
+      : EstadoNegociacionDeuda.PendienteVisitar;
+
+    return {
+      direccion_completa: excelDebtRealty.direccion_completa,
+      ref_catastral: excelDebtRealty.ref_catastral,
+      uf: excelDebtRealty.uf,
+      valor_deuda: Math.floor(excelDebtRealty.valor_deuda),
+      valor_tasacion: Math.floor(excelDebtRealty.valor_tasacion),
+      valor_venta: Math.floor(excelDebtRealty.valor_venta),
+      enlace_idealista: excelDebtRealty.enlace_idealista,
+      fase_deuda: excelDebtRealty.fase_deuda,
+      responsable: Responsable.Aron,
+      estado_negociacion: negotiationState,
+    };
+  } catch (error) {
+    throw new Error(`Error parseando la deuda: ${error.message}`);
+  }
 }

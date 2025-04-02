@@ -15,7 +15,7 @@ export async function handleUploadRoyalties(
     const existingRoyalties =
       royaltyType === TRoyaltieType.Okupados ? await getAllOkupaRoyalties() : await getAllDebtRoyalties();
 
-    const validRoyalties = filterValidRoyalties(excelRoyalties);
+    const validRoyalties = filterValidRoyalties(excelRoyalties, royaltyType);
 
     for (const royalty of validRoyalties) {
       try {

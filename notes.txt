@@ -1,0 +1,3 @@
+Directament representante: Aron
+Si la fase de la deuda comença en 06, es posa a pendiente sanear prioritario, sino, a pendiente sanear.
+S'ometen els que no tenen valor diferencia.
