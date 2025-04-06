@@ -1,7 +1,13 @@
 import { TotalumApiSdk } from 'totalum-api-sdk';
 import { TOTALUM_LAST_LINK_WORKED_ID, TOTALUM_LAST_PROPERTY_WORKED_ID, totalumOptions } from '../../utils/constants';
-import { TDebtRealty, TLastPropertyWorked, TLeadAlContado, TLeadHipoteca, TLeadShared, TOkupaRealty } from '../../database/interfaces/totalum';
-import { DebtRoyalty, OkupaRoyalty } from '../../database/interfaces';
+import {
+  TDebtRealty,
+  TLastPropertyWorked,
+  TLeadAlContado,
+  TLeadHipoteca,
+  TLeadShared,
+  TOkupaRealty,
+} from '../../database/interfaces/totalum';
 
 const totalumSdk = new TotalumApiSdk(totalumOptions);
 
@@ -214,8 +220,8 @@ export async function updateLastLink(newLink: string) {
 }
 
 // ------ inmueble_okupado ------
-export async function getAllOkupaRoyalties(): Promise<OkupaRoyalty[]> {
-  let allRoyalties: OkupaRoyalty[] = [];
+export async function getAllOkupaRealties(): Promise<TOkupaRealty[]> {
+  let allRoyalties: TOkupaRealty[] = [];
   let page = 0;
   const limit = 999;
   let hasMore = true;
@@ -244,7 +250,7 @@ export async function getAllOkupaRoyalties(): Promise<OkupaRoyalty[]> {
   }
 }
 
-export async function createOkupaRoyalty(royalty: Partial<TOkupaRealty>): Promise<string> {
+export async function createOkupaRealty(royalty: Partial<TOkupaRealty>): Promise<string> {
   try {
     const response = await totalumSdk.crud.createItem('inmueble_okupado', royalty);
 
@@ -258,7 +264,19 @@ export async function createOkupaRoyalty(royalty: Partial<TOkupaRealty>): Promis
   }
 }
 
-export async function removeOkupaRoyalty(royaltyId: string) {
+export async function updateOkupaRealty(realtyId: string, update: Partial<TOkupaRealty>) {
+  try {
+    await totalumSdk.crud.editItemById('inmueble_okupado', realtyId, update);
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error modificando el inmueble okupa de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error modificando el inmueble okupa de Totalum: ${error.message}`);
+    }
+  }
+}
+
+export async function removeOkupaRealty(royaltyId: string) {
   try {
     if (!royaltyId) return;
 
@@ -273,8 +291,8 @@ export async function removeOkupaRoyalty(royaltyId: string) {
 }
 
 // ------ inmueble_deuda ------
-export async function getAllDebtRoyalties(): Promise<DebtRoyalty[]> {
-  let allRoyalties: DebtRoyalty[] = [];
+export async function getAllDebtRealties(): Promise<TDebtRealty[]> {
+  let allRoyalties: TDebtRealty[] = [];
   let page = 0;
   const limit = 999;
   let hasMore = true;
@@ -303,7 +321,7 @@ export async function getAllDebtRoyalties(): Promise<DebtRoyalty[]> {
   }
 }
 
-export async function createDebtRoyalty(royalty: Partial<TDebtRealty>): Promise<string> {
+export async function createDebtRealty(royalty: Partial<TDebtRealty>): Promise<string> {
   try {
     const response = await totalumSdk.crud.createItem('inmueble_deuda', royalty);
 
@@ -313,6 +331,18 @@ export async function createDebtRoyalty(royalty: Partial<TDebtRealty>): Promise<
       throw new Error(`Error creando el inmueble deuda de Totalum: ${error.response.data.errors}`);
     } else {
       throw new Error(`Error creando el inmueble deuda de Totalum: ${error.message}`);
+    }
+  }
+}
+
+export async function updateDebtRealty(realtyId: string, update: Partial<TDebtRealty>) {
+  try {
+    await totalumSdk.crud.editItemById('inmueble_deuda', realtyId, update);
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error modificando el inmueble deuda de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error modificando el inmueble deuda de Totalum: ${error.message}`);
     }
   }
 }

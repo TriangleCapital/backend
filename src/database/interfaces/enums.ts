@@ -48,7 +48,7 @@ export enum TLeadCuandoQuiereMudarse {
   En3Meses = 'En 3 meses',
 }
 
-export enum TRoyaltieType {
+export enum TRealtyType {
   Okupados = 'inmueble_okupado',
   Deuda = 'inmueble_deuda',
 }

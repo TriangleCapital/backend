@@ -12,17 +12,20 @@ interface ExcelLead {
   FECHA: string;
 };
 
-type Royalty = OkupaRoyalty | DebtRoyalty;
+type ExcelRealty = ExcelOkupaRealty | ExcelDebtRealty;
 
-interface OkupaRoyalty {
+interface ExcelOkupaRealty {
   direccion_completa: string;
   tipo_okupa: TipoOkupa;
   ref_catastral: string;
   precio_inicial: number;
   fase_okupacion: string;
+  provincia: string;
+  comarca: string;
+  codigo_postal: string;
 }
 
-interface DebtRoyalty {
+interface ExcelDebtRealty {
   direccion_completa: string;
   ref_catastral: string;
   uf: string;

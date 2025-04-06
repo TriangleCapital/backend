@@ -1,46 +1,64 @@
-import { DebtRoyalty, OkupaRoyalty, Royalty } from '../../database/interfaces';
-import { TRoyaltieType } from '../../database/interfaces/enums';
+import { ExcelDebtRealty, ExcelOkupaRealty, ExcelRealty } from '../../database/interfaces';
+import { TRealtyType } from '../../database/interfaces/enums';
+import { TDebtRealty, TOkupaRealty } from '../../database/interfaces/totalum';
 import { parseExcelDebtRealtyToTotalum, parseExcelOkupaRealtyToTotalum } from '../../utils/parser';
-import { existsRoyalty, filterValidRoyalties } from '../helpers/royalties';
-import { createDebtRoyalty, createOkupaRoyalty, getAllDebtRoyalties, getAllOkupaRoyalties } from '../services/totalum';
+import { completeRealtyFromExcel, existsRoyalty, filterValidRoyalties } from '../helpers/royalties';
+import {
+  createDebtRealty,
+  createOkupaRealty,
+  getAllDebtRealties,
+  getAllOkupaRealties,
+  updateDebtRealty,
+  updateOkupaRealty,
+} from '../services/totalum';
 
 export async function handleUploadRoyalties(
-  excelRoyalties: Royalty[],
-  royaltyType: TRoyaltieType
+  excelRoyalties: ExcelRealty[],
+  realtyType: TRealtyType
 ): Promise<{ royaltiesUploaded: number; royaltiesOmitted: number }> {
   try {
-    let royaltiesUploaded = 0;
-    let royaltiesOmitted = 0;
+    let realtiesUploaded = 0;
+    let realtiesOmitted = 0;
 
-    const existingRoyalties =
-      royaltyType === TRoyaltieType.Okupados ? await getAllOkupaRoyalties() : await getAllDebtRoyalties();
+    const existingRealties = realtyType === TRealtyType.Okupados ? await getAllOkupaRealties() : await getAllDebtRealties();
 
-    const validRoyalties = filterValidRoyalties(excelRoyalties, royaltyType);
+    const validRealties = filterValidRoyalties(excelRoyalties, realtyType);
 
-    for (const royalty of validRoyalties) {
+    for (const realty of validRealties) {
       try {
-        if (existsRoyalty(existingRoyalties, royalty)) {
-          royaltiesOmitted++;
+        const existingRealty = existsRoyalty(existingRealties, realty);
+
+        if (existingRealty) {
+          const update = completeRealtyFromExcel(existingRealty, realty, realtyType);
+
+          if (Object.keys(update).length > 0) {
+            if (realtyType === TRealtyType.Okupados) {
+              await updateOkupaRealty(existingRealty._id, update as Partial<TOkupaRealty>);
+            } else {
+              await updateDebtRealty(existingRealty._id, update as Partial<TDebtRealty>);
+            }
+          }
+
+          realtiesOmitted++;
         } else {
-          if (royaltyType === TRoyaltieType.Okupados) {
-            const parsedRoyalty = parseExcelOkupaRealtyToTotalum(royalty as OkupaRoyalty);
-            await createOkupaRoyalty(parsedRoyalty);
+          if (realtyType === TRealtyType.Okupados) {
+            const parsedRoyalty = parseExcelOkupaRealtyToTotalum(realty as ExcelOkupaRealty);
+            await createOkupaRealty(parsedRoyalty);
           }
 
-          if (royaltyType === TRoyaltieType.Deuda) {
-            const parsedRoyalty = parseExcelDebtRealtyToTotalum(royalty as DebtRoyalty);
-
-            await createDebtRoyalty(parsedRoyalty);
+          if (realtyType === TRealtyType.Deuda) {
+            const parsedRoyalty = parseExcelDebtRealtyToTotalum(realty as ExcelDebtRealty);
+            await createDebtRealty(parsedRoyalty);
           }
 
-          royaltiesUploaded++;
+          realtiesUploaded++;
         }
       } catch (error) {
         console.error(`Error procesando el royalty: ${error.message}`);
       }
     }
 
-    return { royaltiesUploaded, royaltiesOmitted };
+    return { royaltiesUploaded: realtiesUploaded, royaltiesOmitted: realtiesOmitted };
   } catch (error) {
     console.error(`Error procesando los royalties: ${error.message}`);
   }

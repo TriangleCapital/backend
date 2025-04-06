@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { DebtRoyalty, OkupaRoyalty, Royalty } from '.';
-import { TRoyaltieType } from './enums';
+import { TRealtyType } from './enums';
 
 interface HandleManychatInteractionPayload extends Request {
   body: {
@@ -20,6 +20,6 @@ interface CompletedChatbotPayload extends Request {
 interface UploadRoyaltiesPayload extends Request {
   body: {
     royalties: Royalty[];
-    royaltyType: TRoyaltieType;
+    royaltyType: TRealtyType;
   };
 }

@@ -50,6 +50,8 @@ interface TLastPropertyWorked {
   descripcion: string;
 }
 
+type TRealty = TOkupaRealty | TDebtRealty;
+
 interface TOkupaRealty {
   _id: string;
   createdAt: Date;
@@ -65,6 +67,9 @@ interface TOkupaRealty {
   precio_valorado: number;
   porcentaje_rentabilidad: number;
   direccion_completa: string;
+  provincia: string;
+  comarca: string;
+  codigo_postal: string;
   precio_inicial: number;
   fase_okupacion: string;
 }

@@ -1,6 +1,6 @@
 import fs from 'fs';
 import * as XLSX from 'xlsx';
-import { DebtRoyalty, ExcelLead, OkupaRoyalty } from '../database/interfaces';
+import { ExcelDebtRealty, ExcelLead, ExcelOkupaRealty } from '../database/interfaces';
 import {
   EstadoNegociacionDeuda,
   EstadoNegociacionOkupa,
@@ -168,7 +168,7 @@ export function parseContadoLeadFromMultipleSourcesToTotalum(
   };
 }
 
-export function parseExcelOkupaRealtyToTotalum(excelOkupaRealty: OkupaRoyalty): Partial<TOkupaRealty> {
+export function parseExcelOkupaRealtyToTotalum(excelOkupaRealty: ExcelOkupaRealty): Partial<TOkupaRealty> {
   return {
     tipo_okupa: excelOkupaRealty.tipo_okupa,
     direccion_completa: excelOkupaRealty.direccion_completa,
@@ -180,7 +180,7 @@ export function parseExcelOkupaRealtyToTotalum(excelOkupaRealty: OkupaRoyalty): 
   };
 }
 
-export function parseExcelDebtRealtyToTotalum(excelDebtRealty: DebtRoyalty): Partial<TDebtRealty> {
+export function parseExcelDebtRealtyToTotalum(excelDebtRealty: ExcelDebtRealty): Partial<TDebtRealty> {
   try {
     const negotiationState = excelDebtRealty.fase_deuda.startsWith('06')
       ? EstadoNegociacionDeuda.PendienteVisitarPrioritario
