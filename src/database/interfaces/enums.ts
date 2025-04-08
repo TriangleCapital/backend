@@ -79,6 +79,7 @@ export enum EstadoNegociacionDeuda {
   EnEspera = 'En Espera',
   Descartado = 'Descartado',
   Cerrado = 'Cerrado',
+  Nuevo = '🔷 Nuevo',
 }
 
 export enum Responsable {
