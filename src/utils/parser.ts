@@ -188,6 +188,8 @@ export function parseExcelDebtRealtyToTotalum(excelDebtRealty: ExcelDebtRealty):
 
     return {
       direccion_completa: excelDebtRealty.direccion_completa,
+      provincia: excelDebtRealty.provincia,
+      codigo_postal: excelDebtRealty.codigo_postal,
       ref_catastral: excelDebtRealty.ref_catastral,
       uf: excelDebtRealty.uf,
       valor_deuda: Math.floor(excelDebtRealty.valor_deuda),

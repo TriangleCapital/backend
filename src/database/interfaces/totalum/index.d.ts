@@ -91,7 +91,8 @@ interface TDebtRealty {
   responsable: Responsable;
   fotos: FileRecordI[];
   enlace_maps: string;
-  provincia: Provincia;
+  provincia: string;
   direccion_catastro: string;
   direccion_completa: string;
+  codigo_postal: string;
 }

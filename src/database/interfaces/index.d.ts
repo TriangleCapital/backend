@@ -35,4 +35,6 @@ interface ExcelDebtRealty {
   diferencia_precio: number;
   fase_deuda: string;
   enlace_idealista: string;
+  provincia: string;
+  codigo_postal: string;
 }
