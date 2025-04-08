@@ -182,9 +182,9 @@ export function parseExcelOkupaRealtyToTotalum(excelOkupaRealty: ExcelOkupaRealt
 
 export function parseExcelDebtRealtyToTotalum(excelDebtRealty: ExcelDebtRealty): Partial<TDebtRealty> {
   try {
-    const negotiationState = excelDebtRealty.fase_deuda.startsWith('06')
-      ? EstadoNegociacionDeuda.PendienteVisitarPrioritario
-      : EstadoNegociacionDeuda.PendienteVisitar;
+    // const negotiationState = excelDebtRealty.fase_deuda.startsWith('06')
+    //   ? EstadoNegociacionDeuda.PendienteVisitarPrioritario
+    //   : EstadoNegociacionDeuda.PendienteVisitar;
 
     return {
       direccion_completa: excelDebtRealty.direccion_completa,
@@ -197,8 +197,7 @@ export function parseExcelDebtRealtyToTotalum(excelDebtRealty: ExcelDebtRealty):
       valor_venta: Math.floor(excelDebtRealty.valor_venta),
       enlace_idealista: excelDebtRealty.enlace_idealista,
       fase_deuda: excelDebtRealty.fase_deuda,
-      responsable: Responsable.Aron,
-      estado_negociacion: negotiationState,
+      estado_negociacion: EstadoNegociacionDeuda.Nuevo,
     };
   } catch (error) {
     throw new Error(`Error parseando la deuda: ${error.message}`);

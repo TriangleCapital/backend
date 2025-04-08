@@ -25,11 +25,11 @@ export function filterValidRoyalties(royalties: ExcelRealty[], royaltyType: TRea
       (royalty) => royalty && royalty.direccion_completa && royalty.direccion_completa.trim() !== ''
     );
 
-    if (royaltyType === TRealtyType.Deuda) {
-      return filteredRoyalties.filter(
-        (royalty: ExcelDebtRealty) => typeof royalty.diferencia_precio === 'number' && royalty.diferencia_precio > 0
-      );
-    }
+    // if (royaltyType === TRealtyType.Deuda) {
+    //   return filteredRoyalties.filter(
+    //     (royalty: ExcelDebtRealty) => typeof royalty.diferencia_precio === 'number' && royalty.diferencia_precio > 0
+    //   );
+    // }
 
     return filteredRoyalties;
   } catch (error) {
