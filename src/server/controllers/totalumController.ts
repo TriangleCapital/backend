@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { catchControllerError } from '../../errors/generalError';
 import { handleExcelLeads } from '../handlers/leads';
 import { UploadRoyaltiesPayload } from '../../database/interfaces/import';
-import { handleUploadRoyalties } from '../handlers/royalties';
+import { handleUploadRealties } from '../handlers/royalties';
 
 export async function processExcelLeads(req: Request, res: Response, next: NextFunction) {
   try {
@@ -26,7 +26,7 @@ export async function uploadRoyalties(req: UploadRoyaltiesPayload, res: Response
   try {
     const { royalties, royaltyType } = req.body;
 
-    const { royaltiesUploaded, royaltiesOmitted } = await handleUploadRoyalties(royalties, royaltyType);
+    const { royaltiesUploaded, royaltiesOmitted } = await handleUploadRealties(royalties, royaltyType);
 
     res.status(200).json({ success: true, royaltiesUploaded, royaltiesOmitted });
   } catch (error) {
