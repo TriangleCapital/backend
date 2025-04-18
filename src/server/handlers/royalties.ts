@@ -9,16 +9,18 @@ import { getAllDebtRealties, getAllOkupaRealties } from '../services/totalum';
 
 export async function handleUploadRealties(
   excelRoyalties: ExcelRealty[],
-  realtyType: TRealtyType
+  realtyType: TRealtyType,
+  resetRealties: boolean,
+  setRealtiesAsNew: boolean
 ): Promise<{ royaltiesUploaded: number; royaltiesOmitted: number }> {
   try {
     const existingRealties = realtyType === TRealtyType.Okupados ? await getAllOkupaRealties() : await getAllDebtRealties();
 
     const validRealties = filterValidRealties(excelRoyalties, realtyType);
 
-    const { royaltiesUploaded, royaltiesOmitted } = await processRealtiesUpload(realtyType, existingRealties, validRealties);
+    const { royaltiesUploaded, royaltiesOmitted } = await processRealtiesUpload(realtyType, existingRealties, validRealties, setRealtiesAsNew);
 
-    await resetRealtiesStateNew(existingRealties, realtyType);
+    if (resetRealties) await resetRealtiesStateNew(existingRealties, realtyType);
 
     return { royaltiesUploaded, royaltiesOmitted };
   } catch (error) {

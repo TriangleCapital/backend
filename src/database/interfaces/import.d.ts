@@ -21,5 +21,7 @@ interface UploadRoyaltiesPayload extends Request {
   body: {
     royalties: Royalty[];
     royaltyType: TRealtyType;
+    resetRealties: boolean;
+    setRealtiesAsNew: boolean;
   };
 }

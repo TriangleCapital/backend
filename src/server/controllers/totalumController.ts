@@ -24,9 +24,14 @@ export async function processExcelLeads(req: Request, res: Response, next: NextF
 
 export async function uploadRoyalties(req: UploadRoyaltiesPayload, res: Response, next: NextFunction) {
   try {
-    const { royalties, royaltyType } = req.body;
+    const { royalties, royaltyType, resetRealties, setRealtiesAsNew } = req.body;
 
-    const { royaltiesUploaded, royaltiesOmitted } = await handleUploadRealties(royalties, royaltyType);
+    const { royaltiesUploaded, royaltiesOmitted } = await handleUploadRealties(
+      royalties,
+      royaltyType,
+      resetRealties,
+      setRealtiesAsNew
+    );
 
     res.status(200).json({ success: true, royaltiesUploaded, royaltiesOmitted });
   } catch (error) {

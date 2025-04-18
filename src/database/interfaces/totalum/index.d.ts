@@ -87,7 +87,7 @@ interface TDebtRealty {
   enlace_inmueble: string;
   enlace_idealista: string;
   notas: string;
-  estado_negociacion: EstadoNegociacionDeuda;
+  estado_negociacion: EstadoNegociacionDeuda | '';
   responsable: Responsable;
   fotos: FileRecordI[];
   enlace_maps: string;

@@ -4,7 +4,7 @@ import { TDebtRealty, TOkupaRealty, TRealty } from '../../database/interfaces/to
 import { parseExcelDebtRealtyToTotalum, parseExcelOkupaRealtyToTotalum } from '../../utils/parser';
 import { createDebtRealty, createOkupaRealty, updateDebtRealty, updateOkupaRealty } from '../services/totalum';
 
-export async function processRealtiesUpload(realtyType: TRealtyType, existingRealties: TRealty[], validRealties: ExcelRealty[]) {
+export async function processRealtiesUpload(realtyType: TRealtyType, existingRealties: TRealty[], validRealties: ExcelRealty[], setRealtiesAsNew: boolean) {
   try {
     let realtiesUploaded = 0;
     let realtiesOmitted = 0;
@@ -27,12 +27,12 @@ export async function processRealtiesUpload(realtyType: TRealtyType, existingRea
               realtiesOmitted++;
             } else {
               if (realtyType === TRealtyType.Okupados) {
-                const parsedRoyalty = parseExcelOkupaRealtyToTotalum(realty as ExcelOkupaRealty);
+                const parsedRoyalty = parseExcelOkupaRealtyToTotalum(realty as ExcelOkupaRealty, setRealtiesAsNew);
                 await createOkupaRealty(parsedRoyalty);
               }
     
               if (realtyType === TRealtyType.Deuda) {
-                const parsedRoyalty = parseExcelDebtRealtyToTotalum(realty as ExcelDebtRealty);
+                const parsedRoyalty = parseExcelDebtRealtyToTotalum(realty as ExcelDebtRealty, setRealtiesAsNew);
                 await createDebtRealty(parsedRoyalty);
               }
     

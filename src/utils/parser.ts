@@ -168,7 +168,7 @@ export function parseContadoLeadFromMultipleSourcesToTotalum(
   };
 }
 
-export function parseExcelOkupaRealtyToTotalum(excelOkupaRealty: ExcelOkupaRealty): Partial<TOkupaRealty> {
+export function parseExcelOkupaRealtyToTotalum(excelOkupaRealty: ExcelOkupaRealty, setRealtiesAsNew: boolean): Partial<TOkupaRealty> {
   return {
     tipo_okupa: excelOkupaRealty.tipo_okupa,
     direccion_completa: excelOkupaRealty.direccion_completa,
@@ -176,11 +176,11 @@ export function parseExcelOkupaRealtyToTotalum(excelOkupaRealty: ExcelOkupaRealt
     precio_inicial: excelOkupaRealty.precio_inicial,
     precio_venta: Math.floor(excelOkupaRealty.precio_inicial * 0.7 + 6),
     fase_okupacion: excelOkupaRealty.fase_okupacion,
-    estado_negociacion: EstadoNegociacionOkupa.Nuevo,
+    estado_negociacion: setRealtiesAsNew ? EstadoNegociacionOkupa.Nuevo : '',
   };
 }
 
-export function parseExcelDebtRealtyToTotalum(excelDebtRealty: ExcelDebtRealty): Partial<TDebtRealty> {
+export function parseExcelDebtRealtyToTotalum(excelDebtRealty: ExcelDebtRealty, setRealtiesAsNew: boolean): Partial<TDebtRealty> {
   try {
     // const negotiationState = excelDebtRealty.fase_deuda.startsWith('06')
     //   ? EstadoNegociacionDeuda.PendienteVisitarPrioritario
@@ -197,7 +197,7 @@ export function parseExcelDebtRealtyToTotalum(excelDebtRealty: ExcelDebtRealty):
       valor_venta: Math.floor(excelDebtRealty.valor_venta),
       enlace_idealista: excelDebtRealty.enlace_idealista,
       fase_deuda: excelDebtRealty.fase_deuda,
-      estado_negociacion: EstadoNegociacionDeuda.Nuevo,
+      estado_negociacion: setRealtiesAsNew ? EstadoNegociacionDeuda.Nuevo : '',
     };
   } catch (error) {
     throw new Error(`Error parseando la deuda: ${error.message}`);
