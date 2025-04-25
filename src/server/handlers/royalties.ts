@@ -1,5 +1,5 @@
 import { ExcelRealty } from '../../database/interfaces';
-import { TRealtyType } from '../../database/interfaces/enums';
+import { TFund, TRealtyType } from '../../database/interfaces/enums';
 import {
   filterValidRoyalties as filterValidRealties,
   processRealtiesUpload,
@@ -8,6 +8,7 @@ import {
 import { getAllDebtRealties, getAllOkupaRealties } from '../services/totalum';
 
 export async function handleUploadRealties(
+  fund: TFund,
   excelRoyalties: ExcelRealty[],
   realtyType: TRealtyType,
   resetRealties: boolean,
@@ -16,11 +17,17 @@ export async function handleUploadRealties(
   try {
     const existingRealties = realtyType === TRealtyType.Okupados ? await getAllOkupaRealties() : await getAllDebtRealties();
 
-    const validRealties = filterValidRealties(excelRoyalties, realtyType);
+    const validRealties = filterValidRealties(excelRoyalties);
 
-    const { royaltiesUploaded, royaltiesOmitted } = await processRealtiesUpload(realtyType, existingRealties, validRealties, setRealtiesAsNew);
+    const { royaltiesUploaded, royaltiesOmitted } = await processRealtiesUpload(
+      realtyType,
+      existingRealties,
+      validRealties,
+      setRealtiesAsNew,
+      fund
+    );
 
-    if (resetRealties) await resetRealtiesStateNew(existingRealties, realtyType);
+    if (resetRealties) await resetRealtiesStateNew(existingRealties, realtyType, fund);
 
     return { royaltiesUploaded, royaltiesOmitted };
   } catch (error) {

@@ -23,6 +23,8 @@ interface ExcelOkupaRealty {
   provincia: string;
   comarca: string;
   codigo_postal: string;
+  ref_activo: string;
+  ref_fondo: string;
 }
 
 interface ExcelDebtRealty {
@@ -37,4 +39,6 @@ interface ExcelDebtRealty {
   enlace_idealista: string;
   provincia: string;
   codigo_postal: string;
+  ref_activo: string;
+  ref_fondo: string;
 }

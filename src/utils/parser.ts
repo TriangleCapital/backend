@@ -7,12 +7,14 @@ import {
   ExcelLeadOrigin,
   Responsable,
   TBoolean,
+  TFund,
   TLeadCuandoQuiereMudarse,
   TLeadOrigin,
 } from '../database/interfaces/enums';
 import { TDebtRealty, TLeadAlContado, TLeadHipoteca, TLeadShared, TOkupaRealty } from '../database/interfaces/totalum';
 import { MContactData, MSubscriber } from '../database/interfaces/manychat';
 import { parse } from 'path';
+import { calculatePrecioVenta } from './funcs';
 
 export function formatPhoneNumber(phone: string): string {
   if (!phone) return '';
@@ -168,19 +170,33 @@ export function parseContadoLeadFromMultipleSourcesToTotalum(
   };
 }
 
-export function parseExcelOkupaRealtyToTotalum(excelOkupaRealty: ExcelOkupaRealty, setRealtiesAsNew: boolean): Partial<TOkupaRealty> {
+export function parseExcelOkupaRealtyToTotalum(
+  excelOkupaRealty: ExcelOkupaRealty,
+  setRealtiesAsNew: boolean,
+  fund: TFund
+): Partial<TOkupaRealty> {
   return {
     tipo_okupa: excelOkupaRealty.tipo_okupa,
     direccion_completa: excelOkupaRealty.direccion_completa,
     ref_catastral: excelOkupaRealty.ref_catastral,
     precio_inicial: excelOkupaRealty.precio_inicial,
-    precio_venta: Math.floor(excelOkupaRealty.precio_inicial * 0.7 + 6),
+    precio_venta: calculatePrecioVenta(excelOkupaRealty.precio_inicial, fund),
     fase_okupacion: excelOkupaRealty.fase_okupacion,
     estado_negociacion: setRealtiesAsNew ? EstadoNegociacionOkupa.Nuevo : '',
+    comarca: excelOkupaRealty.comarca,
+    provincia: excelOkupaRealty.provincia,
+    codigo_postal: excelOkupaRealty.codigo_postal,
+    comercializador: fund,
+    ref_activo: excelOkupaRealty.ref_activo,
+    ref_fondo: excelOkupaRealty.ref_fondo,
   };
 }
 
-export function parseExcelDebtRealtyToTotalum(excelDebtRealty: ExcelDebtRealty, setRealtiesAsNew: boolean): Partial<TDebtRealty> {
+export function parseExcelDebtRealtyToTotalum(
+  excelDebtRealty: ExcelDebtRealty,
+  setRealtiesAsNew: boolean,
+  fund: TFund
+): Partial<TDebtRealty> {
   try {
     // const negotiationState = excelDebtRealty.fase_deuda.startsWith('06')
     //   ? EstadoNegociacionDeuda.PendienteVisitarPrioritario
@@ -198,6 +214,9 @@ export function parseExcelDebtRealtyToTotalum(excelDebtRealty: ExcelDebtRealty, 
       enlace_idealista: excelDebtRealty.enlace_idealista,
       fase_deuda: excelDebtRealty.fase_deuda,
       estado_negociacion: setRealtiesAsNew ? EstadoNegociacionDeuda.Nuevo : '',
+      comercializador: fund,
+      ref_activo: excelDebtRealty.ref_activo,
+      ref_fondo: excelDebtRealty.ref_fondo,
     };
   } catch (error) {
     throw new Error(`Error parseando la deuda: ${error.message}`);

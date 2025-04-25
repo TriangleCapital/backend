@@ -4,6 +4,7 @@ import {
   Provincia,
   Responsable,
   TBoolean,
+  TFund,
   TipoOkupa,
   TLeadCuandoQuiereMudarse,
   TLeadEstadoHipoteca,
@@ -72,6 +73,9 @@ interface TOkupaRealty {
   codigo_postal: string;
   precio_inicial: number;
   fase_okupacion: string;
+  comercializador: TFund;
+  ref_activo: string;
+  ref_fondo: string;
 }
 
 interface TDebtRealty {
@@ -95,4 +99,7 @@ interface TDebtRealty {
   direccion_catastro: string;
   direccion_completa: string;
   codigo_postal: string;
+  comercializador: TFund;
+  ref_activo: string;
+  ref_fondo: string;
 }

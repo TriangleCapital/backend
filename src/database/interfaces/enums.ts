@@ -48,6 +48,26 @@ export enum TLeadCuandoQuiereMudarse {
   En3Meses = 'En 3 meses',
 }
 
+export enum TFund {
+  Aliseda = 'Aliseda',
+  Solvia = 'Solvia',
+  Servihabitat = 'Servihabitat',
+  Hipoges = 'Hipoges',
+  Vivantial = 'Vivantial',
+  Altamira = 'Altamira',
+  Diglo = 'Diglo',
+}
+
+export enum FundDiscounts {
+  Aliseda = 25,
+  Solvia = 10,
+  Servihabitat = 15,
+  Hipoges = 15,
+  Vivantial = 15,
+  Altamira = 15,
+  Diglo = 15,
+}
+
 export enum TRealtyType {
   Okupados = 'inmueble_okupado',
   Deuda = 'inmueble_deuda',

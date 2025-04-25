@@ -1,8 +1,14 @@
-import { TBoolean } from '../database/interfaces/enums';
+import { FundDiscounts, TBoolean, TFund } from '../database/interfaces/enums';
 import { TLeadAlContado, TLeadHipoteca, TLeadShared } from '../database/interfaces/totalum';
 
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export function calculatePrecioVenta(precioInicial: number, fund: TFund): number {
+  const discountPercentage = FundDiscounts[fund] ?? 0;
+  const discountAmount = precioInicial * (discountPercentage / 100);
+  return Math.floor(precioInicial - discountAmount);
 }
 
 export function generateHipotecaLeadEmailHtmlMessage(hipotecaLead: Partial<TLeadHipoteca>): string {
