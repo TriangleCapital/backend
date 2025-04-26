@@ -11,6 +11,10 @@ export function calculatePrecioVenta(precioInicial: number, fund: TFund): number
   return Math.floor(precioInicial - discountAmount);
 }
 
+export function normalizeAddress(address: string): string {
+  return address.toLowerCase().replace(/\s+/g, ' ').replace(/[.,]/g, '').trim();
+}
+
 export function generateHipotecaLeadEmailHtmlMessage(hipotecaLead: Partial<TLeadHipoteca>): string {
   const formatBox = (label: string, value?: string | number) => {
     return value ? `<div class="info-box"><strong>${label}:</strong> ${value}</div>` : '';

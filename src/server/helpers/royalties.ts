@@ -1,6 +1,7 @@
 import { ExcelDebtRealty, ExcelOkupaRealty, ExcelRealty } from '../../database/interfaces';
 import { EstadoNegociacionDeuda, EstadoNegociacionOkupa, TFund, TRealtyType } from '../../database/interfaces/enums';
 import { TDebtRealty, TOkupaRealty, TRealty } from '../../database/interfaces/totalum';
+import { normalizeAddress } from '../../utils/funcs';
 import { parseExcelDebtRealtyToTotalum, parseExcelOkupaRealtyToTotalum } from '../../utils/parser';
 import { createDebtRealty, createOkupaRealty, updateDebtRealty, updateOkupaRealty } from '../services/totalum';
 
@@ -64,11 +65,11 @@ export function existsRoyalty(allExistentRoyalties: TRealty[], newRoyalty: Excel
   try {
     if (!newRoyalty.direccion_completa && !newRoyalty.ref_catastral) return false;
 
-    const formattedNewDireccion = newRoyalty.direccion_completa?.trim().toLowerCase();
+    const formattedNewDireccion = newRoyalty.direccion_completa ? normalizeAddress(newRoyalty.direccion_completa) : '';
     const newCatastral = newRoyalty.ref_catastral?.trim();
 
     const existingRoyalty = allExistentRoyalties.find((royalty) => {
-      const formattedDireccion = royalty.direccion_completa?.trim().toLowerCase();
+      const formattedDireccion = royalty.direccion_completa ? normalizeAddress(royalty.direccion_completa) : '';
       const sameDireccion = formattedNewDireccion && formattedDireccion === formattedNewDireccion;
       const sameCatastral = newCatastral && royalty.ref_catastral === newCatastral;
 
