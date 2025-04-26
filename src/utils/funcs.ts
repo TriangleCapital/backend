@@ -12,7 +12,14 @@ export function calculatePrecioVenta(precioInicial: number, fund: TFund): number
 }
 
 export function normalizeAddress(address: string): string {
-  return address.toLowerCase().replace(/\s+/g, ' ').replace(/[.,]/g, '').trim();
+  return address
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, ' ')
+    .replace(/[.,]/g, '')
+    .replace(/[\u00A0]/g, ' ')
+    .trim();
 }
 
 export function generateHipotecaLeadEmailHtmlMessage(hipotecaLead: Partial<TLeadHipoteca>): string {
