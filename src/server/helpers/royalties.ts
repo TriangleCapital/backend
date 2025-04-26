@@ -13,6 +13,7 @@ export async function processRealtiesUpload(
 ) {
   try {
     let realtiesUploaded = 0;
+    let realtiesUpdated = 0;
     let realtiesOmitted = 0;
 
     for (const realty of validRealties) {
@@ -28,9 +29,11 @@ export async function processRealtiesUpload(
             } else {
               await updateDebtRealty(existingRealty._id, update as Partial<TDebtRealty>);
             }
-          }
 
-          realtiesOmitted++;
+            realtiesUpdated++;
+          } else {
+            realtiesOmitted++;
+          }
         } else {
           if (realtyType === TRealtyType.Okupados) {
             const parsedRoyalty = parseExcelOkupaRealtyToTotalum(realty as ExcelOkupaRealty, setRealtiesAsNew, fund);
@@ -45,11 +48,13 @@ export async function processRealtiesUpload(
           realtiesUploaded++;
         }
       } catch (error) {
+        realtiesOmitted++;
+
         console.error(`Error procesando el royalty: ${error.message}`);
       }
     }
 
-    return { royaltiesUploaded: realtiesUploaded, royaltiesOmitted: realtiesOmitted };
+    return { realtiesUploaded, realtiesUpdated, realtiesOmitted };
   } catch (error) {
     throw new Error(`Error procesando la subida de las propiedades: ${error.message}`);
   }
@@ -92,15 +97,9 @@ export async function resetRealtiesStateNew(
 
       if (!matchesFund) continue;
 
-      if (
-        realtyType === TRealtyType.Okupados &&
-        realty.estado_negociacion === EstadoNegociacionOkupa.Nuevo
-      ) {
+      if (realtyType === TRealtyType.Okupados && realty.estado_negociacion === EstadoNegociacionOkupa.Nuevo) {
         await updateOkupaRealty(realty._id, { estado_negociacion: '' as EstadoNegociacionOkupa });
-      } else if (
-        realtyType === TRealtyType.Deuda &&
-        realty.estado_negociacion === EstadoNegociacionDeuda.Nuevo
-      ) {
+      } else if (realtyType === TRealtyType.Deuda && realty.estado_negociacion === EstadoNegociacionDeuda.Nuevo) {
         await updateDebtRealty(realty._id, { estado_negociacion: '' as EstadoNegociacionDeuda });
       }
     }
@@ -112,7 +111,7 @@ export async function resetRealtiesStateNew(
 export function filterValidRoyalties(realties: ExcelRealty[]): ExcelRealty[] {
   try {
     const filteredRoyalties = realties.filter(
-      (realty) => realty && realty.direccion_completa?.trim() !== '' && realty.ref_catastral?.trim() !== ''
+      (realty) => (realty && realty.direccion_completa?.trim() !== '') || realty.ref_catastral?.trim() !== ''
     );
 
     return filteredRoyalties;

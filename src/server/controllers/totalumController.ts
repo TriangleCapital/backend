@@ -26,7 +26,7 @@ export async function uploadRoyalties(req: UploadRoyaltiesPayload, res: Response
   try {
     const { royalties, fund, royaltyType, resetRealties, setRealtiesAsNew } = req.body;
 
-    const { royaltiesUploaded, royaltiesOmitted } = await handleUploadRealties(
+    const { realtiesUploaded, realtiesUpdated, realtiesOmitted } = await handleUploadRealties(
       fund,
       royalties,
       royaltyType,
@@ -34,7 +34,7 @@ export async function uploadRoyalties(req: UploadRoyaltiesPayload, res: Response
       setRealtiesAsNew
     );
 
-    res.status(200).json({ success: true, royaltiesUploaded, royaltiesOmitted });
+    res.status(200).json({ success: true, realtiesUploaded, realtiesUpdated, realtiesOmitted });
   } catch (error) {
     catchControllerError(error, 'Error procesando el excel de leads en el controlador', req.body, next);
   }

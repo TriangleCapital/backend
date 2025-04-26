@@ -13,13 +13,13 @@ export async function handleUploadRealties(
   realtyType: TRealtyType,
   resetRealties: boolean,
   setRealtiesAsNew: boolean
-): Promise<{ royaltiesUploaded: number; royaltiesOmitted: number }> {
+): Promise<{ realtiesUploaded: number; realtiesUpdated: number; realtiesOmitted: number }> {
   try {
     const existingRealties = realtyType === TRealtyType.Okupados ? await getAllOkupaRealties() : await getAllDebtRealties();
 
     const validRealties = filterValidRealties(excelRoyalties);
 
-    const { royaltiesUploaded, royaltiesOmitted } = await processRealtiesUpload(
+    const { realtiesUploaded, realtiesUpdated, realtiesOmitted } = await processRealtiesUpload(
       realtyType,
       existingRealties,
       validRealties,
@@ -29,7 +29,7 @@ export async function handleUploadRealties(
 
     if (resetRealties) await resetRealtiesStateNew(existingRealties, realtyType, fund);
 
-    return { royaltiesUploaded, royaltiesOmitted };
+    return { realtiesUploaded, realtiesUpdated, realtiesOmitted };
   } catch (error) {
     console.error(`Error procesando los royalties: ${error.message}`);
   }
