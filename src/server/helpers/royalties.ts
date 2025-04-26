@@ -1,7 +1,7 @@
 import { ExcelDebtRealty, ExcelOkupaRealty, ExcelRealty } from '../../database/interfaces';
 import { EstadoNegociacionDeuda, EstadoNegociacionOkupa, TFund, TRealtyType } from '../../database/interfaces/enums';
 import { TDebtRealty, TOkupaRealty, TRealty } from '../../database/interfaces/totalum';
-import { normalizeAddress } from '../../utils/funcs';
+import { normalizeAddress, normalizeString } from '../../utils/funcs';
 import { parseExcelDebtRealtyToTotalum, parseExcelOkupaRealtyToTotalum } from '../../utils/parser';
 import { createDebtRealty, createOkupaRealty, updateDebtRealty, updateOkupaRealty } from '../services/totalum';
 
@@ -19,7 +19,7 @@ export async function processRealtiesUpload(
 
     for (const realty of validRealties) {
       try {
-        const existingRealty = existsRoyalty(existingRealties, realty);
+        const existingRealty = existsRoyalty(existingRealties, realty, fund);
 
         if (existingRealty) {
           const update = completeRealtyFromExcel(existingRealty, realty, realtyType, fund);
@@ -61,7 +61,7 @@ export async function processRealtiesUpload(
   }
 }
 
-export function existsRoyalty(allExistentRoyalties: TRealty[], newRoyalty: ExcelRealty): TRealty | false {
+export function existsRoyalty(allExistentRoyalties: TRealty[], newRoyalty: ExcelRealty, fund: TFund): TRealty | false {
   try {
     if (!newRoyalty.direccion_completa && !newRoyalty.ref_catastral) return false;
 
@@ -70,11 +70,12 @@ export function existsRoyalty(allExistentRoyalties: TRealty[], newRoyalty: Excel
 
     const existingRoyalty = allExistentRoyalties.find((royalty) => {
       const formattedDireccion = royalty.direccion_completa ? normalizeAddress(royalty.direccion_completa) : '';
-      const sameDireccion = formattedNewDireccion && formattedDireccion === formattedNewDireccion;
-      const sameCatastral = newCatastral && royalty.ref_catastral === newCatastral;
+      const sameDireccion = formattedDireccion === formattedNewDireccion;
+
+      const sameCatastral = royalty.ref_catastral === newCatastral;
 
       const hasComercializador = royalty.comercializador && royalty.comercializador.trim() !== '';
-      const matchesComercializador = royalty.comercializador === newRoyalty.ref_fondo;
+      const matchesComercializador = normalizeString(royalty.comercializador || '') === normalizeString(fund || '');
 
       const matchesByDireccionOrCatastral = sameDireccion || sameCatastral;
 

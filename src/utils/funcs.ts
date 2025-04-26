@@ -1,5 +1,5 @@
 import { FundDiscounts, TBoolean, TFund } from '../database/interfaces/enums';
-import { TLeadAlContado, TLeadHipoteca, TLeadShared } from '../database/interfaces/totalum';
+import { TLeadAlContado, TLeadHipoteca } from '../database/interfaces/totalum';
 
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -9,6 +9,14 @@ export function calculatePrecioVenta(precioInicial: number, fund: TFund): number
   const discountPercentage = FundDiscounts[fund] ?? 0;
   const discountAmount = precioInicial * (discountPercentage / 100);
   return Math.floor(precioInicial - discountAmount);
+}
+
+export function normalizeString(value: string) {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim();
 }
 
 export function normalizeAddress(address: string): string {
