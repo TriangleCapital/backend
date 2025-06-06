@@ -63,7 +63,8 @@ export async function processRealtiesUpload(
 
 export function existsRoyalty(allExistentRoyalties: TRealty[], newRoyalty: ExcelRealty, fund: TFund): TRealty | false {
   try {
-    if (!newRoyalty.direccion_completa && !newRoyalty.ref_catastral) return false;
+    if (!newRoyalty.direccion_completa && !newRoyalty.ref_catastral && !newRoyalty.ref_activo && !newRoyalty.ref_fondo)
+      return false;
 
     const formattedNewDireccion = newRoyalty.direccion_completa ? normalizeAddress(newRoyalty.direccion_completa) : '';
     const newCatastral = newRoyalty.ref_catastral?.trim();
@@ -75,11 +76,16 @@ export function existsRoyalty(allExistentRoyalties: TRealty[], newRoyalty: Excel
       const sameCatastral = royalty.ref_catastral === newCatastral;
 
       const hasComercializador = royalty.comercializador && royalty.comercializador.trim() !== '';
+      const hasRefActivo = royalty.ref_activo && royalty.ref_activo.trim() !== '';
+      const hasRefFondo = royalty.ref_fondo && royalty.ref_fondo.trim() !== '';
+      
       const matchesComercializador = normalizeString(royalty.comercializador || '') === normalizeString(fund || '');
+      const matchesRefActivo = hasRefActivo && royalty.ref_activo === newRoyalty.ref_activo?.trim();
+      const matchesRefFondo = hasRefFondo && royalty.ref_fondo === newRoyalty.ref_fondo?.trim();
 
-      const matchesByDireccionOrCatastral = sameDireccion || sameCatastral;
+      const matchesAny = sameDireccion || sameCatastral || matchesRefActivo || matchesRefFondo;
 
-      return matchesByDireccionOrCatastral && (!hasComercializador || matchesComercializador);
+      return matchesAny && (!hasComercializador || matchesComercializador);
     });
 
     return existingRoyalty || false;
