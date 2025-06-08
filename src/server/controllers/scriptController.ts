@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { TotalumApiSdk } from 'totalum-api-sdk';
 import { totalumOptions } from '../../utils/constants';
 import CustomError from '../../errors/CustomError';
-import { getAllOkupaRealties, removeOkupaRealty } from '../services/totalum';
+import { getAllOkupaRealties, removeOkupaRealty, updateOkupaRealty } from '../services/totalum';
 
 const totalumSdk = new TotalumApiSdk(totalumOptions);
 
@@ -12,35 +12,20 @@ export async function runScript(req: Request, res: Response, next: NextFunction)
 
     const royalties: any[] = await getAllOkupaRealties();
 
-    for (let i = 0; i < royalties.length; i++) {
-      const royalty = royalties[i];
+    for (const realty of royalties) {
+      const formattedRefActivo = realty?.ref_activo?.trim();
+      const formattedRefFondo = realty?.ref_fondo?.trim();
 
-      // Format the string to lowercase and trim spaces before comparison
-      const formattedDireccion = royalty.direccion_completa.trim().toLowerCase();
+      if (formattedRefFondo?.length === 18) {
+        try {
 
-      for (let j = i + 1; j < royalties.length; j++) {
-        const sub = royalties[j];
-
-        // Format the string of sub as well
-        const formattedSubDireccion = sub.direccion_completa.trim().toLowerCase();
-
-        if (formattedDireccion === formattedSubDireccion) {
-          // Determine which one to keep
-          if (!royalty.ref_catastral && sub.ref_catastral) {
-            await removeOkupaRealty(royalty._id); // Remove the current one
-            royalties.splice(i, 1); // Remove from array
-            i--; // Adjust index after removal
-            break; // Exit inner loop and restart checking from this index
-          } else {
-            await removeOkupaRealty(sub._id); // Remove the duplicate
-            royalties.splice(j, 1); // Remove from array
-            j--; // Adjust index after removal
-          }
+          await updateOkupaRealty(realty._id, { ref_activo: formattedRefFondo, ref_fondo: formattedRefActivo });
+          console.info('Updated realty:', realty._id, 'with ref_activo:', formattedRefFondo, 'and ref_fondo:', formattedRefActivo);
+        } catch (error) {
+          console.error(`Error updating realty ${realty._id}: ${error.message}`);
         }
       }
     }
-
-    console.log(royalties);
 
     res.status(200).json(true);
   } catch (error) {

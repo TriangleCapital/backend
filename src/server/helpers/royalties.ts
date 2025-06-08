@@ -78,10 +78,10 @@ export function existsRoyalty(allExistentRoyalties: TRealty[], newRoyalty: Excel
       const hasComercializador = royalty.comercializador && royalty.comercializador.trim() !== '';
       const hasRefActivo = royalty.ref_activo && royalty.ref_activo.trim() !== '';
       const hasRefFondo = royalty.ref_fondo && royalty.ref_fondo.trim() !== '';
-      
+
       const matchesComercializador = normalizeString(royalty.comercializador || '') === normalizeString(fund || '');
-      const matchesRefActivo = hasRefActivo && royalty.ref_activo === newRoyalty.ref_activo?.trim();
-      const matchesRefFondo = hasRefFondo && royalty.ref_fondo === newRoyalty.ref_fondo?.trim();
+      const matchesRefActivo = hasRefActivo && royalty?.ref_activo?.toLowerCase() === newRoyalty.ref_activo?.trim()?.toLowerCase();
+      const matchesRefFondo = hasRefFondo && royalty?.ref_fondo?.toLowerCase() === newRoyalty.ref_fondo?.trim()?.toLowerCase();
 
       const matchesAny = sameDireccion || sameCatastral || matchesRefActivo || matchesRefFondo;
 
@@ -119,7 +119,11 @@ export async function resetRealtiesStateNew(
 export function filterValidRoyalties(realties: ExcelRealty[]): ExcelRealty[] {
   try {
     const filteredRoyalties = realties.filter(
-      (realty) => (realty && realty.direccion_completa?.trim() !== '') || realty.ref_catastral?.trim() !== ''
+      (realty) =>
+        (realty && realty.direccion_completa?.trim() !== '') ||
+        realty.ref_catastral?.trim() !== '' ||
+        realty.ref_activo?.trim() !== '' ||
+        realty.ref_fondo?.trim() !== ''
     );
 
     return filteredRoyalties;
