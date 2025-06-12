@@ -42,3 +42,16 @@ interface ExcelDebtRealty {
   ref_activo: string;
   ref_fondo: string;
 }
+
+interface SolviaResultStats {
+  realtiesStock: number;
+  realtiesUploaded: number;
+  realtiesUpdated: number;
+  realtiesOmitted: number;
+}
+
+interface SolviaResult {
+  okupaRealties: ResultStats;
+  rentRealties: ResultStats;
+  emptyRealties: ResultStats;
+}

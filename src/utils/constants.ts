@@ -5,6 +5,8 @@ const isTest = process.env.NODE_ENV !== 'production';
 
 export const MANYCHAT_API = 'https://api.manychat.com';
 
+export const SOLVIA_API = 'https://www.solvia.es/api/inmuebles/v2'
+
 export const MANYCHAT_REALTY_NAME_FIELD_ID = 4591353;
 export const MANYCHAT_REALTY_LINK_FIELD_ID = 4599290;
 
