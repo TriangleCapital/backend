@@ -138,7 +138,7 @@ export function completeRealtyFromExcel(
   realtyType: TRealtyType,
   fund: TFund
 ): Partial<TOkupaRealty> | Partial<TDebtRealty> {
-  const isEmpty = (val: any) => val === undefined || val === null || val === '' || val === 0;
+  const isEmpty = (val: any) => val === undefined || val === null || val === '' || val === 0 || val === '###';
   const isDifferent = (a: any, b: any) => a !== b;
 
   if (realtyType === TRealtyType.Okupados) {
