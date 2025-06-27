@@ -146,37 +146,37 @@ export function completeRealtyFromExcel(
     const existingOkupa = existing as TOkupaRealty;
     const update: Partial<TOkupaRealty> = {};
 
-    if ((isEmpty(existingOkupa.direccion_completa) || isDifferent(existingOkupa.direccion_completa, okupa.direccion_completa)) && okupa.direccion_completa)
+    if ((isEmpty(existingOkupa.direccion_completa) || isDifferent(existingOkupa.direccion_completa, okupa.direccion_completa)) && !isEmpty(okupa.direccion_completa))
       update.direccion_completa = okupa.direccion_completa;
 
-    if ((isEmpty(existingOkupa.ref_catastral) || isDifferent(existingOkupa.ref_catastral, okupa.ref_catastral)) && okupa.ref_catastral)
+    if ((isEmpty(existingOkupa.ref_catastral) || isDifferent(existingOkupa.ref_catastral, okupa.ref_catastral)) && !isEmpty(okupa.ref_catastral))
       update.ref_catastral = okupa.ref_catastral;
 
-    if ((isEmpty(existingOkupa.tipo_okupa) || isDifferent(existingOkupa.tipo_okupa, okupa.tipo_okupa)) && okupa.tipo_okupa)
+    if ((isEmpty(existingOkupa.tipo_okupa) || isDifferent(existingOkupa.tipo_okupa, okupa.tipo_okupa)) && !isEmpty(okupa.tipo_okupa))
       update.tipo_okupa = okupa.tipo_okupa;
 
-    if ((isEmpty(existingOkupa.precio_inicial) || isDifferent(existingOkupa.precio_inicial, okupa.precio_inicial)) && okupa.precio_inicial)
+    if ((isEmpty(existingOkupa.precio_inicial) || isDifferent(existingOkupa.precio_inicial, okupa.precio_inicial)) && !isEmpty(okupa.precio_inicial))
       update.precio_inicial = okupa.precio_inicial;
 
-    if ((isEmpty(existingOkupa.fase_okupacion) || isDifferent(existingOkupa.fase_okupacion, okupa.fase_okupacion)) && okupa.fase_okupacion)
+    if ((isEmpty(existingOkupa.fase_okupacion) || isDifferent(existingOkupa.fase_okupacion, okupa.fase_okupacion)) && !isEmpty(okupa.fase_okupacion))
       update.fase_okupacion = okupa.fase_okupacion;
 
-    if ((isEmpty(existingOkupa.provincia) || isDifferent(existingOkupa.provincia, okupa.provincia)) && okupa.provincia)
+    if ((isEmpty(existingOkupa.provincia) || isDifferent(existingOkupa.provincia, okupa.provincia)) && !isEmpty(okupa.provincia))
       update.provincia = okupa.provincia;
 
-    if ((isEmpty(existingOkupa.comarca) || isDifferent(existingOkupa.comarca, okupa.comarca)) && okupa.comarca)
+    if ((isEmpty(existingOkupa.comarca) || isDifferent(existingOkupa.comarca, okupa.comarca)) && !isEmpty(okupa.comarca))
       update.comarca = okupa.comarca;
 
-    if ((isEmpty(existingOkupa.codigo_postal) || isDifferent(existingOkupa.codigo_postal, okupa.codigo_postal)) && okupa.codigo_postal)
+    if ((isEmpty(existingOkupa.codigo_postal) || isDifferent(existingOkupa.codigo_postal, okupa.codigo_postal)) && !isEmpty(okupa.codigo_postal))
       update.codigo_postal = okupa.codigo_postal;
 
-    if ((isEmpty(existingOkupa.ref_activo) || isDifferent(existingOkupa.ref_activo, okupa.ref_activo)) && okupa.ref_activo)
+    if ((isEmpty(existingOkupa.ref_activo) || isDifferent(existingOkupa.ref_activo, okupa.ref_activo)) && !isEmpty(okupa.ref_activo))
       update.ref_activo = okupa.ref_activo;
 
-    if ((isEmpty(existingOkupa.ref_fondo) || isDifferent(existingOkupa.ref_fondo, okupa.ref_fondo)) && okupa.ref_fondo)
+    if ((isEmpty(existingOkupa.ref_fondo) || isDifferent(existingOkupa.ref_fondo, okupa.ref_fondo)) && !isEmpty(okupa.ref_fondo))
       update.ref_fondo = okupa.ref_fondo;
 
-    if ((isEmpty(existingOkupa.comercializador) || isDifferent(existingOkupa.comercializador, fund)) && fund)
+    if ((isEmpty(existingOkupa.comercializador) || isDifferent(existingOkupa.comercializador, fund)) && !isEmpty(fund))
       update.comercializador = fund;
 
     return update;
@@ -187,43 +187,43 @@ export function completeRealtyFromExcel(
     const existingDeuda = existing as TDebtRealty;
     const update: Partial<TDebtRealty> = {};
 
-    if ((isEmpty(existingDeuda.direccion_completa) || isDifferent(existingDeuda.direccion_completa, deuda.direccion_completa)) && deuda.direccion_completa)
+    if ((isEmpty(existingDeuda.direccion_completa) || isDifferent(existingDeuda.direccion_completa, deuda.direccion_completa)) && !isEmpty(deuda.direccion_completa))
       update.direccion_completa = deuda.direccion_completa;
 
-    if ((isEmpty(existingDeuda.ref_catastral) || isDifferent(existingDeuda.ref_catastral, deuda.ref_catastral)) && deuda.ref_catastral)
+    if ((isEmpty(existingDeuda.ref_catastral) || isDifferent(existingDeuda.ref_catastral, deuda.ref_catastral)) && !isEmpty(deuda.ref_catastral))
       update.ref_catastral = deuda.ref_catastral;
 
-    if ((isEmpty(existingDeuda.uf) || isDifferent(existingDeuda.uf, deuda.uf)) && deuda.uf)
+    if ((isEmpty(existingDeuda.uf) || isDifferent(existingDeuda.uf, deuda.uf)) && !isEmpty(deuda.uf))
       update.uf = deuda.uf;
 
-    if ((isEmpty(existingDeuda.valor_deuda) || isDifferent(existingDeuda.valor_deuda, deuda.valor_deuda)) && deuda.valor_deuda)
+    if ((isEmpty(existingDeuda.valor_deuda) || isDifferent(existingDeuda.valor_deuda, deuda.valor_deuda)) && !isEmpty(deuda.valor_deuda))
       update.valor_deuda = deuda.valor_deuda;
 
-    if ((isEmpty(existingDeuda.valor_venta) || isDifferent(existingDeuda.valor_venta, deuda.valor_venta)) && deuda.valor_venta)
+    if ((isEmpty(existingDeuda.valor_venta) || isDifferent(existingDeuda.valor_venta, deuda.valor_venta)) && !isEmpty(deuda.valor_venta))
       update.valor_venta = deuda.valor_venta;
 
-    if ((isEmpty(existingDeuda.valor_tasacion) || isDifferent(existingDeuda.valor_tasacion, deuda.valor_tasacion)) && deuda.valor_tasacion)
+    if ((isEmpty(existingDeuda.valor_tasacion) || isDifferent(existingDeuda.valor_tasacion, deuda.valor_tasacion)) && !isEmpty(deuda.valor_tasacion))
       update.valor_tasacion = deuda.valor_tasacion;
 
-    if ((isEmpty(existingDeuda.fase_deuda) || isDifferent(existingDeuda.fase_deuda, deuda.fase_deuda)) && deuda.fase_deuda)
+    if ((isEmpty(existingDeuda.fase_deuda) || isDifferent(existingDeuda.fase_deuda, deuda.fase_deuda)) && !isEmpty(deuda.fase_deuda))
       update.fase_deuda = deuda.fase_deuda;
 
-    if ((isEmpty(existingDeuda.enlace_idealista) || isDifferent(existingDeuda.enlace_idealista, deuda.enlace_idealista)) && deuda.enlace_idealista)
+    if ((isEmpty(existingDeuda.enlace_idealista) || isDifferent(existingDeuda.enlace_idealista, deuda.enlace_idealista)) && !isEmpty(deuda.enlace_idealista))
       update.enlace_idealista = deuda.enlace_idealista;
 
-    if ((isEmpty(existingDeuda.provincia) || isDifferent(existingDeuda.provincia, deuda.provincia)) && deuda.provincia)
+    if ((isEmpty(existingDeuda.provincia) || isDifferent(existingDeuda.provincia, deuda.provincia)) && !isEmpty(deuda.provincia))
       update.provincia = deuda.provincia;
 
-    if ((isEmpty(existingDeuda.codigo_postal) || isDifferent(existingDeuda.codigo_postal, deuda.codigo_postal)) && deuda.codigo_postal)
+    if ((isEmpty(existingDeuda.codigo_postal) || isDifferent(existingDeuda.codigo_postal, deuda.codigo_postal)) && !isEmpty(deuda.codigo_postal))
       update.codigo_postal = deuda.codigo_postal;
 
-    if ((isEmpty(existingDeuda.comercializador) || isDifferent(existingDeuda.comercializador, fund)) && fund)
+    if ((isEmpty(existingDeuda.comercializador) || isDifferent(existingDeuda.comercializador, fund)) && !isEmpty(fund))
       update.comercializador = fund;
 
-    if ((isEmpty(existingDeuda.ref_activo) || isDifferent(existingDeuda.ref_activo, deuda.ref_activo)) && deuda.ref_activo)
+    if ((isEmpty(existingDeuda.ref_activo) || isDifferent(existingDeuda.ref_activo, deuda.ref_activo)) && !isEmpty(deuda.ref_activo))
       update.ref_activo = deuda.ref_activo;
 
-    if ((isEmpty(existingDeuda.ref_fondo) || isDifferent(existingDeuda.ref_fondo, deuda.ref_fondo)) && deuda.ref_fondo)
+    if ((isEmpty(existingDeuda.ref_fondo) || isDifferent(existingDeuda.ref_fondo, deuda.ref_fondo)) && !isEmpty(deuda.ref_fondo))
       update.ref_fondo = deuda.ref_fondo;
 
     return update;
