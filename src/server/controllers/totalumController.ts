@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import { catchControllerError } from '../../errors/generalError';
 import { handleExcelLeads } from '../handlers/leads';
-import { UploadRoyaltiesPayload } from '../../database/interfaces/import';
+import { CreateEvaluationForm, UploadRoyaltiesPayload } from '../../database/interfaces/import';
 import { handleUploadRealties } from '../handlers/royalties';
 import { SolviaResult } from '../../database/interfaces';
 import { getSolviaRealties } from '../services/funds';
+import { createTEvaluationForm } from '../services/totalum';
 
 export async function processExcelLeads(req: Request, res: Response, next: NextFunction) {
   try {
@@ -57,5 +58,15 @@ export async function uploadSolviaRoyalties(req: UploadRoyaltiesPayload, res: Re
     res.status(200).json(result);
   } catch (error) {
     catchControllerError(error, 'Error procesando los activos de Solvia en el controlador', req.body, next);
+  }
+}
+
+export async function createEvaluationForm(req: CreateEvaluationForm, res: Response, next: NextFunction) {
+  try {
+    const createdId = await createTEvaluationForm(req.body);
+
+    res.status(200).json({ success: true, createdEvaluationFormId: createdId });
+  } catch (error) {
+    catchControllerError(error, 'Error creando el evaluation form desde controller', req.body, next);
   }
 }

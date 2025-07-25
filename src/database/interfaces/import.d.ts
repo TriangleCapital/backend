@@ -1,6 +1,7 @@
 import { Request } from 'express';
 import { DebtRoyalty, OkupaRoyalty, Royalty } from '.';
 import { TFund, TRealtyType } from './enums';
+import { TEvaluationForm } from './totalum';
 
 interface HandleManychatInteractionPayload extends Request {
   body: {
@@ -25,4 +26,8 @@ interface UploadRoyaltiesPayload extends Request {
     resetRealties: boolean;
     setRealtiesAsNew: boolean;
   };
+}
+
+interface CreateEvaluationForm extends Request {
+  body: TEvaluationForm;
 }

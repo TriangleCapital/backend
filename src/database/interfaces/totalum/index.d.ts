@@ -103,3 +103,17 @@ interface TDebtRealty {
   ref_activo: string;
   ref_fondo: string;
 }
+
+export interface TEvaluationForm {
+  _id?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  nombre_completo?: string;
+  fecha?: Date;
+  invertido_antes?: 'Si' | 'No';
+  tipo_inversion?: string;
+  intencion_inversion?: string;
+  duracion_inversion?: 'Hasta 6 meses' | 'Hasta 1 año';
+  capital_disponible?: number;
+  entiende_condiciones?: 'Si' | 'No';
+}

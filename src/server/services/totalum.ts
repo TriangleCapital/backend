@@ -2,6 +2,7 @@ import { TotalumApiSdk } from 'totalum-api-sdk';
 import { TOTALUM_LAST_LINK_WORKED_ID, TOTALUM_LAST_PROPERTY_WORKED_ID, totalumOptions } from '../../utils/constants';
 import {
   TDebtRealty,
+  TEvaluationForm,
   TLastPropertyWorked,
   TLeadAlContado,
   TLeadHipoteca,
@@ -343,6 +344,20 @@ export async function updateDebtRealty(realtyId: string, update: Partial<TDebtRe
       throw new Error(`Error modificando el inmueble deuda de Totalum: ${error.response.data.errors}`);
     } else {
       throw new Error(`Error modificando el inmueble deuda de Totalum: ${error.message}`);
+    }
+  }
+}
+
+// ------ evaluacion formulario ------
+export async function createTEvaluationForm(evaluationForm: Partial<TEvaluationForm>): Promise<string> {
+  try {
+    const response = await totalumSdk.crud.createItem('formulario_evaluacion', evaluationForm);
+    return response.data.data.insertedId;
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error creando evaluation form de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error creando el evaluation form de Totalum: ${error.message}`);
     }
   }
 }

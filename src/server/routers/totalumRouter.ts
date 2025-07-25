@@ -1,5 +1,10 @@
 import express from 'express';
-import { processExcelLeads, uploadExcelRoyalties, uploadSolviaRoyalties } from '../controllers/totalumController';
+import {
+  createEvaluationForm,
+  processExcelLeads,
+  uploadExcelRoyalties,
+  uploadSolviaRoyalties,
+} from '../controllers/totalumController';
 import multer from 'multer';
 
 const totalumRouter = express.Router();
@@ -11,5 +16,6 @@ totalumRouter.get('/', (req, res) => res.send('Working Totalum endpoint!'));
 totalumRouter.post('/excel-leads', upload.any(), processExcelLeads);
 totalumRouter.post('/excel-realties', uploadExcelRoyalties);
 totalumRouter.get('/solvia-realties/:postalCode', uploadSolviaRoyalties);
+totalumRouter.post('/evaluation-form', createEvaluationForm);
 
 export default totalumRouter;
