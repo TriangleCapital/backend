@@ -4,7 +4,7 @@ import { handleExcelLeads } from '../handlers/leads';
 import { CreateEvaluationForm, CreateMrfPdfForm, UploadRoyaltiesPayload } from '../../database/interfaces/import';
 import { handleUploadRealties } from '../handlers/royalties';
 import { getSolviaRealties } from '../services/funds';
-import { createTEvaluationForm, createTMrfPdfForm } from '../services/totalum';
+import { createTEvaluationForm, createTMrfPdfForm, getTMrfPdf } from '../services/totalum';
 
 export async function processExcelLeads(req: Request, res: Response, next: NextFunction) {
   try {
@@ -76,6 +76,18 @@ export async function createMrfPdfForm(req: CreateMrfPdfForm, res: Response, nex
 
     res.status(200).json({ success: true, createdEvaluationFormId: createdId });
   } catch (error) {
-    catchControllerError(error, 'Error creando el evaluation form desde controller', req.body, next);
+    catchControllerError(error, 'Error creando el mrf pdf form desde controller', req.body, next);
+  }
+}
+
+export async function getMrfPdf(req: Request, res: Response, next: NextFunction) {
+  try {
+    const pdfUrl = await getTMrfPdf();
+
+    console.log('PDF URL:', pdfUrl);
+
+    res.status(200).json({ success: true, pdfUrl });
+  } catch (error) {
+    catchControllerError(error, 'Error obteniendo el pdf de mrf desde controller', req.body, next);
   }
 }

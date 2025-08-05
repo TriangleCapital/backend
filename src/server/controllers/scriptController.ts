@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { TotalumApiSdk } from 'totalum-api-sdk';
 import { totalumOptions } from '../../utils/constants';
 import CustomError from '../../errors/CustomError';
-import { getAllOkupaRealties, removeOkupaRealty, updateOkupaRealty } from '../services/totalum';
+import { getAllOkupaRealties, getTMrfPdf, removeOkupaRealty, updateOkupaRealty } from '../services/totalum';
 
 const totalumSdk = new TotalumApiSdk(totalumOptions);
 
@@ -10,24 +10,10 @@ export async function runScript(req: Request, res: Response, next: NextFunction)
   try {
     const { orderId } = req.body;
 
-    const royalties: any[] = await getAllOkupaRealties();
+    const royalties: any = await getTMrfPdf();
 
-    for (const realty of royalties) {
-      const formattedRefActivo = realty?.ref_activo?.trim();
-      const formattedRefFondo = realty?.ref_fondo?.trim();
 
-      if (formattedRefFondo?.length === 18) {
-        try {
-
-          await updateOkupaRealty(realty._id, { ref_activo: formattedRefFondo, ref_fondo: formattedRefActivo });
-          console.info('Updated realty:', realty._id, 'with ref_activo:', formattedRefFondo, 'and ref_fondo:', formattedRefActivo);
-        } catch (error) {
-          console.error(`Error updating realty ${realty._id}: ${error.message}`);
-        }
-      }
-    }
-
-    res.status(200).json(true);
+    res.status(200).json(royalties);
   } catch (error) {
     console.error(error.message);
     const finalError = new CustomError(

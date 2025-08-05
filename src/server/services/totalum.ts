@@ -1,5 +1,10 @@
 import { TotalumApiSdk } from 'totalum-api-sdk';
-import { TOTALUM_LAST_LINK_WORKED_ID, TOTALUM_LAST_PROPERTY_WORKED_ID, totalumOptions } from '../../utils/constants';
+import {
+  TOTALUM_LAST_LINK_WORKED_ID,
+  TOTALUM_LAST_PROPERTY_WORKED_ID,
+  TOTALUM_MRF_PDF_FILE_ID,
+  totalumOptions,
+} from '../../utils/constants';
 import {
   TDebtRealty,
   TEvaluationForm,
@@ -363,7 +368,21 @@ export async function createTEvaluationForm(evaluationForm: Partial<TEvaluationF
   }
 }
 
-// ------ evaluacion formulario ------
+// ------ MRF PDF ------
+export async function getTMrfPdf(): Promise<string> {
+  try {
+    const response = await totalumSdk.crud.getItemById('archivo', TOTALUM_MRF_PDF_FILE_ID);
+
+    return response.data?.data?.archivo?.[0]?.url;
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error creando mrf pdf form de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error creando el mrf pdf form de Totalum: ${error.message}`);
+    }
+  }
+}
+
 export async function createTMrfPdfForm(mrfForm: Partial<TFormularioMrfPdfI>): Promise<string> {
   try {
     const response = await totalumSdk.crud.createItem('formulario_pdf_mrf', mrfForm);
