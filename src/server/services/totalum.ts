@@ -3,6 +3,7 @@ import { TOTALUM_LAST_LINK_WORKED_ID, TOTALUM_LAST_PROPERTY_WORKED_ID, totalumOp
 import {
   TDebtRealty,
   TEvaluationForm,
+  TFormularioMrfPdfI,
   TLastPropertyWorked,
   TLeadAlContado,
   TLeadHipoteca,
@@ -358,6 +359,20 @@ export async function createTEvaluationForm(evaluationForm: Partial<TEvaluationF
       throw new Error(`Error creando evaluation form de Totalum: ${error.response.data.errors}`);
     } else {
       throw new Error(`Error creando el evaluation form de Totalum: ${error.message}`);
+    }
+  }
+}
+
+// ------ evaluacion formulario ------
+export async function createTMrfPdfForm(mrfForm: Partial<TFormularioMrfPdfI>): Promise<string> {
+  try {
+    const response = await totalumSdk.crud.createItem('formulario_pdf_mrf', mrfForm);
+    return response.data.data.insertedId;
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error creando mrf pdf form de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error creando el mrf pdf form de Totalum: ${error.message}`);
     }
   }
 }

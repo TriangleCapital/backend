@@ -117,3 +117,16 @@ export interface TEvaluationForm {
   capital_disponible?: number;
   entiende_condiciones?: 'Si' | 'No';
 }
+
+export interface TFormularioMrfPdfI {
+  _id?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  nombre_completo?: string;
+  fecha?: Date;
+  intencion_inversion?: string;
+  duracion_inversion?: string;
+  capital_disponible?: number;
+  meses_empleado?: number;
+  salario_anual_empleado?: number;
+}

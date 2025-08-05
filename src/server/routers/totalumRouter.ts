@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   createEvaluationForm,
+  createMrfPdfForm,
   processExcelLeads,
   uploadExcelRoyalties,
   uploadSolviaRoyalties,
@@ -17,5 +18,6 @@ totalumRouter.post('/excel-leads', upload.any(), processExcelLeads);
 totalumRouter.post('/excel-realties', uploadExcelRoyalties);
 totalumRouter.get('/solvia-realties/:postalCode', uploadSolviaRoyalties);
 totalumRouter.post('/evaluation-form', createEvaluationForm);
+totalumRouter.post('/mrf-pdf-form', createMrfPdfForm);
 
 export default totalumRouter;

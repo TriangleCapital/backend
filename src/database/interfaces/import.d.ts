@@ -1,7 +1,7 @@
 import { Request } from 'express';
 import { DebtRoyalty, OkupaRoyalty, Royalty } from '.';
 import { TFund, TRealtyType } from './enums';
-import { TEvaluationForm } from './totalum';
+import { TEvaluationForm, TFormularioMrfPdfI } from './totalum';
 
 interface HandleManychatInteractionPayload extends Request {
   body: {
@@ -30,4 +30,8 @@ interface UploadRoyaltiesPayload extends Request {
 
 interface CreateEvaluationForm extends Request {
   body: TEvaluationForm;
+}
+
+interface CreateMrfPdfForm extends Request {
+  body: TFormularioMrfPdfI;
 }
