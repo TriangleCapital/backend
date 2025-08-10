@@ -4,6 +4,7 @@ import {
   createMrfPdfForm,
   getMrfPdf,
   processExcelLeads,
+  updateDocumentViewedNumber,
   uploadExcelRoyalties,
   uploadSolviaRoyalties,
 } from '../controllers/totalumController';
@@ -21,5 +22,6 @@ totalumRouter.get('/solvia-realties/:postalCode', uploadSolviaRoyalties);
 totalumRouter.post('/evaluation-form', createEvaluationForm);
 totalumRouter.post('/mrf-pdf-form', createMrfPdfForm);
 totalumRouter.get('/mrf-pdf', getMrfPdf);
+totalumRouter.post('/update-document-viewed-number', updateDocumentViewedNumber);
 
 export default totalumRouter;

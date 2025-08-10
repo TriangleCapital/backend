@@ -4,7 +4,8 @@ import { handleExcelLeads } from '../handlers/leads';
 import { CreateEvaluationForm, CreateMrfPdfForm, UploadRoyaltiesPayload } from '../../database/interfaces/import';
 import { handleUploadRealties } from '../handlers/royalties';
 import { getSolviaRealties } from '../services/funds';
-import { createTEvaluationForm, createTMrfPdfForm, getTMrfPdf } from '../services/totalum';
+import { createTEvaluationForm, createTMrfPdfForm, getTFile, updateTFile } from '../services/totalum';
+import { TOTALUM_MRF_PDF_FILE_ID } from '../../utils/constants';
 
 export async function processExcelLeads(req: Request, res: Response, next: NextFunction) {
   try {
@@ -82,11 +83,26 @@ export async function createMrfPdfForm(req: CreateMrfPdfForm, res: Response, nex
 
 export async function getMrfPdf(req: Request, res: Response, next: NextFunction) {
   try {
-    const pdfUrl = await getTMrfPdf();
+    const file = await getTFile(TOTALUM_MRF_PDF_FILE_ID);
 
-    console.log('PDF URL:', pdfUrl);
+    const pdfUrl = file?.archivo?.[0]?.url;
 
     res.status(200).json({ success: true, pdfUrl });
+  } catch (error) {
+    catchControllerError(error, 'Error obteniendo el pdf de mrf desde controller', req.body, next);
+  }
+}
+
+export async function updateDocumentViewedNumber(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { documentId } = req.body;
+
+    const file = await getTFile(documentId);
+    const fileDownloadCount = file?.numero_descargas || 0;
+
+    await updateTFile(documentId, { update: { numero_descargas: fileDownloadCount + 1 } });
+
+    res.status(200).json({ success: true });
   } catch (error) {
     catchControllerError(error, 'Error obteniendo el pdf de mrf desde controller', req.body, next);
   }

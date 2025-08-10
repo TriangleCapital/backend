@@ -130,3 +130,23 @@ export interface TFormularioMrfPdfI {
   meses_empleado?: number;
   salario_anual_empleado?: number;
 }
+
+interface Archivo {
+  name: string;
+  previousFilename: string;
+  type: string;
+  order: number;
+  sizeInMb: number;
+  url: string;
+}
+
+export interface TArchivo {
+  _id: string;
+  archivo: Archivo[];
+  referencia: string;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;
+  numero_descargas: number | null;
+  id: string;
+}

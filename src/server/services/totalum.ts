@@ -6,6 +6,7 @@ import {
   totalumOptions,
 } from '../../utils/constants';
 import {
+  TArchivo,
   TDebtRealty,
   TEvaluationForm,
   TFormularioMrfPdfI,
@@ -368,21 +369,7 @@ export async function createTEvaluationForm(evaluationForm: Partial<TEvaluationF
   }
 }
 
-// ------ MRF PDF ------
-export async function getTMrfPdf(): Promise<string> {
-  try {
-    const response = await totalumSdk.crud.getItemById('archivo', TOTALUM_MRF_PDF_FILE_ID);
-
-    return response.data?.data?.archivo?.[0]?.url;
-  } catch (error) {
-    if (error.response.data.errors) {
-      throw new Error(`Error creando mrf pdf form de Totalum: ${error.response.data.errors}`);
-    } else {
-      throw new Error(`Error creando el mrf pdf form de Totalum: ${error.message}`);
-    }
-  }
-}
-
+// ------ formulario_pdf_mrf ------
 export async function createTMrfPdfForm(mrfForm: Partial<TFormularioMrfPdfI>): Promise<string> {
   try {
     const response = await totalumSdk.crud.createItem('formulario_pdf_mrf', mrfForm);
@@ -392,6 +379,33 @@ export async function createTMrfPdfForm(mrfForm: Partial<TFormularioMrfPdfI>): P
       throw new Error(`Error creando mrf pdf form de Totalum: ${error.response.data.errors}`);
     } else {
       throw new Error(`Error creando el mrf pdf form de Totalum: ${error.message}`);
+    }
+  }
+}
+
+// ------ archivo ------
+export async function getTFile(fileId: string): Promise<TArchivo> {
+  try {
+    const response = await totalumSdk.crud.getItemById('archivo', TOTALUM_MRF_PDF_FILE_ID);
+
+    return response.data?.data;
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error creando el archivo de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error creando el archivo form de Totalum: ${error.message}`);
+    }
+  }
+}
+
+export async function updateTFile(fileId: string, update: { update: Partial<TArchivo> }) {
+  try {
+    await totalumSdk.crud.editItemById('archivo', fileId, update);
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error modificando el archivo de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error modificando el archivo de Totalum: ${error.message}`);
     }
   }
 }

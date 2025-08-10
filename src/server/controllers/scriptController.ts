@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { TotalumApiSdk } from 'totalum-api-sdk';
-import { totalumOptions } from '../../utils/constants';
+import { TOTALUM_MRF_PDF_FILE_ID, totalumOptions } from '../../utils/constants';
 import CustomError from '../../errors/CustomError';
-import { getAllOkupaRealties, getTMrfPdf, removeOkupaRealty, updateOkupaRealty } from '../services/totalum';
+import { getAllOkupaRealties, getTFile, removeOkupaRealty, updateOkupaRealty } from '../services/totalum';
 
 const totalumSdk = new TotalumApiSdk(totalumOptions);
 
@@ -10,10 +10,11 @@ export async function runScript(req: Request, res: Response, next: NextFunction)
   try {
     const { orderId } = req.body;
 
-    const royalties: any = await getTMrfPdf();
+    const royalties: any = await getTFile(TOTALUM_MRF_PDF_FILE_ID);
 
+    const pdfUrl = royalties?.archivo?.[0]?.url;
 
-    res.status(200).json(royalties);
+    res.status(200).json(pdfUrl);
   } catch (error) {
     console.error(error.message);
     const finalError = new CustomError(
