@@ -100,7 +100,7 @@ export async function updateDocumentViewedNumber(req: Request, res: Response, ne
     const file = await getTFile(documentId);
     const fileDownloadCount = file?.numero_descargas || 0;
 
-    await updateTFile(documentId, { update: { numero_descargas: fileDownloadCount + 1 } });
+    await updateTFile(documentId, { numero_descargas: fileDownloadCount + 1 });
 
     res.status(200).json({ success: true });
   } catch (error) {

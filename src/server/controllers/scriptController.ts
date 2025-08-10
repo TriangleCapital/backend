@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { TotalumApiSdk } from 'totalum-api-sdk';
 import { TOTALUM_MRF_PDF_FILE_ID, totalumOptions } from '../../utils/constants';
 import CustomError from '../../errors/CustomError';
-import { getAllOkupaRealties, getTFile, removeOkupaRealty, updateOkupaRealty } from '../services/totalum';
+import { getAllOkupaRealties, getTFile, removeOkupaRealty, updateOkupaRealty, updateTFile } from '../services/totalum';
 
 const totalumSdk = new TotalumApiSdk(totalumOptions);
 
@@ -10,11 +10,13 @@ export async function runScript(req: Request, res: Response, next: NextFunction)
   try {
     const { orderId } = req.body;
 
-    const royalties: any = await getTFile(TOTALUM_MRF_PDF_FILE_ID);
+    const file = await getTFile('6891a3f9fc887572d452d232');
+    const fileDownloadCount = file?.numero_descargas || 0;
 
-    const pdfUrl = royalties?.archivo?.[0]?.url;
+    await updateTFile('6891a3f9fc887572d452d232', { numero_descargas: fileDownloadCount + 1 });
 
-    res.status(200).json(pdfUrl);
+
+    res.status(200).json(true);
   } catch (error) {
     console.error(error.message);
     const finalError = new CustomError(

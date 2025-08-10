@@ -398,7 +398,7 @@ export async function getTFile(fileId: string): Promise<TArchivo> {
   }
 }
 
-export async function updateTFile(fileId: string, update: { update: Partial<TArchivo> }) {
+export async function updateTFile(fileId: string, update: Partial<TArchivo>) {
   try {
     await totalumSdk.crud.editItemById('archivo', fileId, update);
   } catch (error) {
