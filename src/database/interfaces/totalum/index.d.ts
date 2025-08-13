@@ -150,3 +150,17 @@ export interface TArchivo {
   numero_descargas: number | null;
   id: string;
 }
+
+export interface TPersona {
+  _id?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  nombre_completo?: string;
+  telefono?: string;
+  rol?: string;
+  notas?: string;
+  inmueble_deuda?: string; // (Many to One) if you get this field with nested, can be: InmuebleDeudaI;
+  inmueble_vacio?: string; // (Many to One) if you get this field with nested, can be: InmuebleVacioI;
+  inmueble_okupado?: string; // (Many to One) if you get this field with nested, can be: InmuebleOkupadoI;
+  mensajes_automatico?: string;
+}

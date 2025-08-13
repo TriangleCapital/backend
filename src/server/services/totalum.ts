@@ -391,9 +391,9 @@ export async function getTFile(fileId: string): Promise<TArchivo> {
     return response.data?.data;
   } catch (error) {
     if (error.response.data.errors) {
-      throw new Error(`Error creando el archivo de Totalum: ${error.response.data.errors}`);
+      throw new Error(`Error obteniendo el archivo de Totalum: ${error.response.data.errors}`);
     } else {
-      throw new Error(`Error creando el archivo form de Totalum: ${error.message}`);
+      throw new Error(`Error obteniendo el archivo form de Totalum: ${error.message}`);
     }
   }
 }
@@ -406,6 +406,21 @@ export async function updateTFile(fileId: string, update: Partial<TArchivo>) {
       throw new Error(`Error modificando el archivo de Totalum: ${error.response.data.errors}`);
     } else {
       throw new Error(`Error modificando el archivo de Totalum: ${error.message}`);
+    }
+  }
+}
+
+// ------ persona ------
+export async function getTPerson(fileId: string): Promise<TArchivo> {
+  try {
+    const response = await totalumSdk.crud.getItemById('persona', fileId);
+
+    return response.data?.data;
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error obteniendo la persona de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error obteniendo la persona form de Totalum: ${error.message}`);
     }
   }
 }

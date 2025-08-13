@@ -1,7 +1,7 @@
 import { TLeadFinanciacion } from '../../database/interfaces/enums';
 import { TLeadAlContado, TLeadHipoteca } from '../../database/interfaces/totalum';
 import { PERSONAL_EMAIL } from '../../utils/constants';
-import { generateContadoLeadEmailHtmlMessage, generateHipotecaLeadEmailHtmlMessage } from '../../utils/funcs';
+import { generateContadoLeadEmailHtmlMessage, generateHipotecaLeadEmailHtmlMessage } from '../../utils/parsers';
 import { sendEmail } from '../services/nodemailer';
 
 export async function sendCompletedChatbotEmail(
