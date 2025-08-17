@@ -34,6 +34,35 @@ export function formatPhoneNumber(phone: string): string {
   return cleaned;
 }
 
+export function parsePhoneNumberForWhatsApp(phoneNumber: string, chatExtension?: string): string {
+  const cleanedPhoneNumber = phoneNumber.replace(/\D/g, '');
+
+  if (cleanedPhoneNumber.startsWith('34') || chatExtension === '@g.us') {
+    return cleanedPhoneNumber;
+  }
+
+  return `34${cleanedPhoneNumber}`;
+}
+
+export function parsePhoneNumberForWhatsappId(phoneNumber: string): string {
+  const cleanedNumber = phoneNumber.replace(/[^+\d]/g, '');
+
+  let formattedNumber = cleanedNumber;
+  if (formattedNumber.startsWith('+')) {
+    formattedNumber = formattedNumber.slice(1);
+  } else if (!formattedNumber.startsWith('34')) {
+    formattedNumber = `34${formattedNumber}`;
+  }
+
+  if (formattedNumber.startsWith('34')) {
+    formattedNumber = formattedNumber.replace(/^34(0+)/, '34');
+  }
+
+  return `${formattedNumber}@c.us`;
+}
+
+
+
 export function parseLeadFromExcelToTotalum(excelLead: ExcelLead): Partial<TLeadShared> {
   const [day, month, year, time] = excelLead.FECHA.split(/[/ ]/);
   const timestamp = new Date(`${year}-${month}-${day}T${time}`);

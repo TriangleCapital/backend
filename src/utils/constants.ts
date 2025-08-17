@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer';
 
 const isTest = process.env.NODE_ENV !== 'production';
 
-export const whatsappApi = process.env.WHATSAPP_API;
+export const whatsappApi = 'http://localhost:3200';
 
 export const MANYCHAT_API = 'https://api.manychat.com';
 

@@ -1,10 +1,5 @@
 import { TotalumApiSdk } from 'totalum-api-sdk';
-import {
-  TOTALUM_LAST_LINK_WORKED_ID,
-  TOTALUM_LAST_PROPERTY_WORKED_ID,
-  TOTALUM_MRF_PDF_FILE_ID,
-  totalumOptions,
-} from '../../utils/constants';
+import { TOTALUM_LAST_LINK_WORKED_ID, TOTALUM_LAST_PROPERTY_WORKED_ID, totalumOptions } from '../../utils/constants';
 import {
   TArchivo,
   TDebtRealty,
@@ -386,7 +381,7 @@ export async function createTMrfPdfForm(mrfForm: Partial<TFormularioMrfPdfI>): P
 // ------ archivo ------
 export async function getTFile(fileId: string): Promise<TArchivo> {
   try {
-    const response = await totalumSdk.crud.getItemById('archivo', TOTALUM_MRF_PDF_FILE_ID);
+    const response = await totalumSdk.crud.getItemById('archivo', fileId);
 
     return response.data?.data;
   } catch (error) {
@@ -421,6 +416,25 @@ export async function getTPerson(fileId: string): Promise<TArchivo> {
       throw new Error(`Error obteniendo la persona de Totalum: ${error.response.data.errors}`);
     } else {
       throw new Error(`Error obteniendo la persona form de Totalum: ${error.message}`);
+    }
+  }
+}
+
+export async function getFilteredPersons(filters: any): Promise<TLeadShared[]> {
+  try {
+    const response = await totalumSdk.crud.getItems('persona', {
+      filter: filters,
+      pagination: {
+        limit: 999,
+        page: 0,
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    if (error.response.data.errors) {
+      throw new Error(`Error obteniendo las personas filtradas de Totalum: ${error.response.data.errors}`);
+    } else {
+      throw new Error(`Error obteniendo las personas filtradas de Totalum: ${error.message}`);
     }
   }
 }

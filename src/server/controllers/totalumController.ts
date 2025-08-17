@@ -4,8 +4,13 @@ import { handleExcelLeads } from '../handlers/leads';
 import { CreateEvaluationForm, CreateMrfPdfForm, UploadRoyaltiesPayload } from '../../database/interfaces/import';
 import { handleUploadRealties } from '../handlers/royalties';
 import { getSolviaRealties } from '../services/funds';
-import { createTEvaluationForm, createTMrfPdfForm, getTFile, updateTFile } from '../services/totalum';
+import { createTEvaluationForm, createTMrfPdfForm, getFilteredPersons, getTFile, updateTFile } from '../services/totalum';
 import { TOTALUM_MRF_PDF_FILE_ID } from '../../utils/constants';
+import { TPersonAutomaticMessaging, TPersonRole } from '../../database/interfaces/enums';
+import { parsePhoneNumberForWhatsApp } from '../../utils/parser';
+import { investorMessages, okupaMessages } from '../../utils/lists';
+import { getGroupMembers, sendWhatsappMessage, sendWhatsappMessagesToChatIds } from '../services/whatsapp';
+import { sleep } from '../../utils/funcs';
 
 export async function processExcelLeads(req: Request, res: Response, next: NextFunction) {
   try {
@@ -105,5 +110,59 @@ export async function updateDocumentViewedNumber(req: Request, res: Response, ne
     res.status(200).json({ success: true });
   } catch (error) {
     catchControllerError(error, 'Error obteniendo el pdf de mrf desde controller', req.body, next);
+  }
+}
+
+export async function sendMessageToOkupas(req: Request, res: Response, next: NextFunction) {
+  try {
+    const filters = [{ rol: TPersonRole.Okupa }, { mensajes_automatico: TPersonAutomaticMessaging.Activo }];
+
+    const okupasPhoneNumbers = (await getFilteredPersons(filters)).map((okupa) => okupa.telefono).filter(Boolean);
+
+    const parsedPhones = okupasPhoneNumbers.map((phone) => parsePhoneNumberForWhatsApp(phone));
+
+    for (const phone of parsedPhones) {
+      if (!phone) continue;
+
+      try {
+        const options = { phoneNumber: phone, message: okupaMessages.one };
+        await sendWhatsappMessage(options);
+
+        sleep(300);
+      } catch (error) {
+        console.error(`Error enviando mensaje a ${phone}:`, error);
+        continue;
+      }
+    }
+
+    res.status(200).json({ success: true });
+  } catch (error) {
+    catchControllerError(error, 'Error enviando el mensaje a los okupas', req.body, next);
+  }
+}
+
+export async function sendMessageToGroupMembers(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { groupChatId, chatIdsToAvoid, fromContactNumber, toContactNumber } = req.body;
+
+    if (!groupChatId) {
+      res.status(400).send('No se ha proporcionado el ID del grupo de WhatsApp.');
+      return;
+    }
+
+    const groupMembers = await getGroupMembers(groupChatId);
+
+    const membersChatIds = groupMembers
+      .map((member: any) => member.id._serialized)
+      .filter((chatId: string) => {
+        return chatId && !chatIdsToAvoid.includes(chatId);
+      })
+      .slice(fromContactNumber, toContactNumber);
+
+    await sendWhatsappMessagesToChatIds(membersChatIds, investorMessages.one);
+
+    res.status(200).json({ success: true, membersChatIds });
+  } catch (error) {
+    catchControllerError(error, 'Error enviando el mensaje a los okupas', req.body, next);
   }
 }

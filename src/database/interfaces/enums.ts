@@ -113,3 +113,16 @@ export enum Provincia {
   Castellon = 'Castellón',
   Tarragona = 'Tarragona',
 }
+
+export enum TPersonRole {
+  Cliente = 'Cliente',
+  Inversor = 'Inversor',
+  Okupa = 'Okupa',
+  Deudor = 'Deudor',
+  Abogado = 'Abogado',
+}
+
+export enum TPersonAutomaticMessaging {
+  Activo = 'Activo',
+  Inactivo = 'Inactivo',
+}
