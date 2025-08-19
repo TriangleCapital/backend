@@ -30,7 +30,7 @@ export async function processExcelLeads(req: Request, res: Response, next: NextF
   }
 }
 
-export async function uploadExcelRoyalties(req: UploadRoyaltiesPayload, res: Response, next: NextFunction) {
+export async function uploadExcelRealties(req: UploadRoyaltiesPayload, res: Response, next: NextFunction) {
   try {
     const { royalties, fund, royaltyType, resetRealties, setRealtiesAsNew } = req.body;
 
@@ -45,24 +45,6 @@ export async function uploadExcelRoyalties(req: UploadRoyaltiesPayload, res: Res
     res.status(200).json({ success: true, realtiesUploaded, realtiesUpdated, realtiesOmitted });
   } catch (error) {
     catchControllerError(error, 'Error procesando el excel de activos en el controlador', req.body, next);
-  }
-}
-
-export async function uploadSolviaRoyalties(req: UploadRoyaltiesPayload, res: Response, next: NextFunction) {
-  try {
-    const { postalCode } = req.params;
-
-    // const result: SolviaResult = {
-    //   emptyRealties: { realtiesStock: 0, realtiesUploaded: 0, realtiesUpdated: 0, realtiesOmitted: 0 },
-    //   okupaRealties: { realtiesStock: 0, realtiesUploaded: 0, realtiesUpdated: 0, realtiesOmitted: 0 },
-    //   rentRealties: { realtiesStock: 0, realtiesUploaded: 0, realtiesUpdated: 0, realtiesOmitted: 0 },
-    // };
-
-    const result = await getSolviaRealties(postalCode);
-
-    res.status(200).json(result);
-  } catch (error) {
-    catchControllerError(error, 'Error procesando los activos de Solvia en el controlador', req.body, next);
   }
 }
 
