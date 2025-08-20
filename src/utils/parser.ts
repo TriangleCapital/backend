@@ -7,7 +7,7 @@ import {
   ExcelLeadOrigin,
   Responsable,
   TBoolean,
-  TFund,
+  TBank,
   TLeadCuandoQuiereMudarse,
   TLeadOrigin,
 } from '../database/interfaces/enums';
@@ -60,8 +60,6 @@ export function parsePhoneNumberForWhatsappId(phoneNumber: string): string {
 
   return `${formattedNumber}@c.us`;
 }
-
-
 
 export function parseLeadFromExcelToTotalum(excelLead: ExcelLead): Partial<TLeadShared> {
   const [day, month, year, time] = excelLead.FECHA.split(/[/ ]/);
@@ -202,7 +200,7 @@ export function parseContadoLeadFromMultipleSourcesToTotalum(
 export function parseExcelOkupaRealtyToTotalum(
   excelOkupaRealty: ExcelOkupaRealty,
   setRealtiesAsNew: boolean,
-  fund: TFund
+  fund: TBank
 ): Partial<TOkupaRealty> {
   return {
     tipo_okupa: excelOkupaRealty.tipo_okupa,
@@ -224,7 +222,7 @@ export function parseExcelOkupaRealtyToTotalum(
 export function parseExcelDebtRealtyToTotalum(
   excelDebtRealty: ExcelDebtRealty,
   setRealtiesAsNew: boolean,
-  fund: TFund
+  fund: TBank
 ): Partial<TDebtRealty> {
   try {
     // const negotiationState = excelDebtRealty.fase_deuda.startsWith('06')

@@ -48,7 +48,7 @@ export enum TLeadCuandoQuiereMudarse {
   En3Meses = 'En 3 meses',
 }
 
-export enum TFund {
+export enum TBank {
   Aliseda = 'Aliseda',
   Solvia = 'Solvia',
   Servihabitat = 'Servihabitat',
@@ -79,6 +79,10 @@ export enum TipoOkupa {
   AntiguoInquilino = 'Antiguo Inquilino',
   Desconocido = 'Desconocido',
   Vacio = 'Vacío',
+  Squatter = 'Squatter',
+  ExBorrower = 'Ex Borrower',
+  ExTenant = 'Ex Tenant',
+  ExBorrowerOSquatter = 'ExBorrower o Squatter',
 }
 
 export enum EstadoNegociacionOkupa {

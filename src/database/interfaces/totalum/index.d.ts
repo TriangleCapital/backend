@@ -4,7 +4,7 @@ import {
   Provincia,
   Responsable,
   TBoolean,
-  TFund,
+  TBank,
   TipoOkupa,
   TLeadCuandoQuiereMudarse,
   TLeadEstadoHipoteca,
@@ -62,6 +62,7 @@ interface TOkupaRealty {
   notas: string;
   enlace_inmueble: string;
   enlace_idealista: string;
+  enlace_maps: string;
   fotos: FileRecordI[];
   ref_catastral: string;
   precio_venta: number;
@@ -73,9 +74,22 @@ interface TOkupaRealty {
   codigo_postal: string;
   precio_inicial: number;
   fase_okupacion: string;
-  comercializador: TFund;
+  comercializador: TBank;
   ref_activo: string;
   ref_fondo: string;
+  m2: number;
+  numero_habitaciones: number;
+  numero_banos: number;
+  tiene_garaje: TBoolean;
+  tiene_trastero: TBoolean;
+  tiene_piscina: TBoolean;
+  certificacion_energetica: string;
+  fecha_primera_publicacion: Date;
+  fecha_publicacion: Date;
+  ficha_origen_producto: string;
+  ficha_macro: string;
+  ficha_territorial: string;
+  ficha_rango_precio: string;
 }
 
 interface TDebtRealty {
@@ -99,7 +113,7 @@ interface TDebtRealty {
   direccion_catastro: string;
   direccion_completa: string;
   codigo_postal: string;
-  comercializador: TFund;
+  comercializador: TBank;
   ref_activo: string;
   ref_fondo: string;
 }

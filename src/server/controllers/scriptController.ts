@@ -1,22 +1,19 @@
 import { NextFunction, Request, Response } from 'express';
 import { TotalumApiSdk } from 'totalum-api-sdk';
-import { TOTALUM_MRF_PDF_FILE_ID, totalumOptions } from '../../utils/constants';
+import { totalumOptions } from '../../utils/constants';
 import CustomError from '../../errors/CustomError';
-import { getAllOkupaRealties, getTFile, removeOkupaRealty, updateOkupaRealty, updateTFile } from '../services/totalum';
+import { filterOkupaRealtiesFromBank } from '../helpers/banks';
 
 const totalumSdk = new TotalumApiSdk(totalumOptions);
 
 export async function runScript(req: Request, res: Response, next: NextFunction) {
   try {
-    const { orderId } = req.body;
+    const { realties } = req.body;
 
-    const file = await getTFile('6891a3f9fc887572d452d232');
-    const fileDownloadCount = file?.numero_descargas || 0;
-
-    await updateTFile('6891a3f9fc887572d452d232', { numero_descargas: fileDownloadCount + 1 });
+    const filtered = filterOkupaRealtiesFromBank(realties)
 
 
-    res.status(200).json(true);
+    res.status(200).json(filtered);
   } catch (error) {
     console.error(error.message);
     const finalError = new CustomError(

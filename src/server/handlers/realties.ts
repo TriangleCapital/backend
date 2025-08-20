@@ -1,14 +1,14 @@
 import { ExcelRealty } from '../../database/interfaces';
-import { TFund, TRealtyType } from '../../database/interfaces/enums';
+import { TBank, TRealtyType } from '../../database/interfaces/enums';
 import {
   filterValidRoyalties as filterValidRealties,
   processRealtiesUpload,
   resetRealtiesStateNew,
-} from '../helpers/royalties';
+} from '../helpers/realties';
 import { getAllDebtRealties, getAllOkupaRealties } from '../services/totalum';
 
 export async function handleUploadRealties(
-  fund: TFund,
+  fund: TBank,
   excelRoyalties: ExcelRealty[],
   realtyType: TRealtyType,
   resetRealties: boolean,
