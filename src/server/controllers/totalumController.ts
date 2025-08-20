@@ -3,7 +3,7 @@ import { catchControllerError } from '../../errors/generalError';
 import { handleExcelLeads } from '../handlers/leads';
 import { CreateEvaluationForm, CreateMrfPdfForm, UploadRoyaltiesPayload } from '../../database/interfaces/import';
 import { handleUploadRealties } from '../handlers/royalties';
-import { getSolviaRealties } from '../services/funds';
+import { getSolviaRealties } from '../services/banks';
 import { createTEvaluationForm, createTMrfPdfForm, getFilteredPersons, getTFile, updateTFile } from '../services/totalum';
 import { TOTALUM_MRF_PDF_FILE_ID } from '../../utils/constants';
 import { TPersonAutomaticMessaging, TPersonRole } from '../../database/interfaces/enums';

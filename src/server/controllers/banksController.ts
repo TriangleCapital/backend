@@ -1,7 +1,7 @@
-import { NextFunction, Response } from "express";
-import { UploadRoyaltiesPayload } from "../../database/interfaces/import";
-import { getSolviaRealties } from "../services/funds";
-import { catchControllerError } from "../../errors/generalError";
+import { NextFunction, Response } from 'express';
+import { UploadRoyaltiesPayload } from '../../database/interfaces/import';
+import { getSolviaRealties } from '../services/banks';
+import { catchControllerError } from '../../errors/generalError';
 
 export async function uploadSolviaRoyalties(req: UploadRoyaltiesPayload, res: Response, next: NextFunction) {
   try {

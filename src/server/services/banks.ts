@@ -1,7 +1,17 @@
 import axios from 'axios';
 import { SOLVIA_API } from '../../utils/constants';
 
-export async function getSolviaRealties(postalCode: string) {
+export async function getSolviaExtendedRealty(realtyId: string): Promise<SolviaRealty> {
+  try {
+    const response: any = await axios.post(`${SOLVIA_API}/v3/${realtyId}`);
+
+    return response.data;
+  } catch (error) {
+    throw new Error(`Error obteniendo el activo desde Solvia: ${error.response?.data?.errors || error.message}`);
+  }
+}
+
+export async function getSolviaRealties(postalCode: string): Promise<SolviaSimpleRealty[]> {
   const allRealties: any[] = [];
   const pageSize = 100;
   let page = 0;
@@ -9,7 +19,7 @@ export async function getSolviaRealties(postalCode: string) {
 
   try {
     while (hasMore) {
-      const response: any = await axios.post(`${SOLVIA_API}/buscarInmuebles`, {
+      const response: any = await axios.post(`${SOLVIA_API}/v2/buscarInmuebles`, {
         idProvincia: postalCode.slice(0, 2),
         tipoIperacion: 'COMPRA',
         idCategoriaTipoVivienda: '1',
@@ -35,6 +45,6 @@ export async function getSolviaRealties(postalCode: string) {
 
     return allRealties;
   } catch (error) {
-    throw new Error(`Error obteniendo las propiedades desde Solvia: ${error.response?.data?.errors || error.message}`);
+    throw new Error(`Error obteniendo los activos desde Solvia: ${error.response?.data?.errors || error.message}`);
   }
 }
