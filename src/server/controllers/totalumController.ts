@@ -9,7 +9,12 @@ import { TOTALUM_MRF_PDF_FILE_ID } from '../../utils/constants';
 import { TPersonAutomaticMessaging, TPersonRole } from '../../database/interfaces/enums';
 import { parsePhoneNumberForWhatsApp } from '../../utils/parser';
 import { investorMessages, okupaMessages } from '../../utils/lists';
-import { getGroupMembers, sendWhatsappMessage, sendWhatsappMessagesToChatIds } from '../services/whatsapp';
+import {
+  getGroupMembers,
+  sendWhatsappMessage,
+  sendWhatsappMessagesToChatIds,
+  sendWhatsappMessageToChatId,
+} from '../services/whatsapp';
 import { sleep } from '../../utils/funcs';
 
 export async function processExcelLeads(req: Request, res: Response, next: NextFunction) {
@@ -141,7 +146,14 @@ export async function sendMessageToGroupMembers(req: Request, res: Response, nex
       })
       .slice(fromContactNumber, toContactNumber);
 
-    await sendWhatsappMessagesToChatIds(membersChatIds, investorMessages.one);
+    for (const chatId of membersChatIds) {
+      try {
+        await sleep(5000);
+        await sendWhatsappMessageToChatId({ chatId, message: investorMessages.one });
+      } catch (error) {
+        throw new Error(`Error enviando mensaje a ${chatId}: ${error.message}`);
+      }
+    }
 
     res.status(200).json({ success: true, membersChatIds });
   } catch (error) {

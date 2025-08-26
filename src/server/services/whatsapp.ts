@@ -21,6 +21,23 @@ export async function sendWhatsappMessage({ phoneNumber, message }: { phoneNumbe
   }
 }
 
+export async function sendWhatsappMessageToChatId({ chatId, message }: { chatId: string; message: string }) {
+  try {
+    const endpoint = `${whatsappApi}/messages/send-any-chat`;
+    const options = { chatId, message };
+
+    const response = await axios.post(endpoint, options);
+
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(`Error enviando el mensaje de whatsapp al chat id: ${error.response}`);
+    } else {
+      throw new Error(`Error enviando el mensaje de whatsapp al chat id: ${error.response}`);
+    }
+  }
+}
+
 export async function sendWhatsappMessagesToChatIds(chatIds: string[], message: string) {
   try {
     const endpoint = `${whatsappApi}/messages/send-messages-to-chat-ids`;

@@ -54,6 +54,9 @@ interface MContactData {
     estado_hipoteca?: TLeadEstadoHipoteca | null;
     venta_actual_propiedad?: TBoolean | null;
     chatbot_completado?: TBoolean | null;
+    quiere_recibir_alternativas_inversion?: TBoolean | null;
+    quiere_mrf?: TBoolean | null;
+    email?: string | null;
   };
 }
 

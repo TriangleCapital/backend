@@ -16,10 +16,10 @@ import { MContactData, MSubscriber } from '../database/interfaces/manychat';
 import { parse } from 'path';
 import { calculatePrecioVenta } from './funcs';
 
-export function formatPhoneNumber(phone: string): string {
-  if (!phone) return '';
+export function formatPhoneNumber(phone: string | number): string {
+  if (phone === null || phone === undefined) return '';
 
-  let cleaned = phone.replace(/[^0-9+]/g, '');
+  let cleaned = String(phone).replace(/[^0-9+]/g, '');
 
   if (!cleaned.startsWith('+34')) {
     if (cleaned.startsWith('34')) {
@@ -110,7 +110,7 @@ export function parseLeadFromTotalumToManychat(lead: Partial<TLeadShared>): MSub
     email: lead.email || '',
     gender: '',
     has_opt_in_sms: false,
-    has_opt_in_email: false,
+    has_opt_in_email: true,
     consent_phrase: '',
   };
 }
@@ -140,7 +140,16 @@ export function parseHipotecaLeadFromManychatToTotalum(contactData: MContactData
 }
 
 export function parseContadoLeadFromManychatToTotalum(contactData: MContactData): Partial<TLeadAlContado> {
-  const { ahorros_disponibles, uso_vivienda, fin_inversion, zona_interes, chatbot_completado } = contactData.custom_fields;
+  const {
+    ahorros_disponibles,
+    uso_vivienda,
+    fin_inversion,
+    zona_interes,
+    chatbot_completado,
+    quiere_recibir_alternativas_inversion,
+    quiere_mrf,
+    email,
+  } = contactData.custom_fields;
 
   const phone = formatPhoneNumber(contactData.whatsapp_phone);
 
@@ -152,6 +161,9 @@ export function parseContadoLeadFromManychatToTotalum(contactData: MContactData)
     fin_inversion,
     zona_interes,
     chatbot_completado: chatbot_completado || TBoolean.No,
+    quiere_recibir_alternativas_inversion: quiere_recibir_alternativas_inversion || TBoolean.No,
+    quiere_mrf: quiere_mrf || TBoolean.No,
+    email,
   };
 }
 

@@ -38,6 +38,8 @@ interface TLeadAlContado extends TLeadShared {
   uso_vivienda: TLeadUsoVivienda;
   fin_inversion: TLeadFinInversion;
   zona_interes: string;
+  quiere_recibir_alternativas_inversion: TBoolean;
+  quiere_mrf: TBoolean;
 }
 
 interface TLeadHipoteca extends TLeadShared {

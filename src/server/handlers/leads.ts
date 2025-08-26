@@ -1,7 +1,11 @@
 import { TLeadFinanciacion } from '../../database/interfaces/enums';
 import { MContactData } from '../../database/interfaces/manychat';
 import { TLeadAlContado, TLeadHipoteca } from '../../database/interfaces/totalum';
-import { MANYCHAT_REALTY_NAME_FIELD_ID, MANYCHAT_REALTY_LINK_FIELD_ID } from '../../utils/constants';
+import {
+  MANYCHAT_REALTY_NAME_FIELD_ID,
+  MANYCHAT_REALTY_LINK_FIELD_ID,
+  MANYCHAT_EMAIL_FIELD_ID,
+} from '../../utils/constants';
 import { sleep } from '../../utils/funcs';
 import { parseExcelToTLeads } from '../../utils/parser';
 import {
@@ -11,7 +15,7 @@ import {
   handleHipotecaInteraction,
 } from '../helpers/leads';
 import { sendCompletedChatbotEmail } from '../helpers/notifications';
-import { createSubscriber, sendFlowToSubscriber, updateBotField } from '../services/manychat';
+import { createSubscriber, sendFlowToSubscriber, updateBotField, updateSubscriberCustomField } from '../services/manychat';
 import {
   getLastLink,
   getLastProperty,
@@ -42,8 +46,8 @@ export async function handleExcelLeads(excel: Express.Multer.File, realtyLink: s
           await updateBotField(MANYCHAT_REALTY_LINK_FIELD_ID, realtyLink);
           await updateLastLink(realtyLink);
         }
-
         const subscriberId = await createSubscriber(lead);
+        if (lead.email) await updateSubscriberCustomField(subscriberId, MANYCHAT_EMAIL_FIELD_ID, lead.email);
 
         await sendFlowToSubscriber(subscriberId);
 
@@ -102,7 +106,7 @@ export async function handleCompletedChatbot(phoneNumber: string, contactData: M
 
   if (leadType && leadType === TLeadFinanciacion.AlContado) {
     const leadData = await handleContadoInteraction(phoneNumber, contactData, sharedLead);
-  
+
     lead = leadData.lead;
     alreadyHandled = leadData.alreadyHandled;
   }

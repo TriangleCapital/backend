@@ -9,13 +9,32 @@ export async function createSubscriber(lead: Partial<TLeadShared>): Promise<numb
     const subscriber = parseLeadFromTotalumToManychat(lead);
 
     const response = await axios.post(`${MANYCHAT_API}/fb/subscriber/createSubscriber`, subscriber, manychatOptions);
+    const id = Number(response.data.data.id);
 
-    return Number(response.data.data.id);
+    return id;
   } catch (error) {
-    if (error.response.data.message) {
-      throw new Error(`Error creando el subscriber en Manychat: ${error.response.data.message}`);
+    if (error.response.data) {
+      throw new Error(`Error creando el subscriber en Manychat a: ${JSON.stringify(error.response.data)}`);
     } else {
-      throw new Error(`Error creando el subscriber en Manychat: ${error.message}`);
+      throw new Error(`Error creando el subscriber en Manychat b: ${error.message}`);
+    }
+  }
+}
+
+export async function updateSubscriberCustomField(subscriber_id: number, field_id: number, field_value: any) {
+  try {
+    if (!subscriber_id || !field_id) {
+      throw new Error('No se ha proporcionado el subscriber_id o field_id para actualizar el campo de usuario en Manychat');
+    }
+    
+    const options = { subscriber_id, field_id, field_value };
+
+    await axios.post(`${MANYCHAT_API}/fb/subscriber/setCustomField`, options, manychatOptions);
+  } catch (error) {
+    if (error.response.data) {
+      throw new Error(`Error actualizando el campo de usuario en Manychat a: ${JSON.stringify(error.response.data)}`);
+    } else {
+      throw new Error(`Error actualizando el campo de usuario en Manychat b: ${error.message}`);
     }
   }
 }
