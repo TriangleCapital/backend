@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { MANYCHAT_API, MANYCHAT_FLOW_NS_0, manychatOptions } from '../../utils/constants';
+import { MANYCHAT_API, manychatOptions } from '../../utils/constants';
 import { parseLeadFromTotalumToManychat } from '../../utils/parser';
 import { TLeadShared } from '../../database/interfaces/totalum';
 import { MBotField, MSendFlow } from '../../database/interfaces/manychat';
@@ -63,6 +63,20 @@ export async function sendFlowToSubscriber(subscriberId: number, flowNs: string)
       throw new Error(`Error enviando el flow al subscriber en Manychat: ${error.response.data.message}`);
     } else {
       throw new Error(`Error enviando el flow al subscriber en Manychat: ${error.message}`);
+    }
+  }
+}
+
+export async function getFlows() {
+  try {
+    const response = await axios.get(`${MANYCHAT_API}/fb/page/getFlows`, manychatOptions);
+
+    return response.data.data.flows;
+  } catch (error) {
+    if (error.response.data.message) {
+      throw new Error(`Error obteniendo los flows de Manychat: ${error.response.data.message}`);
+    } else {
+      throw new Error(`Error obteniendo los flows de Manychat: ${error.message}`);
     }
   }
 }
