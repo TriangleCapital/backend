@@ -148,6 +148,7 @@ export function parseContadoLeadFromManychatToTotalum(contactData: MContactData)
     chatbot_completado,
     quiere_recibir_alternativas_inversion,
     quiere_mrf,
+    gusta_pdf_mrf,
     email,
   } = contactData.custom_fields;
 
@@ -163,6 +164,7 @@ export function parseContadoLeadFromManychatToTotalum(contactData: MContactData)
     chatbot_completado: chatbot_completado || TBoolean.No,
     quiere_recibir_alternativas_inversion: quiere_recibir_alternativas_inversion || TBoolean.No,
     quiere_mrf: quiere_mrf || TBoolean.No,
+    gusta_pdf_mrf: gusta_pdf_mrf || TBoolean.No,
     email,
   };
 }

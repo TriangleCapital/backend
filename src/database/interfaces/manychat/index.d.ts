@@ -56,6 +56,7 @@ interface MContactData {
     chatbot_completado?: TBoolean | null;
     quiere_recibir_alternativas_inversion?: TBoolean | null;
     quiere_mrf?: TBoolean | null;
+    gusta_pdf_mrf: TBoolean | null;
     email?: string | null;
   };
 }

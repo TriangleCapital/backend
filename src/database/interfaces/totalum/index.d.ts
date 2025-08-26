@@ -40,6 +40,7 @@ interface TLeadAlContado extends TLeadShared {
   zona_interes: string;
   quiere_recibir_alternativas_inversion: TBoolean;
   quiere_mrf: TBoolean;
+  gusta_pdf_mrf: TBoolean;
 }
 
 interface TLeadHipoteca extends TLeadShared {
