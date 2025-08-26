@@ -25,7 +25,7 @@ import {
   removeSharedLead,
 } from '../services/totalum';
 
-export async function handleExcelLeads(excel: Express.Multer.File, realtyLink: string, flowNumber: number) {
+export async function handleExcelLeads(excel: Express.Multer.File, realtyLink: string, flowNs: string) {
   try {
     const parsedExcelLeads = parseExcelToTLeads(excel);
 
@@ -49,7 +49,7 @@ export async function handleExcelLeads(excel: Express.Multer.File, realtyLink: s
         const subscriberId = await createSubscriber(lead);
         if (lead.email) await updateSubscriberCustomField(subscriberId, MANYCHAT_EMAIL_FIELD_ID, lead.email);
 
-        await sendFlowToSubscriber(subscriberId, flowNumber);
+        await sendFlowToSubscriber(subscriberId, flowNs);
 
         await createSharedLead(lead);
 

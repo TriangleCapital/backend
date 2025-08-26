@@ -3,7 +3,6 @@ import { MANYCHAT_API, MANYCHAT_FLOW_NS_0, manychatOptions } from '../../utils/c
 import { parseLeadFromTotalumToManychat } from '../../utils/parser';
 import { TLeadShared } from '../../database/interfaces/totalum';
 import { MBotField, MSendFlow } from '../../database/interfaces/manychat';
-import { getManychatFlowByFlowNumber } from '../../utils/funcs';
 
 export async function createSubscriber(lead: Partial<TLeadShared>): Promise<number> {
   try {
@@ -54,9 +53,9 @@ export async function updateBotField(botFieldId: number, newValue: string) {
   }
 }
 
-export async function sendFlowToSubscriber(subscriberId: number, flowNumber: number = 0) {
+export async function sendFlowToSubscriber(subscriberId: number, flowNs: string) {
   try {
-    const body: MSendFlow = { subscriber_id: subscriberId, flow_ns: getManychatFlowByFlowNumber(flowNumber) };
+    const body: MSendFlow = { subscriber_id: subscriberId, flow_ns: flowNs };
 
     await axios.post(`${MANYCHAT_API}/fb/sending/sendFlow`, body, manychatOptions);
   } catch (error) {

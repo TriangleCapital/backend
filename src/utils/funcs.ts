@@ -10,14 +10,3 @@ export function calculatePrecioVenta(precioInicial: number, fund: TBank): number
   const discountAmount = precioInicial * (discountPercentage / 100);
   return Math.floor(precioInicial - discountAmount);
 }
-
-export function getManychatFlowByFlowNumber(flowNumber: number): string {
-  switch (flowNumber) {
-    case 0:
-      return MANYCHAT_FLOW_NS_0;
-    case 1:
-      return MANYCHAT_FLOW_NS_1;
-    default:
-      return MANYCHAT_FLOW_NS_0;
-  }
-}

@@ -19,14 +19,14 @@ import { sleep } from '../../utils/funcs';
 export async function processExcelLeads(req: Request, res: Response, next: NextFunction) {
   try {
     const files = req.files as Express.Multer.File[];
-    const { realtyLink, flowNumber } = req.body;
+    const { realtyLink, flowNs } = req.body;
 
     if (!files || files.length === 0 || !realtyLink) {
       res.status(400).send(`No se ha recibido ningún archivo o enlace de propiedad.`);
       return;
     }
 
-    const { leadsProcessed, leadsOmitted } = await handleExcelLeads(files[0], realtyLink, flowNumber);
+    const { leadsProcessed, leadsOmitted } = await handleExcelLeads(files[0], realtyLink, flowNs);
 
     res.status(200).json({ success: true, leadsProcessed, leadsOmitted });
   } catch (error) {
