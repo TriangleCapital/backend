@@ -41,6 +41,7 @@ interface TLeadAlContado extends TLeadShared {
   quiere_recibir_alternativas_inversion: TBoolean;
   quiere_mrf: TBoolean;
   gusta_pdf_mrf: TBoolean;
+  cuando_puede_invertir?: string;
 }
 
 interface TLeadHipoteca extends TLeadShared {

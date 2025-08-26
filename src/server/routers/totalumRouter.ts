@@ -2,8 +2,10 @@ import express from 'express';
 import {
   createEvaluationForm,
   createMrfPdfForm,
+  getGroupMembersChatIds,
   getMrfPdf,
   processExcelLeads,
+  sendMessageToChatIds,
   sendMessageToGroupMembers,
   sendMessageToOkupas,
   updateDocumentViewedNumber,
@@ -27,5 +29,7 @@ totalumRouter.post('/update-document-viewed-number', updateDocumentViewedNumber)
 
 totalumRouter.post('/message-okupas', sendMessageToOkupas);
 totalumRouter.post('/send-message-to-group-members', sendMessageToGroupMembers);
+totalumRouter.post('/send-message-to-chat-ids', sendMessageToChatIds);
+totalumRouter.get('/group-members-chat-ids', getGroupMembersChatIds);
 
 export default totalumRouter;

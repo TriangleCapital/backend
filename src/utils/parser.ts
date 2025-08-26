@@ -115,6 +115,17 @@ export function parseLeadFromTotalumToManychat(lead: Partial<TLeadShared>): MSub
   };
 }
 
+export function sanitizeWhatsAppId(id: string): string {
+  if (!id) return "";
+
+  let cleaned = id.split("@")[0];
+
+  cleaned = cleaned.replace(/[^0-9]/g, "");
+
+  return cleaned;
+}
+
+
 export function parseHipotecaLeadFromManychatToTotalum(contactData: MContactData): Partial<TLeadHipoteca> {
   const { ahorros_disponibles, estado_hipoteca, cuando_quiere_mudarse, venta_actual_propiedad, chatbot_completado } =
     contactData.custom_fields;
@@ -149,6 +160,7 @@ export function parseContadoLeadFromManychatToTotalum(contactData: MContactData)
     quiere_recibir_alternativas_inversion,
     quiere_mrf,
     gusta_pdf_mrf,
+    cuando_puede_invertir,
     email,
   } = contactData.custom_fields;
 
@@ -165,6 +177,7 @@ export function parseContadoLeadFromManychatToTotalum(contactData: MContactData)
     quiere_recibir_alternativas_inversion: quiere_recibir_alternativas_inversion || TBoolean.No,
     quiere_mrf: quiere_mrf || TBoolean.No,
     gusta_pdf_mrf: gusta_pdf_mrf || TBoolean.No,
+    cuando_puede_invertir,
     email,
   };
 }

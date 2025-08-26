@@ -7,6 +7,8 @@ export const whatsappApi = 'http://localhost:3200';
 
 export const MANYCHAT_API = 'https://api.manychat.com';
 
+export const ZAPI_API = 'https://api.z-api.io';
+
 export const SOLVIA_API = 'https://www.solvia.es/api/inmuebles';
 
 export const MANYCHAT_REALTY_NAME_FIELD_ID = 4591353;
@@ -14,11 +16,14 @@ export const MANYCHAT_REALTY_LINK_FIELD_ID = 4599290;
 
 export const MANYCHAT_EMAIL_FIELD_ID = 13528788;
 
-export const MANYCHAT_FLOW_NS = 'content20250825153317_814953';
+export const MANYCHAT_FLOW_NS_0 = 'content20250825153317_814953';
+export const MANYCHAT_FLOW_NS_1 = 'content20250826092356_099295';
 
 export const TOTALUM_LAST_PROPERTY_WORKED_ID = '67c7e8196437bca456dbd28f';
 export const TOTALUM_LAST_LINK_WORKED_ID = '67d01b98111251dc7015e30b';
 export const TOTALUM_MRF_PDF_FILE_ID = '6891a3f9fc887572d452d232';
+
+export const ZAPI_CLIENT_TOKEN = process.env.ZAPI_CLIENT_TOKEN;
 
 export const PERSONAL_EMAIL = 'aronilie.code@gmail.com';
 

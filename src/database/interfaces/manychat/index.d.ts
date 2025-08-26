@@ -57,6 +57,7 @@ interface MContactData {
     quiere_recibir_alternativas_inversion?: TBoolean | null;
     quiere_mrf?: TBoolean | null;
     gusta_pdf_mrf: TBoolean | null;
+    cuando_puede_invertir?: string | null;
     email?: string | null;
   };
 }

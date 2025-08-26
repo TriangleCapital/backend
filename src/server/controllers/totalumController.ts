@@ -7,27 +7,26 @@ import { getSolviaRealties } from '../services/banks';
 import { createTEvaluationForm, createTMrfPdfForm, getFilteredPersons, getTFile, updateTFile } from '../services/totalum';
 import { TOTALUM_MRF_PDF_FILE_ID } from '../../utils/constants';
 import { TPersonAutomaticMessaging, TPersonRole } from '../../database/interfaces/enums';
-import { parsePhoneNumberForWhatsApp } from '../../utils/parser';
+import { parsePhoneNumberForWhatsApp, sanitizeWhatsAppId } from '../../utils/parser';
 import { investorMessages, okupaMessages } from '../../utils/lists';
 import {
   getGroupMembers,
   sendWhatsappMessage,
-  sendWhatsappMessagesToChatIds,
-  sendWhatsappMessageToChatId,
+  sendZApiWhatsappMessage,
 } from '../services/whatsapp';
 import { sleep } from '../../utils/funcs';
 
 export async function processExcelLeads(req: Request, res: Response, next: NextFunction) {
   try {
     const files = req.files as Express.Multer.File[];
-    const { realtyLink } = req.body;
+    const { realtyLink, flowNumber } = req.body;
 
     if (!files || files.length === 0 || !realtyLink) {
       res.status(400).send(`No se ha recibido ningún archivo o enlace de propiedad.`);
       return;
     }
 
-    const { leadsProcessed, leadsOmitted } = await handleExcelLeads(files[0], realtyLink);
+    const { leadsProcessed, leadsOmitted } = await handleExcelLeads(files[0], realtyLink, flowNumber);
 
     res.status(200).json({ success: true, leadsProcessed, leadsOmitted });
   } catch (error) {
@@ -130,7 +129,7 @@ export async function sendMessageToOkupas(req: Request, res: Response, next: Nex
 
 export async function sendMessageToGroupMembers(req: Request, res: Response, next: NextFunction) {
   try {
-    const { groupChatId, chatIdsToAvoid, fromContactNumber, toContactNumber } = req.body;
+    const { groupChatId, chatIdsToAvoid, fromContactNumber, toContactNumber, instanceId, instanceToken } = req.body;
 
     if (!groupChatId) {
       res.status(400).send('No se ha proporcionado el ID del grupo de WhatsApp.');
@@ -147,13 +146,63 @@ export async function sendMessageToGroupMembers(req: Request, res: Response, nex
       .slice(fromContactNumber, toContactNumber);
 
     for (const chatId of membersChatIds) {
+      const number = sanitizeWhatsAppId(chatId);
+      if (!number) continue;
+
       try {
         await sleep(5000);
-        await sendWhatsappMessageToChatId({ chatId, message: investorMessages.one });
+        await sendZApiWhatsappMessage({ phoneNumber: number, message: investorMessages.one, instanceId, instanceToken });
       } catch (error) {
         throw new Error(`Error enviando mensaje a ${chatId}: ${error.message}`);
       }
     }
+
+    res.status(200).json({ success: true, membersChatIds });
+  } catch (error) {
+    catchControllerError(error, 'Error enviando el mensaje a los okupas', req.body, next);
+  }
+}
+
+export async function sendMessageToChatIds(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { chatIds, chatIdsToAvoid, fromNumber, toNumber, instanceId, instanceToken } = req.body;
+
+    const membersChatIds = chatIds
+      .filter((chatId: string) => {
+        return chatId && !chatIdsToAvoid.includes(chatId);
+      })
+      .slice(fromNumber, toNumber);
+
+    for (const chatId of membersChatIds) {
+      const number = sanitizeWhatsAppId(chatId);
+      if (!number) continue;
+
+      try {
+        await sleep(5000);
+        await sendZApiWhatsappMessage({ phoneNumber: number, message: investorMessages.one, instanceId, instanceToken });
+      } catch (error) {
+        throw new Error(`Error enviando mensaje a ${chatId}: ${error.message}`);
+      }
+    }
+
+    res.status(200).json({ success: true, membersChatIds });
+  } catch (error) {
+    catchControllerError(error, 'Error enviando el mensaje a los chat ids', req.body, next);
+  }
+}
+
+export async function getGroupMembersChatIds(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { groupChatId } = req.body;
+
+    if (!groupChatId) {
+      res.status(400).send('No se ha proporcionado el ID del grupo de WhatsApp.');
+      return;
+    }
+
+    const groupMembers = await getGroupMembers(groupChatId);
+
+    const membersChatIds = groupMembers.map((member: any) => member.id._serialized);
 
     res.status(200).json({ success: true, membersChatIds });
   } catch (error) {
