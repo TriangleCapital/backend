@@ -28,6 +28,12 @@ interface UploadRoyaltiesPayload extends Request {
   };
 }
 
+interface GetSolviaExcelPayload extends Request {
+  body: {
+    postalCodes: string[];
+  }
+}
+
 interface CreateEvaluationForm extends Request {
   body: TEvaluationForm;
 }

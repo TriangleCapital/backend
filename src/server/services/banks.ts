@@ -3,7 +3,7 @@ import { SOLVIA_API } from '../../utils/constants';
 
 export async function getSolviaExtendedRealty(realtyId: string): Promise<SolviaRealty> {
   try {
-    const response: any = await axios.post(`${SOLVIA_API}/v3/${realtyId}`);
+    const response: any = await axios.get(`${SOLVIA_API}/v3/${realtyId}`);
 
     return response.data;
   } catch (error) {
@@ -11,40 +11,44 @@ export async function getSolviaExtendedRealty(realtyId: string): Promise<SolviaR
   }
 }
 
-export async function getSolviaRealties(postalCode: string): Promise<SolviaSimpleRealty[]> {
+export async function getSolviaRealties(postalCodes: string[]): Promise<SolviaSimpleRealty[]> {
   const allRealties: any[] = [];
   const pageSize = 100;
-  let page = 0;
-  let hasMore = true;
 
   try {
-    while (hasMore) {
-      const response: any = await axios.post(`${SOLVIA_API}/v2/buscarInmuebles`, {
-        idProvincia: postalCode.slice(0, 2),
-        tipoIperacion: 'COMPRA',
-        idCategoriaTipoVivienda: '1',
-        paginacion: {
-          numeroPagina: page,
-          tamanoPagina: pageSize,
-        },
-      });
+    for (const postalCode of postalCodes) {
+      let page = 0;
+      let hasMore = true;
 
-      const realties = response.data.inmuebles;
+      while (hasMore) {
+        const response: any = await axios.post(`${SOLVIA_API}/v2/buscarInmuebles`, {
+          idProvincia: postalCode.slice(0, 2),
+          tipoIperacion: 'COMPRA',
+          idCategoriaTipoVivienda: '1',
+          paginacion: {
+            numeroPagina: page,
+            tamanoPagina: pageSize,
+          },
+        });
 
-      if (!Array.isArray(realties) || realties.length === 0) {
-        hasMore = false;
-      } else {
-        allRealties.push(...realties);
-        if (realties.length < pageSize) {
+        const realties = response.data.inmuebles;
+
+        if (!Array.isArray(realties) || realties.length === 0) {
           hasMore = false;
         } else {
-          page += 1;
+          allRealties.push(...realties);
+          if (realties.length < pageSize) {
+            hasMore = false;
+          } else {
+            page += 1;
+          }
         }
       }
     }
 
     return allRealties;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(`Error obteniendo los activos desde Solvia: ${error.response?.data?.errors || error.message}`);
   }
 }
+

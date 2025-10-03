@@ -1,5 +1,7 @@
+import * as XLSX from 'xlsx';
 import { TBank, TBoolean, TipoOkupa } from '../../database/interfaces/enums';
 import { TOkupaRealty } from '../../database/interfaces/totalum';
+import { enhance, styleHeader, zebra } from '../../utils/excel';
 
 export function parseSolviaRealtyToDb(solviaRealty: SolviaRealty): Partial<TOkupaRealty> {
   return {
@@ -71,11 +73,28 @@ export function getTipoOkupaFromSolviaRealty(solviaRealty: SolviaRealty): TipoOk
   }
 }
 
-function setUpdate<K extends keyof TOkupaRealty>(
-  obj: Partial<TOkupaRealty>,
-  key: K,
-  value: TOkupaRealty[K]
-) {
+export function getNeedsReformFromSolviaRealty(solviaRealty: SolviaRealty): boolean {
+  const disclaimer = solviaRealty?.datosBasicos?.campanya?.disclaimer;
+
+  const disponibleArray = solviaRealty?.tiposDisponibles?.[0]?.disponibles;
+  const disponible = Array.isArray(disponibleArray) && disponibleArray.length > 0 ? disponibleArray[0] : undefined;
+
+  const disclaimerObjArray = disponible?.disclaimers;
+  const disclaimerObj =
+    Array.isArray(disclaimerObjArray) && disclaimerObjArray.length > 0 ? disclaimerObjArray[0] : undefined;
+
+  const needsReformFromText =
+    (typeof disclaimerObj?.texto === 'string' && disclaimerObj.texto.includes('reforma')) ||
+    (typeof disclaimer === 'string' && disclaimer.includes('reforma'));
+
+  if (needsReformFromText || solviaRealty?.reformar === 'S') {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function setUpdate<K extends keyof TOkupaRealty>(obj: Partial<TOkupaRealty>, key: K, value: TOkupaRealty[K]) {
   obj[key] = value;
 }
 
@@ -100,10 +119,6 @@ export function getUpdatedSolviaRealty(
   return update;
 }
 
-
-
-
-
 function parseSolviaDate(dateStr: string): Date | null {
   if (!dateStr) return null;
 
@@ -118,4 +133,58 @@ function parseSolviaDate(dateStr: string): Date | null {
   }
 
   return new Date(year, month - 1, day, hours, minutes, seconds);
+}
+
+function toFlatRows(solviaRealties: SolviaRealty[]) {
+  return solviaRealties.map((realty) => ({
+    id: realty.id,
+    id_promocion: realty.idPromocion,
+    okupado: getTipoOkupaFromSolviaRealty(realty),
+
+    referencia_catastral: realty.datosBasicos?.caracteristicas?.refCatastral,
+    precio: realty.datosBasicos?.precio,
+    fecha_primera_publicacion: realty.datosBasicos?.fichaFechaPrimeraPub,
+    fecha_publicacion_componente: realty.datosBasicos?.fichaFechaPubComponente,
+    fecha_ultima_actualizacion: realty.datosBasicos?.fichaFechaActualizacionProducto,
+
+    referencia_comercial: realty.datosBasicos?.referenciaComercial,
+
+    provincia_id: realty.datosBasicos?.provincia?.id,
+    codigo_postal: realty.datosBasicos?.cp,
+    poblacion: realty.datosBasicos?.poblacion?.name,
+    direccion: realty.datosBasicos?.direccion,
+    direccion_google: realty.datosBasicos?.geo?.direccionGoogle,
+    metros2: realty.datosBasicos?.m2,
+    superficie_construida: realty.datosBasicos?.caracteristicas?.supConstruida,
+    banos: realty.datosBasicos?.totalBanyos,
+    dormitorios: realty.datosBasicos?.totalDormitorios,
+
+    necesita_reforma: getNeedsReformFromSolviaRealty(realty),
+    reservado: realty.reservado,
+    ficha_pdf_url: realty.urlPdfFicha,
+    url_activo: `https://www.solvia.es/es/comprar/viviendas?texto=PM${realty.idPromocion}&palabraClave=true`,
+    url_info_detallada: `https://www.solvia.es/api/inmuebles/v3/${realty.id}`,
+  }));
+}
+
+function buildWorkbook(rows: any[], sheetName = 'Activos Solvia') {
+  const headers = Object.keys(rows[0] ?? {});
+  const ws = XLSX.utils.json_to_sheet(rows, { header: headers });
+  XLSX.utils.sheet_add_aoa(ws, [headers], { origin: 'A1' });
+
+  styleHeader(ws, headers);
+  zebra(ws);
+  enhance(ws, headers);
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, sheetName);
+  return wb;
+}
+
+export function generateExcelBuffer(data: SolviaRealty[], filename = 'activos_solvia.xlsx') {
+  const rows = toFlatRows(data);
+  const wb = buildWorkbook(rows, 'Activos Solvia');
+
+  const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx', cellStyles: true });
+  return { buffer, filename };
 }

@@ -3,17 +3,18 @@ import { TotalumApiSdk } from 'totalum-api-sdk';
 import { totalumOptions } from '../../utils/constants';
 import CustomError from '../../errors/CustomError';
 import { filterOkupaRealtiesFromBank } from '../helpers/banks';
+import { getNeedsReformFromSolviaRealty } from '../helpers/bankParsers';
 
 const totalumSdk = new TotalumApiSdk(totalumOptions);
 
 export async function runScript(req: Request, res: Response, next: NextFunction) {
   try {
-    const { realties } = req.body;
+    const { realty } = req.body;
 
-    const filtered = filterOkupaRealtiesFromBank(realties)
+    const result = getNeedsReformFromSolviaRealty(realty);
 
 
-    res.status(200).json(filtered);
+    res.status(200).json(result);
   } catch (error) {
     console.error(error.message);
     const finalError = new CustomError(

@@ -12,6 +12,7 @@ import { investorMessages, okupaMessages } from '../../utils/lists';
 import {
   getGroupMembers,
   sendWhatsappMessage,
+  sendWhatsappMessageToChatId,
   sendZApiWhatsappMessage,
 } from '../services/whatsapp';
 import { sleep } from '../../utils/funcs';
@@ -174,12 +175,9 @@ export async function sendMessageToChatIds(req: Request, res: Response, next: Ne
       .slice(fromNumber, toNumber);
 
     for (const chatId of membersChatIds) {
-      const number = sanitizeWhatsAppId(chatId);
-      if (!number) continue;
-
       try {
         await sleep(5000);
-        await sendZApiWhatsappMessage({ phoneNumber: number, message: investorMessages.one, instanceId, instanceToken });
+        await sendWhatsappMessageToChatId({ chatId, message: investorMessages.one });
       } catch (error) {
         throw new Error(`Error enviando mensaje a ${chatId}: ${error.message}`);
       }
