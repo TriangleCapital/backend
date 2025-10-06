@@ -100,6 +100,30 @@ export function parseExcelToTLeads(excel: Express.Multer.File): Partial<TLeadSha
   }
 }
 
+export function parseExcelToRealtiesIds(excel: Express.Multer.File): string[] {
+  try {
+    if (!excel.path) {
+      throw new Error('File path is missing.');
+    }
+
+    const fileBuffer = fs.readFileSync(excel.path);
+    const workbook = XLSX.read(fileBuffer, { type: 'buffer' });
+
+    if (!workbook.SheetNames || workbook.SheetNames.length === 0) {
+      throw new Error('No sheets found in the Excel file.');
+    }
+
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+
+    const excelData = XLSX.utils.sheet_to_json(sheet);
+
+    return excelData.map((row:any) => row.id);
+  } catch (error) {
+    throw new Error(`Error parseando el excel a leads: ${error.message}`);
+  }
+}
+
 export function parseLeadFromTotalumToManychat(lead: Partial<TLeadShared>): MSubscriber {
   const phone = lead.telefono ? formatPhoneNumber(lead.telefono) : '';
 
@@ -275,4 +299,19 @@ export function parseExcelDebtRealtyToTotalum(
   } catch (error) {
     throw new Error(`Error parseando la deuda: ${error.message}`);
   }
+}
+
+export function normalizePostalCodes(postalCodes: string[] | string): string[] {
+  if (Array.isArray(postalCodes)) {
+    return postalCodes.map(c => c.trim()).filter(Boolean);
+  }
+
+  if (typeof postalCodes === 'string') {
+    return postalCodes
+      .split(',')
+      .map(c => c.trim())
+      .filter(Boolean);
+  }
+
+  return [];
 }

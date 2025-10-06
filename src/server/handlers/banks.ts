@@ -1,4 +1,5 @@
 import { sleep } from '../../utils/funcs';
+import { parseExcelToRealtiesIds } from '../../utils/parser';
 import { getSolviaExtendedRealty } from '../services/banks';
 
 export async function getSolviaRealtiesFromSimpleRealties(simpleRealties: SolviaSimpleRealty[]): Promise<SolviaRealty[]> {
@@ -22,7 +23,7 @@ export async function getSolviaRealtiesFromSimpleRealties(simpleRealties: Solvia
         const remaining = total - processed;
         const pct = Math.round((processed / total) * 100);
         console.info(`⏳ Progreso: ${processed}/${total} (${pct}%) · Restantes: ${remaining}`);
-        console.info(hr());  
+        console.info(hr());
         await sleep(1000 + Math.random() * 2000);
       }
     }
@@ -36,5 +37,15 @@ export async function getSolviaRealtiesFromSimpleRealties(simpleRealties: Solvia
 
 const hr = () => {
   const width = Math.min(process.stdout?.columns ?? 80, 100);
-  return `\x1b[90m${"─".repeat(width)}\x1b[0m`;
+  return `\x1b[90m${'─'.repeat(width)}\x1b[0m`;
 };
+
+export async function handleExcelRealties(excel: Express.Multer.File) {
+  try {
+    const realtiesIds: string[] = parseExcelToRealtiesIds(excel);
+
+    return realtiesIds;
+  } catch (error) {
+    throw new Error(`Error manejando los inmuebles del excel: ${error.message}`);
+  }
+}

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { SOLVIA_API } from '../../utils/constants';
+import { normalizePostalCodes } from '../../utils/parser';
 
 export async function getSolviaExtendedRealty(realtyId: string): Promise<SolviaRealty> {
   try {
@@ -11,12 +12,14 @@ export async function getSolviaExtendedRealty(realtyId: string): Promise<SolviaR
   }
 }
 
-export async function getSolviaRealties(postalCodes: string[]): Promise<SolviaSimpleRealty[]> {
+export async function getSolviaRealties(postalCodes: string[] | string): Promise<SolviaSimpleRealty[]> {
   const allRealties: any[] = [];
   const pageSize = 100;
 
+  const normalizedPostalCodes = normalizePostalCodes(postalCodes)
+
   try {
-    for (const postalCode of postalCodes) {
+    for (const postalCode of normalizedPostalCodes) {
       let page = 0;
       let hasMore = true;
 
