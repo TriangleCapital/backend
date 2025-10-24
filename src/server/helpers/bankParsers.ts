@@ -58,13 +58,20 @@ export function getTipoOkupaFromSolviaRealty(solviaRealty: SolviaRealty): TipoOk
     (typeof disclaimer === 'string' &&
       disclaimer.includes('El inmueble ha sido adquirido a través de un procedimiento judicial'));
 
+  const isBorrower =
+    (typeof disclaimerObj?.texto === 'string' && disclaimerObj.texto.includes('arrendado a tercero')) ||
+    (typeof disclaimer === 'string' && disclaimer.includes('arrendado a tercero'));
+
   if (
     isExTenant ||
+    isBorrower ||
     (typeof disclaimer === 'string' && disclaimer.includes('ocupado')) ||
     (typeof disclaimerObj?.texto === 'string' && disclaimerObj.texto.includes('ocupado'))
   ) {
     if (isExTenant) {
       return TipoOkupa.ExTenant;
+    } else if (isBorrower) {
+      return TipoOkupa.Borrower;
     } else {
       return TipoOkupa.ExBorrowerOSquatter;
     }

@@ -80,9 +80,10 @@ export enum TipoOkupa {
   Desconocido = 'Desconocido',
   Vacio = 'Vacío',
   Squatter = 'Squatter',
-  ExBorrower = 'Ex Borrower',
-  ExTenant = 'Ex Tenant',
-  ExBorrowerOSquatter = 'ExBorrower o Squatter',
+  ExBorrower = 'ExBorrower',
+  ExTenant = 'ExTenant',
+  ExBorrowerOSquatter = 'ExBorrower/Squatter',
+  Borrower = 'Borrower',
 }
 
 export enum EstadoNegociacionOkupa {
