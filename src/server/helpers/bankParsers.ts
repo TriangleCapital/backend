@@ -145,32 +145,24 @@ function parseSolviaDate(dateStr: string): Date | null {
 function toFlatRows(solviaRealties: SolviaRealty[]) {
   return solviaRealties.map((realty) => ({
     id: realty.id,
-    id_promocion: realty.idPromocion,
-    okupado: getTipoOkupaFromSolviaRealty(realty),
+    ocupacion: getTipoOkupaFromSolviaRealty(realty),
 
     referencia_catastral: realty.datosBasicos?.caracteristicas?.refCatastral,
     precio: realty.datosBasicos?.precio,
+
+    poblacion: realty.datosBasicos?.poblacion?.name,
+    calle: realty.datosBasicos?.direccion,
+    codigo_postal: realty.datosBasicos?.cp,
+    m2: realty.datosBasicos?.m2,
+    superficie_construida: realty.datosBasicos?.caracteristicas?.supConstruida,
+
     fecha_primera_publicacion: realty.datosBasicos?.fichaFechaPrimeraPub,
     fecha_publicacion_componente: realty.datosBasicos?.fichaFechaPubComponente,
     fecha_ultima_actualizacion: realty.datosBasicos?.fichaFechaActualizacionProducto,
 
-    referencia_comercial: realty.datosBasicos?.referenciaComercial,
+    coordenadas_maps: realty.datosBasicos?.geo?.direccionGoogle,
 
-    provincia_id: realty.datosBasicos?.provincia?.id,
-    codigo_postal: realty.datosBasicos?.cp,
-    poblacion: realty.datosBasicos?.poblacion?.name,
-    direccion: realty.datosBasicos?.direccion,
-    direccion_google: realty.datosBasicos?.geo?.direccionGoogle,
-    metros2: realty.datosBasicos?.m2,
-    superficie_construida: realty.datosBasicos?.caracteristicas?.supConstruida,
-    banos: realty.datosBasicos?.totalBanyos,
-    dormitorios: realty.datosBasicos?.totalDormitorios,
-
-    necesita_reforma: getNeedsReformFromSolviaRealty(realty),
-    reservado: realty.reservado,
-    ficha_pdf_url: realty.urlPdfFicha,
-    url_activo: `https://www.solvia.es/es/comprar/viviendas?texto=PM${realty.idPromocion}&palabraClave=true`,
-    url_info_detallada: `https://www.solvia.es/api/inmuebles/v3/${realty.id}`,
+    url_activo: `https://www.solvia.es/es/comprar/viviendas?texto=PM${realty?.idPromocion}&palabraClave=true`,
   }));
 }
 
