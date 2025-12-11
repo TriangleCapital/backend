@@ -154,7 +154,7 @@ function toFlatRows(solviaRealties: SolviaRealty[]) {
     calle: realty.datosBasicos?.direccion,
     codigo_postal: realty.datosBasicos?.cp,
     m2: realty.datosBasicos?.m2,
-    superficie_construida: realty.datosBasicos?.caracteristicas?.supConstruida,
+    m2_construidos: realty.datosBasicos?.caracteristicas?.supConstruida,
 
     fecha_primera_publicacion: realty.datosBasicos?.fichaFechaPrimeraPub,
     fecha_publicacion_componente: realty.datosBasicos?.fichaFechaPubComponente,
