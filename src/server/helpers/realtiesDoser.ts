@@ -1,5 +1,5 @@
 import { TOkupaRealty } from '../../database/interfaces/totalum';
-import { createOkupaRealty, updateOkupaRealty } from '../services/totalum';
+import { createOkupaRealty, updateOkupaRealty } from '../services/pastTotalum';
 import { getUpdatedSolviaRealty } from './bankParsers';
 import { filterOkupaRealtiesFromBank } from './banks';
 

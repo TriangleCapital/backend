@@ -5,7 +5,7 @@ import {
   processRealtiesUpload,
   resetRealtiesStateNew,
 } from '../helpers/realties';
-import { getAllDebtRealties, getAllOkupaRealties } from '../services/totalum';
+import { getAllDebtRealties, getAllOkupaRealties } from '../services/pastTotalum';
 
 export async function handleUploadRealties(
   fund: TBank,

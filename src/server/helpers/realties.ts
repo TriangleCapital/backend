@@ -3,7 +3,7 @@ import { EstadoNegociacionDeuda, EstadoNegociacionOkupa, TBank, TRealtyType } fr
 import { TDebtRealty, TOkupaRealty, TRealty } from '../../database/interfaces/totalum';
 import { parseExcelDebtRealtyToTotalum, parseExcelOkupaRealtyToTotalum } from '../../utils/parser';
 import { normalizeAddress, normalizeString } from '../../utils/parsers';
-import { createDebtRealty, createOkupaRealty, updateDebtRealty, updateOkupaRealty } from '../services/totalum';
+import { createDebtRealty, createOkupaRealty, updateDebtRealty, updateOkupaRealty } from '../services/pastTotalum';
 
 export async function processRealtiesUpload(
   realtyType: TRealtyType,

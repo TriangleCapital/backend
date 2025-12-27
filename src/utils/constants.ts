@@ -33,6 +33,12 @@ export const totalumOptions = {
   },
 };
 
+export const triangleTotalumOptions = {
+  apiKey: {
+    'api-key': process.env.TRIANGLE_TOTALUM_API_KEY,
+  },
+};
+
 export const manychatOptions = {
   headers: {
     Authorization: `Bearer ${process.env.MANYCHAT_API_KEY}`,

@@ -23,7 +23,7 @@ import {
   updateLastProperty,
   createSharedLead,
   removeSharedLead,
-} from '../services/totalum';
+} from '../services/pastTotalum';
 
 export async function handleExcelLeads(excel: Express.Multer.File, realtyLink: string, flowNs: string) {
   try {

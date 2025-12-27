@@ -6,7 +6,7 @@ import { catchControllerError } from '../../errors/generalError';
 import { getSolviaRealtiesFromSimpleRealties, handleExcelRealties } from '../handlers/banks';
 import { doserRealties } from '../helpers/realtiesDoser';
 import { generateExcelBuffer, parseSolviaRealtyToDb } from '../helpers/bankParsers';
-import { getAllOkupaRealties } from '../services/totalum';
+import { getAllOkupaRealties } from '../services/pastTotalum';
 
 export async function getAllSolviaRealties(req: GetSolviaExcelPayload, res: Response, next: NextFunction) {
   try {

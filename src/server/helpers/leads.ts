@@ -15,7 +15,7 @@ import {
   getAllSharedLeads,
   updateContadoLead,
   updateHipotecaLead,
-} from '../services/totalum';
+} from '../services/pastTotalum';
 
 export async function filterNonSendedLeads(parsedExcelLeads: Partial<TLeadShared>[]): Promise<Partial<TLeadShared>[]> {
   try {

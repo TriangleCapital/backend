@@ -4,7 +4,13 @@ import { handleExcelLeads } from '../handlers/leads';
 import { CreateEvaluationForm, CreateMrfPdfForm, UploadRoyaltiesPayload } from '../../database/interfaces/import';
 import { handleUploadRealties } from '../handlers/realties';
 import { getSolviaRealties } from '../services/banks';
-import { createTEvaluationForm, createTMrfPdfForm, getFilteredPersons, getTFile, updateTFile } from '../services/totalum';
+import {
+  createTEvaluationForm,
+  createTMrfPdfForm,
+  getFilteredPersons,
+  getTFile,
+  updateTFile,
+} from '../services/pastTotalum';
 import { TOTALUM_MRF_PDF_FILE_ID } from '../../utils/constants';
 import { TPersonAutomaticMessaging, TPersonRole } from '../../database/interfaces/enums';
 import { parsePhoneNumberForWhatsApp, sanitizeWhatsAppId } from '../../utils/parser';
