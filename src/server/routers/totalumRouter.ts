@@ -2,6 +2,7 @@ import express from 'express';
 import {
   createEvaluationForm,
   createMrfPdfForm,
+  get7ReglasNegociacionPdf,
   getGroupMembersChatIds,
   getMrfPdf,
   processExcelLeads,
@@ -26,6 +27,7 @@ totalumRouter.post('/evaluation-form', createEvaluationForm);
 totalumRouter.post('/mrf-pdf-form', createMrfPdfForm);
 totalumRouter.get('/mrf-pdf', getMrfPdf);
 totalumRouter.post('/update-document-viewed-number', updateDocumentViewedNumber);
+totalumRouter.get('/7-reglas-negociacion-pdf', get7ReglasNegociacionPdf);
 
 totalumRouter.post('/message-okupas', sendMessageToOkupas);
 totalumRouter.post('/send-message-to-group-members', sendMessageToGroupMembers);

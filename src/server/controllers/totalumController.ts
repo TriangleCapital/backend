@@ -11,7 +11,7 @@ import {
   getTFile,
   updateTFile,
 } from '../services/pastTotalum';
-import { TOTALUM_MRF_PDF_FILE_ID } from '../../utils/constants';
+import { TOTALUM_7_REGLAS_NEGOCIACION_PDF_FILE_ID, TOTALUM_MRF_PDF_FILE_ID } from '../../utils/constants';
 import { TPersonAutomaticMessaging, TPersonRole } from '../../database/interfaces/enums';
 import { parsePhoneNumberForWhatsApp, sanitizeWhatsAppId } from '../../utils/parser';
 import { investorMessages, okupaMessages } from '../../utils/lists';
@@ -88,6 +88,18 @@ export async function getMrfPdf(req: Request, res: Response, next: NextFunction)
     res.status(200).json({ success: true, pdfUrl });
   } catch (error) {
     catchControllerError(error, 'Error obteniendo el pdf de mrf desde controller', req.body, next);
+  }
+}
+
+export async function get7ReglasNegociacionPdf(req: Request, res: Response, next: NextFunction) {
+  try {
+    const file = await getTFile(TOTALUM_7_REGLAS_NEGOCIACION_PDF_FILE_ID);
+
+    const pdfUrl = file?.archivo?.[0]?.url;
+
+    res.status(200).json({ success: true, pdfUrl });
+  } catch (error) {
+    catchControllerError(error, 'Error obteniendo el pdf de las 7 reglas de negociación desde controller', req.body, next);
   }
 }
 
